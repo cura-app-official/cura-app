@@ -1,0 +1,225 @@
+import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
+import { BackButton } from '@/components/ui/back-button';
+import { Input } from '@/components/ui/input';
+import { sellerApplicationSchema, type SellerApplicationForm } from '@/lib/validations';
+import { useAuth } from '@/providers/auth-provider';
+import { submitSellerApplication } from '@/services/seller';
+import { Ionicons } from '@expo/vector-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
+import { router } from 'expo-router';
+import { Controller, useForm } from 'react-hook-form';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export default function SellerApplyScreen() {
+  const { user } = useAuth();
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<SellerApplicationForm>({
+    resolver: zodResolver(sellerApplicationSchema),
+    defaultValues: {
+      first_name: '',
+      last_name: '',
+      instagram_link: '',
+      height: '',
+      intro: '',
+      sample_photos: [],
+    },
+  });
+
+  const samplePhotos = watch('sample_photos') ?? [];
+
+  const pickPhotos = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsMultipleSelection: true,
+      selectionLimit: 6,
+      quality: 0.8,
+    });
+    if (!result.canceled) {
+      const uris = result.assets.map((a) => a.uri);
+      setValue('sample_photos', [...samplePhotos, ...uris].slice(0, 6));
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setValue(
+      'sample_photos',
+      samplePhotos.filter((_, i) => i !== index)
+    );
+  };
+
+  const onSubmit = async (values: SellerApplicationForm) => {
+    if (!user) return;
+    try {
+      await submitSellerApplication({
+        user_id: user.id,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        instagram_link: values.instagram_link,
+        height: values.height,
+        intro: values.intro ?? null,
+        sample_photos: values.sample_photos ?? null,
+      });
+      Alert.alert(
+        'Application submitted',
+        'We\'ll review your application and get back to you soon.',
+        [{ text: 'OK', onPress: () => router.back() }]
+      );
+    } catch (err: any) {
+      Alert.alert('Error', err?.message ?? 'Failed to submit application');
+    }
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
+        <View className="flex-row items-center px-6 py-3">
+          <BackButton />
+          <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+            Sell my pieces
+          </Text>
+        </View>
+
+        <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+          <Text className="text-sm font-helvetica text-muted-foreground mb-6">
+            Tell us about yourself so we can review your seller application.
+          </Text>
+
+          <View className="gap-4">
+            <View className="flex-row gap-3">
+              <View className="flex-1">
+                <Controller
+                  control={control}
+                  name="first_name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      label="First name *"
+                      placeholder="Jane"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.first_name?.message}
+                    />
+                  )}
+                />
+              </View>
+              <View className="flex-1">
+                <Controller
+                  control={control}
+                  name="last_name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      label="Last name *"
+                      placeholder="Doe"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.last_name?.message}
+                    />
+                  )}
+                />
+              </View>
+            </View>
+
+            <Controller
+              control={control}
+              name="instagram_link"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Instagram link *"
+                  placeholder="https://instagram.com/username"
+                  autoCapitalize="none"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  error={errors.instagram_link?.message}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="height"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Height *"
+                  placeholder="e.g. 5'7&quot; or 170cm"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  error={errors.height?.message}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="intro"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Intro"
+                  placeholder="Tell us about your style"
+                  multiline
+                  numberOfLines={3}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value ?? ''}
+                  className="min-h-[80px] py-3"
+                />
+              )}
+            />
+
+            <View>
+              <Text className="text-sm font-helvetica text-muted-foreground mb-2">
+                Sample photos
+              </Text>
+              <View className="flex-row flex-wrap gap-2">
+                {samplePhotos.map((uri, i) => (
+                  <View key={uri} className="relative w-20 h-20">
+                    <Image
+                      source={{ uri }}
+                      className="w-20 h-20 rounded-lg bg-muted"
+                      contentFit="cover"
+                    />
+                    <Pressable
+                      onPress={() => removePhoto(i)}
+                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-foreground items-center justify-center"
+                    >
+                      <Ionicons name="close" size={12} color="white" />
+                    </Pressable>
+                  </View>
+                ))}
+                {samplePhotos.length < 6 && (
+                  <Pressable
+                    onPress={pickPhotos}
+                    className="w-20 h-20 rounded-lg bg-muted items-center justify-center"
+                  >
+                    <Ionicons name="add" size={24} color="#A3A3A3" />
+                  </Pressable>
+                )}
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+
+        <View className="px-6 pb-6">
+          <AnimatedLoadingButton
+            isSubmitting={isSubmitting}
+            onPress={handleSubmit(onSubmit)}
+            title="Submit application"
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}

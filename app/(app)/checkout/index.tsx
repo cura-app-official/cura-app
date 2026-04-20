@@ -1,0 +1,170 @@
+import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
+import { BackButton } from '@/components/ui/back-button';
+import { useAuth } from '@/providers/auth-provider';
+import { getCartItems, clearCart } from '@/services/cart';
+import { getDefaultAddress } from '@/services/addresses';
+import { createOrder } from '@/services/orders';
+import type { Tables } from '@/types/database';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export default function CheckoutScreen() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: cartItems = [], isLoading: cartLoading } = useQuery({
+    queryKey: ['cart', user?.id],
+    queryFn: () => (user ? getCartItems(user.id) : []),
+    enabled: !!user,
+  });
+
+  const { data: defaultAddress, isLoading: addressLoading } = useQuery({
+    queryKey: ['default-address', user?.id],
+    queryFn: () => (user ? getDefaultAddress(user.id) : null),
+    enabled: !!user,
+  });
+
+  const total = cartItems.reduce((sum, ci) => sum + (ci.item?.price ?? 0), 0);
+
+  const handlePlaceOrder = async () => {
+    if (!user) return;
+    if (!defaultAddress) {
+      Alert.alert('No address', 'Please add a shipping address first.', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Add address', onPress: () => router.push('/(app)/address/add') },
+      ]);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      for (const ci of cartItems) {
+        await createOrder({
+          buyer_id: user.id,
+          seller_id: ci.item.seller_id,
+          item_id: ci.item.id,
+          address_id: defaultAddress.id,
+          total_amount: ci.item.price,
+        });
+      }
+      await clearCart(user.id);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      Alert.alert('Order placed', 'Your order has been placed successfully!', [
+        { text: 'OK', onPress: () => router.replace('/(app)/orders') },
+      ]);
+    } catch (err: any) {
+      Alert.alert('Error', err?.message ?? 'Failed to place order');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (cartLoading || addressLoading) {
+    return (
+      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+        <ActivityIndicator size="small" color="#1A1A1A" />
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-row items-center px-6 py-3">
+        <BackButton />
+        <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+          Checkout
+        </Text>
+      </View>
+
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="px-6">
+          <Text className="text-sm font-hell-round-bold text-foreground mb-3">
+            Shipping Address
+          </Text>
+          {defaultAddress ? (
+            <Pressable
+              onPress={() => router.push('/(app)/address')}
+              className="p-4 rounded-xl bg-muted flex-row items-center"
+            >
+              <View className="flex-1">
+                <Text className="text-base font-hell-round-bold text-foreground">
+                  {defaultAddress.name}
+                </Text>
+                <Text className="text-sm font-helvetica text-muted-foreground mt-0.5">
+                  {defaultAddress.phone_number}
+                </Text>
+                <Text className="text-sm font-helvetica text-foreground mt-0.5">
+                  {defaultAddress.address}
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="#A3A3A3" />
+            </Pressable>
+          ) : (
+            <Pressable
+              onPress={() => router.push('/(app)/address/add')}
+              className="p-4 rounded-xl bg-muted flex-row items-center justify-center gap-2"
+            >
+              <Ionicons name="add" size={20} color="#1A1A1A" />
+              <Text className="text-sm font-hell-round-bold text-foreground">
+                Add shipping address
+              </Text>
+            </Pressable>
+          )}
+
+          <Text className="text-sm font-hell-round-bold text-foreground mt-6 mb-3">
+            Items
+          </Text>
+          <View className="gap-3">
+            {cartItems.map((ci) => (
+              <View key={ci.id} className="flex-row gap-3">
+                <Image
+                  source={{ uri: ci.item.item_media?.[0]?.url ?? '' }}
+                  className="w-16 h-16 rounded-lg bg-muted"
+                  contentFit="cover"
+                />
+                <View className="flex-1 justify-center">
+                  <Text className="text-sm font-hell-round-bold text-foreground" numberOfLines={1}>
+                    {ci.item.item_name}
+                  </Text>
+                  <Text className="text-sm font-helvetica text-muted-foreground">
+                    ₱{ci.item.price.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View className="flex-row justify-between mt-6 py-4 border-t border-border">
+            <Text className="text-base font-helvetica text-muted-foreground">Total</Text>
+            <Text className="text-xl font-hell-round-bold text-foreground">
+              ₱{total.toLocaleString()}
+            </Text>
+          </View>
+
+          <View className="py-4 border-t border-border">
+            <Text className="text-xs font-helvetica text-muted-foreground leading-4">
+              By placing this order, you agree that all items are secondhand and may
+              show signs of wear as described in their listings. All sales are final.
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      <View className="px-6 pb-6 border-t border-border pt-4">
+        <AnimatedLoadingButton
+          isSubmitting={isSubmitting}
+          onPress={handlePlaceOrder}
+          title="Place order"
+          disabled={cartItems.length === 0}
+        />
+      </View>
+    </SafeAreaView>
+  );
+}
