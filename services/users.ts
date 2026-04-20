@@ -1,9 +1,9 @@
 import { supabase } from '@/lib/supabase';
 import type { InsertTables, Tables, UpdateTables } from '@/types/database';
 
-export async function getProfile(userId: string): Promise<Tables<'profiles'> | null> {
+export async function getUser(userId: string): Promise<Tables<'users'> | null> {
   const { data, error } = await supabase
-    .from('profiles')
+    .from('users')
     .select('*')
     .eq('id', userId)
     .single();
@@ -11,9 +11,9 @@ export async function getProfile(userId: string): Promise<Tables<'profiles'> | n
   return data;
 }
 
-export async function getProfileByUsername(username: string): Promise<Tables<'profiles'> | null> {
+export async function getUserByUsername(username: string): Promise<Tables<'users'> | null> {
   const { data, error } = await supabase
-    .from('profiles')
+    .from('users')
     .select('*')
     .eq('username', username)
     .single();
@@ -21,15 +21,15 @@ export async function getProfileByUsername(username: string): Promise<Tables<'pr
   return data;
 }
 
-export async function createProfile(profile: InsertTables<'profiles'>) {
-  const { data, error } = await supabase.from('profiles').insert(profile).select().single();
+export async function createUser(user: InsertTables<'users'>) {
+  const { data, error } = await supabase.from('users').insert(user).select().single();
   if (error) throw error;
   return data;
 }
 
-export async function updateProfile(userId: string, updates: UpdateTables<'profiles'>) {
+export async function updateUser(userId: string, updates: UpdateTables<'users'>) {
   const { data, error } = await supabase
-    .from('profiles')
+    .from('users')
     .update(updates)
     .eq('id', userId)
     .select()
@@ -40,7 +40,7 @@ export async function updateProfile(userId: string, updates: UpdateTables<'profi
 
 export async function checkUsernameAvailable(username: string): Promise<boolean> {
   const { data } = await supabase
-    .from('profiles')
+    .from('users')
     .select('id')
     .eq('username', username)
     .single();

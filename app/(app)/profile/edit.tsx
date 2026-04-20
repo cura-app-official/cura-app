@@ -3,7 +3,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { Input } from '@/components/ui/input';
 import { editProfileSchema, type EditProfileForm } from '@/lib/validations';
 import { useAuth } from '@/providers/auth-provider';
-import { updateProfile } from '@/services/profiles';
+import { updateUser } from '@/services/users';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
@@ -50,7 +50,7 @@ export default function EditProfileScreen() {
   const onSubmit = async (values: EditProfileForm) => {
     if (!user) return;
     try {
-      await updateProfile(user.id, {
+      await updateUser(user.id, {
         avatar_url: values.avatar_url,
         background_url: values.background_url,
         instagram_link: values.instagram_link || null,

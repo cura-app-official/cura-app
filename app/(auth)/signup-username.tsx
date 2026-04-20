@@ -2,7 +2,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
 import { Input } from '@/components/ui/input';
 import { usernameSchema, type UsernameForm } from '@/lib/validations';
-import { checkUsernameAvailable } from '@/services/profiles';
+import { checkUsernameAvailable } from '@/services/users';
 import { useSignup } from '@/store/signup-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';

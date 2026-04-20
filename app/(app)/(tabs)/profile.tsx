@@ -1,7 +1,7 @@
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { useAuth } from '@/providers/auth-provider';
 import { getItemsBySeller, type ItemWithMedia } from '@/services/items';
-import { getFollowerCount, getFollowingCount } from '@/services/profiles';
+import { getFollowerCount, getFollowingCount } from '@/services/users';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useQuery } from '@tanstack/react-query';

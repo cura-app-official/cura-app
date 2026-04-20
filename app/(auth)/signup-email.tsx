@@ -3,7 +3,7 @@ import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
 import { Input } from '@/components/ui/input';
 import { emailPasswordSchema, type EmailPasswordForm } from '@/lib/validations';
 import { useAuth } from '@/providers/auth-provider';
-import { createProfile } from '@/services/profiles';
+import { createUser } from '@/services/users';
 import { useSignup } from '@/store/signup-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
@@ -31,7 +31,7 @@ export default function SignupEmailScreen() {
         return;
       }
 
-      await createProfile({
+      await createUser({
         id: user.id,
         username: signupData.username!,
         email: values.email,

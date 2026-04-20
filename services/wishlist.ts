@@ -4,7 +4,7 @@ import type { ItemWithMedia } from './items';
 export async function getWishlistItems(userId: string): Promise<ItemWithMedia[]> {
   const { data, error } = await supabase
     .from('wishlist_items')
-    .select('*, item:items(*, item_media(*), seller:profiles!seller_id(*))')
+    .select('*, item:items(*, item_media(*), seller:users!seller_id(*))')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
   if (error) throw error;

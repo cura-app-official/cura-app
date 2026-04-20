@@ -5,10 +5,10 @@ import { getItemsBySeller, type ItemWithMedia } from '@/services/items';
 import {
   getFollowerCount,
   getFollowingCount,
-  getProfile,
+  getUser,
   isFollowing,
   toggleFollow,
-} from '@/services/profiles';
+} from '@/services/users';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -31,7 +31,7 @@ export default function UserProfileScreen() {
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', id],
-    queryFn: () => getProfile(id),
+    queryFn: () => getUser(id),
     enabled: !!id,
   });
 

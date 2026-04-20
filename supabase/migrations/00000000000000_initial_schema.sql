@@ -1,8 +1,5 @@
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- Profiles table
-CREATE TABLE profiles (
+-- Users table (public.users references auth.users)
+CREATE TABLE public.users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   username TEXT UNIQUE NOT NULL,
   email TEXT NOT NULL,
@@ -18,12 +15,12 @@ CREATE TABLE profiles (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_profiles_username ON profiles(username);
+CREATE INDEX idx_users_username ON public.users(username);
 
 -- Addresses table
 CREATE TABLE addresses (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   phone_number TEXT NOT NULL,
   address TEXT NOT NULL,
@@ -40,8 +37,8 @@ CREATE UNIQUE INDEX idx_addresses_default ON addresses(user_id) WHERE is_default
 
 -- Seller applications table
 CREATE TABLE seller_applications (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   instagram_link TEXT NOT NULL,
@@ -57,8 +54,8 @@ CREATE INDEX idx_seller_applications_user_id ON seller_applications(user_id);
 
 -- Items table
 CREATE TABLE items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  seller_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  seller_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   item_name TEXT NOT NULL,
   brand TEXT NOT NULL,
   category TEXT NOT NULL,
@@ -82,7 +79,7 @@ CREATE INDEX idx_items_brand ON items(brand);
 
 -- Item media table
 CREATE TABLE item_media (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   url TEXT NOT NULL,
   sort_order INTEGER DEFAULT 0,
@@ -93,8 +90,8 @@ CREATE INDEX idx_item_media_item_id ON item_media(item_id);
 
 -- Wishlist items table
 CREATE TABLE wishlist_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id, item_id)
@@ -104,9 +101,9 @@ CREATE INDEX idx_wishlist_user_id ON wishlist_items(user_id);
 
 -- Follows table
 CREATE TABLE follows (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  follower_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  following_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  follower_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  following_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(follower_id, following_id),
   CHECK (follower_id != following_id)
@@ -117,8 +114,8 @@ CREATE INDEX idx_follows_following ON follows(following_id);
 
 -- Cart items table
 CREATE TABLE cart_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id, item_id)
@@ -128,9 +125,9 @@ CREATE INDEX idx_cart_user_id ON cart_items(user_id);
 
 -- Orders table
 CREATE TABLE orders (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  buyer_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  seller_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  buyer_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  seller_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   item_id UUID NOT NULL REFERENCES items(id),
   address_id UUID NOT NULL REFERENCES addresses(id),
   status TEXT DEFAULT 'to_pay' CHECK (status IN ('to_pay', 'to_ship', 'to_receive', 'completed')),
@@ -153,14 +150,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Apply updated_at triggers
-CREATE TRIGGER profiles_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER addresses_updated_at BEFORE UPDATE ON addresses FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER seller_applications_updated_at BEFORE UPDATE ON seller_applications FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER items_updated_at BEFORE UPDATE ON items FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER orders_updated_at BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 -- RLS Policies
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE addresses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE seller_applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;
@@ -170,10 +167,10 @@ ALTER TABLE follows ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 
--- Profiles: public read, owner write
-CREATE POLICY "Public profiles are viewable" ON profiles FOR SELECT USING (TRUE);
-CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
-CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+-- Users: public read, owner write
+CREATE POLICY "Public users are viewable" ON public.users FOR SELECT USING (TRUE);
+CREATE POLICY "Users can update own record" ON public.users FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users can insert own record" ON public.users FOR INSERT WITH CHECK (auth.uid() = id);
 
 -- Addresses: owner only
 CREATE POLICY "Users can view own addresses" ON addresses FOR SELECT USING (auth.uid() = user_id);

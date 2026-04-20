@@ -6,6 +6,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { searchCreators, searchItems, type ItemWithMedia } from '@/services/items';
 import { getWishlistIds, toggleWishlist } from '@/services/wishlist';
 import type { Tables } from '@/types/database';
+
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -154,7 +155,7 @@ export default function SearchScreen() {
           ) : (
             <FlatList
               data={creatorResults}
-              renderItem={({ item }: { item: Tables<'profiles'> }) => (
+              renderItem={({ item }: { item: Tables<'users'> }) => (
                 <Pressable
                   onPress={() => router.push(`/(app)/profile/${item.id}`)}
                   className="flex-row items-center px-6 py-3 gap-3"

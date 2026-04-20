@@ -3,14 +3,14 @@ import type { InsertTables, Tables } from '@/types/database';
 
 export interface ItemWithMedia extends Tables<'items'> {
   item_media: Tables<'item_media'>[];
-  seller: Tables<'profiles'>;
+  seller: Tables<'users'>;
 }
 
 export async function getItems(page = 0, limit = 20): Promise<ItemWithMedia[]> {
   const from = page * limit;
   const { data, error } = await supabase
     .from('items')
-    .select('*, item_media(*), seller:profiles!seller_id(*)')
+    .select('*, item_media(*), seller:users!seller_id(*)')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
     .range(from, from + limit - 1);
@@ -21,7 +21,7 @@ export async function getItems(page = 0, limit = 20): Promise<ItemWithMedia[]> {
 export async function getItem(id: string): Promise<ItemWithMedia> {
   const { data, error } = await supabase
     .from('items')
-    .select('*, item_media(*), seller:profiles!seller_id(*)')
+    .select('*, item_media(*), seller:users!seller_id(*)')
     .eq('id', id)
     .single();
   if (error) throw error;
@@ -31,7 +31,7 @@ export async function getItem(id: string): Promise<ItemWithMedia> {
 export async function getItemsBySeller(sellerId: string): Promise<ItemWithMedia[]> {
   const { data, error } = await supabase
     .from('items')
-    .select('*, item_media(*), seller:profiles!seller_id(*)')
+    .select('*, item_media(*), seller:users!seller_id(*)')
     .eq('seller_id', sellerId)
     .order('created_at', { ascending: false });
   if (error) throw error;
@@ -41,7 +41,7 @@ export async function getItemsBySeller(sellerId: string): Promise<ItemWithMedia[
 export async function searchItems(query: string): Promise<ItemWithMedia[]> {
   const { data, error } = await supabase
     .from('items')
-    .select('*, item_media(*), seller:profiles!seller_id(*)')
+    .select('*, item_media(*), seller:users!seller_id(*)')
     .eq('status', 'active')
     .or(`item_name.ilike.%${query}%,brand.ilike.%${query}%,category.ilike.%${query}%`)
     .order('created_at', { ascending: false })
@@ -50,9 +50,9 @@ export async function searchItems(query: string): Promise<ItemWithMedia[]> {
   return (data ?? []) as unknown as ItemWithMedia[];
 }
 
-export async function searchCreators(query: string): Promise<Tables<'profiles'>[]> {
+export async function searchCreators(query: string): Promise<Tables<'users'>[]> {
   const { data, error } = await supabase
-    .from('profiles')
+    .from('users')
     .select('*')
     .eq('is_seller', true)
     .ilike('username', `%${query}%`)
@@ -75,7 +75,7 @@ export async function createItemMedia(media: InsertTables<'item_media'>[]) {
 export async function getItemsByCategory(category: string): Promise<ItemWithMedia[]> {
   const { data, error } = await supabase
     .from('items')
-    .select('*, item_media(*), seller:profiles!seller_id(*)')
+    .select('*, item_media(*), seller:users!seller_id(*)')
     .eq('status', 'active')
     .eq('category', category)
     .order('created_at', { ascending: false });

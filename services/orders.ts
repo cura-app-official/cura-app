@@ -3,8 +3,8 @@ import type { InsertTables, Tables } from '@/types/database';
 
 export interface OrderWithDetails extends Tables<'orders'> {
   item: Tables<'items'> & { item_media: Tables<'item_media'>[] };
-  buyer: Tables<'profiles'>;
-  seller: Tables<'profiles'>;
+  buyer: Tables<'users'>;
+  seller: Tables<'users'>;
   address: Tables<'addresses'>;
 }
 
@@ -15,7 +15,7 @@ export async function getOrders(
   let query = supabase
     .from('orders')
     .select(
-      '*, item:items(*, item_media(*)), buyer:profiles!buyer_id(*), seller:profiles!seller_id(*), address:addresses(*)'
+      '*, item:items(*, item_media(*)), buyer:users!buyer_id(*), seller:users!seller_id(*), address:addresses(*)'
     )
     .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
     .order('created_at', { ascending: false });

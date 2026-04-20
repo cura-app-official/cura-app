@@ -3,7 +3,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { useAuth } from '@/providers/auth-provider';
 import { getItem } from '@/services/items';
 import { addToCart, isInCart } from '@/services/cart';
-import { isFollowing, toggleFollow } from '@/services/profiles';
+import { isFollowing, toggleFollow } from '@/services/users';
 import { isWishlisted, toggleWishlist } from '@/services/wishlist';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';

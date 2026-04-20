@@ -1,6 +1,6 @@
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { useAuth } from '@/providers/auth-provider';
-import { updateProfile } from '@/services/profiles';
+import { updateUser } from '@/services/users';
 import { Ionicons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
@@ -22,7 +22,7 @@ export default function NotificationsScreen() {
 
   const finishOnboarding = async () => {
     if (user) {
-      await updateProfile(user.id, { is_onboarded: true });
+      await updateUser(user.id, { is_onboarded: true });
       await refreshProfile();
     }
     router.replace('/(app)/(tabs)');

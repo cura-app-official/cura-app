@@ -9,7 +9,7 @@ export interface CartItemWithDetails {
 export async function getCartItems(userId: string): Promise<CartItemWithDetails[]> {
   const { data, error } = await supabase
     .from('cart_items')
-    .select('id, item:items(*, item_media(*), seller:profiles!seller_id(*))')
+    .select('id, item:items(*, item_media(*), seller:users!seller_id(*))')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
   if (error) throw error;
