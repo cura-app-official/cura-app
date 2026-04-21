@@ -41,7 +41,7 @@ function RootNavigator() {
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Helvetica: require('@/assets/fonts/Helvetica.ttf'),
-    HelveticaRoundedBold: require('@/assets/fonts/helvetica-rounded-bold.ttf'),
+    HelveticaRoundedBold: require('@/assets/fonts/helvetica-rounded-bold.otf'),
   });
 
   useEffect(() => {
