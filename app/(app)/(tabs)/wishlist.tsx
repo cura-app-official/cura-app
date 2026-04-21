@@ -3,6 +3,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { useAuth } from '@/providers/auth-provider';
 import type { ItemWithMedia } from '@/services/items';
 import { getWishlistIds, getWishlistItems, toggleWishlist } from '@/services/wishlist';
+import { Heart } from 'lucide-react-native';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
@@ -37,7 +38,7 @@ export default function WishlistScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <View className="px-6 py-4">
-        <Text className="text-2xl font-hell-round-bold text-foreground">
+        <Text className="text-3xl font-hell-round-bold text-foreground">
           Wishlist
         </Text>
       </View>
@@ -48,7 +49,7 @@ export default function WishlistScreen() {
         </View>
       ) : items.length === 0 ? (
         <EmptyState
-          icon="heart-outline"
+          icon={Heart}
           title="Your wishlist is empty"
           description="Save items you love and come back to them later"
         />
@@ -71,8 +72,8 @@ export default function WishlistScreen() {
           )}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
-          columnWrapperStyle={{ marginBottom: 20 }}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}
+          columnWrapperStyle={{ marginBottom: 24 }}
           showsVerticalScrollIndicator={false}
         />
       )}

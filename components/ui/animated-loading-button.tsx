@@ -71,7 +71,7 @@ export function AnimatedLoadingButton({
         onPress={handlePress}
         disabled={isSubmitting || disabled}
         style={animatedStyle}
-        className={cn('justify-center items-center h-[4.75rem]', className)}
+        className={cn('justify-center items-center h-[4.25rem]', className)}
       >
         {isSubmitting ? (
           <ActivityIndicator size="small" color="white" />

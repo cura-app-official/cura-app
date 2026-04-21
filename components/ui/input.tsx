@@ -13,22 +13,29 @@ export const Input = forwardRef<TextInput, InputProps>(
     return (
       <View className={cn('w-full', containerClassName)}>
         {label && (
-          <Text className="text-sm font-helvetica text-muted-foreground mb-2">
+          <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
             {label}
           </Text>
         )}
-        <TextInput
-          ref={ref}
+        <View
           className={cn(
-            'w-full px-4 py-4 rounded-xl bg-muted font-helvetica text-base text-foreground',
-            error && 'border border-error',
-            className
+            'px-5 rounded-3xl bg-gray-100',
+            error && 'border border-error'
           )}
-          placeholderTextColor="#A3A3A3"
-          {...props}
-        />
+        >
+          <TextInput
+            ref={ref}
+            className={cn(
+              'text-base text-foreground font-helvetica py-4 leading-[1.1]',
+              className
+            )}
+            placeholderTextColor="#a3a3a3"
+            selectionColor="#1A1A1A"
+            {...props}
+          />
+        </View>
         {error && (
-          <Text className="text-xs font-helvetica text-error mt-1.5">
+          <Text className="text-sm font-helvetica text-error ml-2 mt-1.5">
             {error}
           </Text>
         )}

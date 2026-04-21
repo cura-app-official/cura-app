@@ -3,7 +3,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useAuth } from '@/providers/auth-provider';
 import { type CartItemWithDetails, getCartItems, removeFromCart } from '@/services/cart';
-import { Ionicons } from '@expo/vector-icons';
+import { ShoppingBag, X } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
@@ -30,9 +30,9 @@ export default function CartScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row items-center px-6 py-3">
+      <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+        <Text className="text-xl font-hell-round-bold text-foreground">
           Cart
         </Text>
       </View>
@@ -43,7 +43,7 @@ export default function CartScreen() {
         </View>
       ) : cartItems.length === 0 ? (
         <EmptyState
-          icon="bag-outline"
+          icon={ShoppingBag}
           title="Your cart is empty"
           description="Browse items and add them to your cart"
         />
@@ -54,33 +54,33 @@ export default function CartScreen() {
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ paddingHorizontal: 24, gap: 16, paddingBottom: 20 }}
             renderItem={({ item: ci }: { item: CartItemWithDetails }) => (
-              <View className="flex-row gap-3">
+              <View className="flex-row gap-4">
                 <Pressable onPress={() => router.push(`/(app)/item/${ci.item.id}`)}>
                   <Image
                     source={{ uri: ci.item.item_media?.[0]?.url ?? '' }}
-                    className="w-24 h-24 rounded-xl bg-muted"
+                    className="w-28 h-28 rounded-2xl bg-muted"
                     contentFit="cover"
                   />
                 </Pressable>
                 <View className="flex-1 justify-between py-1">
                   <View>
-                    <Text className="text-base font-hell-round-bold text-foreground" numberOfLines={1}>
+                    <Text className="text-lg font-hell-round-bold text-foreground" numberOfLines={1}>
                       {ci.item.item_name}
                     </Text>
-                    <Text className="text-sm font-helvetica text-muted-foreground mt-0.5">
+                    <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
                       {ci.item.brand} · {ci.item.size}
                     </Text>
                   </View>
-                  <Text className="text-base font-hell-round-bold text-foreground">
+                  <Text className="text-lg font-hell-round-bold text-foreground">
                     ₱{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
                 <Pressable
                   onPress={() => handleRemove(ci.id)}
                   className="self-start pt-1"
-                  hitSlop={8}
+                  hitSlop={12}
                 >
-                  <Ionicons name="close" size={18} color="#A3A3A3" />
+                  <X size={18} strokeWidth={2.5} color="#A3A3A3" />
                 </Pressable>
               </View>
             )}
@@ -88,14 +88,14 @@ export default function CartScreen() {
 
           <View className="border-t border-border px-6 py-4">
             <View className="flex-row justify-between mb-4">
-              <Text className="text-base font-helvetica text-muted-foreground">Total</Text>
-              <Text className="text-xl font-hell-round-bold text-foreground">
+              <Text className="text-lg font-helvetica text-muted-foreground">Total</Text>
+              <Text className="text-2xl font-hell-round-bold text-foreground">
                 ₱{total.toLocaleString()}
               </Text>
             </View>
             <AnimatedButton
               onPress={() => router.push('/(app)/checkout')}
-              className="h-[4.75rem] justify-center items-center bg-accent"
+              className="h-[4.25rem] bg-accent"
             >
               <Text className="text-lg font-hell-round-bold text-white">
                 Checkout

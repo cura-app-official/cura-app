@@ -2,6 +2,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useAuth } from '@/providers/auth-provider';
 import { getOrders, type OrderWithDetails } from '@/services/orders';
+import { Package } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -37,24 +38,24 @@ export default function OrdersScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row items-center px-6 py-3">
+      <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+        <Text className="text-xl font-hell-round-bold text-foreground">
           My Orders
         </Text>
       </View>
 
-      <View className="flex-row px-6 gap-1 mb-2">
+      <View className="flex-row px-6 gap-2 mb-3">
         {TABS.map((tab) => (
           <Pressable
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
-            className={`flex-1 py-2.5 items-center rounded-full ${
-              activeTab === tab.key ? 'bg-accent' : 'bg-muted'
+            className={`flex-1 py-3 items-center rounded-3xl ${
+              activeTab === tab.key ? 'bg-accent' : 'bg-gray-100'
             }`}
           >
             <Text
-              className={`text-xs font-hell-round-bold ${
+              className={`text-sm font-hell-round-bold ${
                 activeTab === tab.key ? 'text-white' : 'text-foreground'
               }`}
             >
@@ -70,7 +71,7 @@ export default function OrdersScreen() {
         </View>
       ) : orders.length === 0 ? (
         <EmptyState
-          icon="receipt-outline"
+          icon={Package}
           title="No orders yet"
           description={`You have no ${activeTab.replace('_', ' ')} orders`}
         />
@@ -80,21 +81,21 @@ export default function OrdersScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingHorizontal: 24, gap: 12, paddingBottom: 20 }}
           renderItem={({ item: order }: { item: OrderWithDetails }) => (
-            <View className="p-4 rounded-xl bg-muted">
-              <View className="flex-row gap-3">
+            <View className="p-5 rounded-3xl bg-gray-100">
+              <View className="flex-row gap-4">
                 <Image
                   source={{ uri: order.item?.item_media?.[0]?.url ?? '' }}
-                  className="w-16 h-16 rounded-lg bg-border"
+                  className="w-20 h-20 rounded-2xl bg-border"
                   contentFit="cover"
                 />
                 <View className="flex-1">
-                  <Text className="text-base font-hell-round-bold text-foreground" numberOfLines={1}>
+                  <Text className="text-lg font-hell-round-bold text-foreground" numberOfLines={1}>
                     {order.item?.item_name}
                   </Text>
-                  <Text className="text-sm font-helvetica text-muted-foreground mt-0.5">
+                  <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
                     ₱{order.total_amount.toLocaleString()}
                   </Text>
-                  <Text className={`text-xs font-hell-round-bold mt-1 ${getStatusColor(order.status)}`}>
+                  <Text className={`text-sm font-hell-round-bold mt-1.5 ${getStatusColor(order.status)}`}>
                     {order.status.replace('_', ' ').toUpperCase()}
                   </Text>
                 </View>

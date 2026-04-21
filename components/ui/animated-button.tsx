@@ -40,7 +40,10 @@ export function AnimatedButton({
       onPress={onPress}
       disabled={disabled}
       style={[animatedStyle, style]}
-      className={cn('rounded-2xl bg-accent overflow-hidden', className)}
+      className={cn(
+        'rounded-3xl bg-accent overflow-hidden items-center justify-center',
+        className
+      )}
       {...props}
     >
       {children}

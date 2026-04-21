@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { sellerApplicationSchema, type SellerApplicationForm } from '@/lib/validations';
 import { useAuth } from '@/providers/auth-provider';
 import { submitSellerApplication } from '@/services/seller';
-import { Ionicons } from '@expo/vector-icons';
+import { Camera, X } from 'lucide-react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -83,19 +83,19 @@ export default function SellerApplyScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-        <View className="flex-row items-center px-6 py-3">
+        <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-lg font-hell-round-bold text-foreground ml-2">
-            Sell my pieces
+          <Text className="text-xl font-hell-round-bold text-foreground">
+            Become a Seller
           </Text>
         </View>
 
         <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-          <Text className="text-sm font-helvetica text-muted-foreground mb-6">
+          <Text className="text-base font-helvetica text-muted-foreground mb-8 leading-6">
             Tell us about yourself so we can review your seller application.
           </Text>
 
-          <View className="gap-4">
+          <View className="gap-5">
             <View className="flex-row gap-3">
               <View className="flex-1">
                 <Controller
@@ -103,7 +103,7 @@ export default function SellerApplyScreen() {
                   name="first_name"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
-                      label="First name *"
+                      label="First name"
                       placeholder="Jane"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -119,7 +119,7 @@ export default function SellerApplyScreen() {
                   name="last_name"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
-                      label="Last name *"
+                      label="Last name"
                       placeholder="Doe"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -136,7 +136,7 @@ export default function SellerApplyScreen() {
               name="instagram_link"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Instagram link *"
+                  label="Instagram link"
                   placeholder="https://instagram.com/username"
                   autoCapitalize="none"
                   onBlur={onBlur}
@@ -152,7 +152,7 @@ export default function SellerApplyScreen() {
               name="height"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Height *"
+                  label="Height"
                   placeholder="e.g. 5'7&quot; or 170cm"
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -174,37 +174,40 @@ export default function SellerApplyScreen() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value ?? ''}
-                  className="min-h-[80px] py-3"
+                  className="min-h-[100px]"
                 />
               )}
             />
 
             <View>
-              <Text className="text-sm font-helvetica text-muted-foreground mb-2">
+              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
                 Sample photos
               </Text>
-              <View className="flex-row flex-wrap gap-2">
+              <View className="flex-row flex-wrap gap-3">
                 {samplePhotos.map((uri, i) => (
-                  <View key={uri} className="relative w-20 h-20">
+                  <View key={uri} className="relative w-24 h-24">
                     <Image
                       source={{ uri }}
-                      className="w-20 h-20 rounded-lg bg-muted"
+                      className="w-24 h-24 rounded-2xl bg-muted"
                       contentFit="cover"
                     />
                     <Pressable
                       onPress={() => removePhoto(i)}
-                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-foreground items-center justify-center"
+                      className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-foreground items-center justify-center"
                     >
-                      <Ionicons name="close" size={12} color="white" />
+                      <X size={12} strokeWidth={3} color="white" />
                     </Pressable>
                   </View>
                 ))}
                 {samplePhotos.length < 6 && (
                   <Pressable
                     onPress={pickPhotos}
-                    className="w-20 h-20 rounded-lg bg-muted items-center justify-center"
+                    className="w-24 h-24 rounded-2xl bg-gray-100 items-center justify-center"
                   >
-                    <Ionicons name="add" size={24} color="#A3A3A3" />
+                    <Camera size={26} strokeWidth={2} color="#A3A3A3" />
+                    <Text className="text-sm font-helvetica text-muted-foreground mt-1">
+                      {samplePhotos.length}/6
+                    </Text>
                   </Pressable>
                 )}
               </View>

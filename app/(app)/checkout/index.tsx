@@ -4,8 +4,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { getCartItems, clearCart } from '@/services/cart';
 import { getDefaultAddress } from '@/services/addresses';
 import { createOrder } from '@/services/orders';
-import type { Tables } from '@/types/database';
-import { Ionicons } from '@expo/vector-icons';
+import { ChevronRight, Plus } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
@@ -68,72 +67,72 @@ export default function CheckoutScreen() {
 
   if (cartLoading || addressLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <View className="flex-1 bg-background items-center justify-center">
         <ActivityIndicator size="small" color="#1A1A1A" />
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row items-center px-6 py-3">
+      <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+        <Text className="text-xl font-hell-round-bold text-foreground">
           Checkout
         </Text>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="px-6">
-          <Text className="text-sm font-hell-round-bold text-foreground mb-3">
+          <Text className="text-base font-hell-round-bold text-foreground mb-3">
             Shipping Address
           </Text>
           {defaultAddress ? (
             <Pressable
               onPress={() => router.push('/(app)/address')}
-              className="p-4 rounded-xl bg-muted flex-row items-center"
+              className="p-5 rounded-3xl bg-gray-100 flex-row items-center"
             >
               <View className="flex-1">
-                <Text className="text-base font-hell-round-bold text-foreground">
+                <Text className="text-lg font-hell-round-bold text-foreground">
                   {defaultAddress.name}
                 </Text>
-                <Text className="text-sm font-helvetica text-muted-foreground mt-0.5">
+                <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
                   {defaultAddress.phone_number}
                 </Text>
-                <Text className="text-sm font-helvetica text-foreground mt-0.5">
+                <Text className="text-base font-helvetica text-foreground mt-1">
                   {defaultAddress.address}
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={18} color="#A3A3A3" />
+              <ChevronRight size={20} strokeWidth={2.5} color="#A3A3A3" />
             </Pressable>
           ) : (
             <Pressable
               onPress={() => router.push('/(app)/address/add')}
-              className="p-4 rounded-xl bg-muted flex-row items-center justify-center gap-2"
+              className="p-5 rounded-3xl bg-gray-100 flex-row items-center justify-center gap-2"
             >
-              <Ionicons name="add" size={20} color="#1A1A1A" />
-              <Text className="text-sm font-hell-round-bold text-foreground">
+              <Plus size={20} strokeWidth={2.5} color="#282828" />
+              <Text className="text-base font-hell-round-bold text-foreground">
                 Add shipping address
               </Text>
             </Pressable>
           )}
 
-          <Text className="text-sm font-hell-round-bold text-foreground mt-6 mb-3">
+          <Text className="text-base font-hell-round-bold text-foreground mt-8 mb-4">
             Items
           </Text>
-          <View className="gap-3">
+          <View className="gap-4">
             {cartItems.map((ci) => (
-              <View key={ci.id} className="flex-row gap-3">
+              <View key={ci.id} className="flex-row gap-4">
                 <Image
                   source={{ uri: ci.item.item_media?.[0]?.url ?? '' }}
-                  className="w-16 h-16 rounded-lg bg-muted"
+                  className="w-20 h-20 rounded-2xl bg-muted"
                   contentFit="cover"
                 />
                 <View className="flex-1 justify-center">
-                  <Text className="text-sm font-hell-round-bold text-foreground" numberOfLines={1}>
+                  <Text className="text-base font-hell-round-bold text-foreground" numberOfLines={1}>
                     {ci.item.item_name}
                   </Text>
-                  <Text className="text-sm font-helvetica text-muted-foreground">
+                  <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
                     ₱{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
@@ -141,15 +140,15 @@ export default function CheckoutScreen() {
             ))}
           </View>
 
-          <View className="flex-row justify-between mt-6 py-4 border-t border-border">
-            <Text className="text-base font-helvetica text-muted-foreground">Total</Text>
-            <Text className="text-xl font-hell-round-bold text-foreground">
+          <View className="flex-row justify-between mt-8 py-5 border-t border-border">
+            <Text className="text-lg font-helvetica text-muted-foreground">Total</Text>
+            <Text className="text-2xl font-hell-round-bold text-foreground">
               ₱{total.toLocaleString()}
             </Text>
           </View>
 
           <View className="py-4 border-t border-border">
-            <Text className="text-xs font-helvetica text-muted-foreground leading-4">
+            <Text className="text-sm font-helvetica text-muted-foreground leading-5">
               By placing this order, you agree that all items are secondhand and may
               show signs of wear as described in their listings. All sales are final.
             </Text>

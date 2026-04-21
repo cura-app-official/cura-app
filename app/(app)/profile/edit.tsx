@@ -4,11 +4,11 @@ import { Input } from '@/components/ui/input';
 import { editProfileSchema, type EditProfileForm } from '@/lib/validations';
 import { useAuth } from '@/providers/auth-provider';
 import { updateUser } from '@/services/users';
-import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
+import { Camera, User } from 'lucide-react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -69,39 +69,45 @@ export default function EditProfileScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-        <View className="flex-row items-center px-6 py-3">
+        <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+          <Text className="text-xl font-hell-round-bold text-foreground">
             Edit profile
           </Text>
         </View>
 
         <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-          <Pressable onPress={() => pickImage('background_url')} className="relative h-28 rounded-xl bg-muted overflow-hidden mb-6">
+          {/* Cover photo */}
+          <Pressable
+            onPress={() => pickImage('background_url')}
+            className="relative h-36 rounded-3xl bg-gray-100 overflow-hidden mb-8"
+          >
             {backgroundUrl && (
               <Image source={{ uri: backgroundUrl }} className="absolute inset-0" contentFit="cover" />
             )}
             <View className="absolute inset-0 items-center justify-center bg-black/20">
-              <Ionicons name="camera-outline" size={24} color="white" />
+              <Camera size={26} strokeWidth={2} color="white" />
             </View>
           </Pressable>
 
-          <View className="items-center mb-8">
+          {/* Avatar */}
+          <View className="items-center mb-10">
             <Pressable onPress={() => pickImage('avatar_url')} className="relative">
               {avatarUrl ? (
-                <Image source={{ uri: avatarUrl }} className="w-24 h-24 rounded-full bg-muted" />
+                <Image source={{ uri: avatarUrl }} className="w-28 h-28 rounded-full bg-muted" />
               ) : (
-                <View className="w-24 h-24 rounded-full bg-muted items-center justify-center">
-                  <Ionicons name="person" size={32} color="#A3A3A3" />
+                <View className="w-28 h-28 rounded-full bg-gray-100 items-center justify-center">
+                  <User size={36} strokeWidth={2} color="#A3A3A3" />
                 </View>
               )}
-              <View className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-accent items-center justify-center">
-                <Ionicons name="camera" size={14} color="white" />
+              <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center">
+                <Camera size={16} strokeWidth={2.5} color="white" />
               </View>
             </Pressable>
           </View>
 
-          <View className="gap-4 pb-8">
+          {/* Form fields */}
+          <View className="gap-5 pb-8">
             <Controller
               control={control}
               name="instagram_link"
@@ -130,7 +136,7 @@ export default function EditProfileScreen() {
                   onChangeText={onChange}
                   value={value ?? ''}
                   error={errors.bio?.message}
-                  className="min-h-[80px] py-3"
+                  className="min-h-[100px]"
                 />
               )}
             />
@@ -141,7 +147,7 @@ export default function EditProfileScreen() {
           <AnimatedLoadingButton
             isSubmitting={isSubmitting}
             onPress={handleSubmit(onSubmit)}
-            title="Save"
+            title="Save changes"
           />
         </View>
       </KeyboardAvoidingView>

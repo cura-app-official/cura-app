@@ -39,14 +39,14 @@ export default function LoginScreen() {
           <BackButton />
         </View>
         <View className="flex-1 px-6 pt-8">
-          <Text className="text-3xl font-hell-round-bold text-foreground">
+          <Text className="text-4xl font-hell-round-bold text-foreground">
             Welcome back
           </Text>
-          <Text className="text-base font-helvetica text-muted-foreground mt-2 mb-10">
+          <Text className="text-lg font-helvetica text-muted-foreground mt-3 mb-10">
             Sign in to your account
           </Text>
 
-          <View className="gap-4">
+          <View className="gap-5">
             <Controller
               control={control}
               name="email"
@@ -69,7 +69,7 @@ export default function LoginScreen() {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
                   label="Password"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   secureTextEntry
                   onBlur={onBlur}
                   onChangeText={onChange}

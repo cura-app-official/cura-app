@@ -5,7 +5,7 @@ import { CATEGORIES, CONDITIONS, DAMAGE_OPTIONS } from '@/lib/constants';
 import { createListingSchema, type CreateListingForm } from '@/lib/validations';
 import { useAuth } from '@/providers/auth-provider';
 import { createItem, createItemMedia } from '@/services/items';
-import { Ionicons } from '@expo/vector-icons';
+import { Camera, X } from 'lucide-react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -119,42 +119,43 @@ export default function CreateListingScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-        <View className="flex-row items-center px-6 py-3">
+        <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+          <Text className="text-xl font-hell-round-bold text-foreground">
             Create listing
           </Text>
         </View>
 
         <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-          <View className="mb-6">
-            <Text className="text-sm font-helvetica text-muted-foreground mb-2">
+          {/* Photos */}
+          <View className="mb-8">
+            <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
               Photos
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="flex-row gap-2">
+              <View className="flex-row gap-3">
                 {mediaUris.map((uri, i) => (
                   <View key={uri} className="relative">
                     <Image
                       source={{ uri }}
-                      className="w-24 h-24 rounded-xl bg-muted"
+                      className="w-28 h-28 rounded-2xl bg-muted"
                       contentFit="cover"
                     />
                     <Pressable
                       onPress={() => removeMedia(i)}
-                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-foreground items-center justify-center"
+                      className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-foreground items-center justify-center"
                     >
-                      <Ionicons name="close" size={12} color="white" />
+                      <X size={12} strokeWidth={3} color="white" />
                     </Pressable>
                   </View>
                 ))}
                 {mediaUris.length < 10 && (
                   <Pressable
                     onPress={pickMedia}
-                    className="w-24 h-24 rounded-xl bg-muted items-center justify-center"
+                    className="w-28 h-28 rounded-2xl bg-gray-100 items-center justify-center"
                   >
-                    <Ionicons name="camera-outline" size={28} color="#A3A3A3" />
-                    <Text className="text-xs font-helvetica text-muted-foreground mt-1">
+                    <Camera size={28} strokeWidth={2} color="#A3A3A3" />
+                    <Text className="text-sm font-helvetica text-muted-foreground mt-1">
                       {mediaUris.length}/10
                     </Text>
                   </Pressable>
@@ -163,13 +164,13 @@ export default function CreateListingScreen() {
             </ScrollView>
           </View>
 
-          <View className="gap-4 pb-6">
+          <View className="gap-5 pb-6">
             <Controller
               control={control}
               name="item_name"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Item name *"
+                  label="Item name"
                   placeholder="e.g. Vintage denim jacket"
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -184,7 +185,7 @@ export default function CreateListingScreen() {
               name="brand"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Brand *"
+                  label="Brand"
                   placeholder="e.g. Nike, Zara, Thrifted"
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -195,20 +196,20 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-sm font-helvetica text-muted-foreground mb-2">
-                Category *
+              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
+                Category
               </Text>
               <View className="flex-row flex-wrap gap-2">
                 {CATEGORIES.map((cat) => (
                   <Pressable
                     key={cat}
                     onPress={() => setValue('category', cat, { shouldValidate: true })}
-                    className={`px-4 py-2 rounded-full ${
-                      selectedCategory === cat ? 'bg-accent' : 'bg-muted'
+                    className={`px-5 py-3 rounded-3xl ${
+                      selectedCategory === cat ? 'bg-accent' : 'bg-gray-100'
                     }`}
                   >
                     <Text
-                      className={`text-sm font-helvetica ${
+                      className={`text-base font-helvetica ${
                         selectedCategory === cat ? 'text-white' : 'text-foreground'
                       }`}
                     >
@@ -218,7 +219,7 @@ export default function CreateListingScreen() {
                 ))}
               </View>
               {errors.category && (
-                <Text className="text-xs text-error mt-1">{errors.category.message}</Text>
+                <Text className="text-sm text-error ml-2 mt-1.5">{errors.category.message}</Text>
               )}
             </View>
 
@@ -227,7 +228,7 @@ export default function CreateListingScreen() {
               name="size"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Size *"
+                  label="Size"
                   placeholder="e.g. S, M, L, 28, US 8"
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -238,20 +239,20 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-sm font-helvetica text-muted-foreground mb-2">
-                Condition *
+              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
+                Condition
               </Text>
               <View className="flex-row flex-wrap gap-2">
                 {CONDITIONS.map((cond) => (
                   <Pressable
                     key={cond}
                     onPress={() => setValue('condition', cond, { shouldValidate: true })}
-                    className={`px-4 py-2 rounded-full ${
-                      selectedCondition === cond ? 'bg-accent' : 'bg-muted'
+                    className={`px-5 py-3 rounded-3xl ${
+                      selectedCondition === cond ? 'bg-accent' : 'bg-gray-100'
                     }`}
                   >
                     <Text
-                      className={`text-sm font-helvetica ${
+                      className={`text-base font-helvetica ${
                         selectedCondition === cond ? 'text-white' : 'text-foreground'
                       }`}
                     >
@@ -261,7 +262,7 @@ export default function CreateListingScreen() {
                 ))}
               </View>
               {errors.condition && (
-                <Text className="text-xs text-error mt-1">{errors.condition.message}</Text>
+                <Text className="text-sm text-error ml-2 mt-1.5">{errors.condition.message}</Text>
               )}
             </View>
 
@@ -270,7 +271,7 @@ export default function CreateListingScreen() {
               name="price"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Price (₱) *"
+                  label="Price (₱)"
                   placeholder="0"
                   keyboardType="numeric"
                   onBlur={onBlur}
@@ -282,7 +283,7 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-sm font-helvetica text-muted-foreground mb-2">
+              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
                 Damage
               </Text>
               <View className="flex-row flex-wrap gap-2">
@@ -290,12 +291,12 @@ export default function CreateListingScreen() {
                   <Pressable
                     key={dmg}
                     onPress={() => setValue('damage_type', dmg)}
-                    className={`px-4 py-2 rounded-full ${
-                      selectedDamage === dmg ? 'bg-accent' : 'bg-muted'
+                    className={`px-5 py-3 rounded-3xl ${
+                      selectedDamage === dmg ? 'bg-accent' : 'bg-gray-100'
                     }`}
                   >
                     <Text
-                      className={`text-sm font-helvetica ${
+                      className={`text-base font-helvetica ${
                         selectedDamage === dmg ? 'text-white' : 'text-foreground'
                       }`}
                     >
@@ -333,7 +334,7 @@ export default function CreateListingScreen() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value ?? ''}
-                  className="min-h-[80px] py-3"
+                  className="min-h-[100px]"
                 />
               )}
             />

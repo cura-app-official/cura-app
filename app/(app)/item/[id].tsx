@@ -1,15 +1,17 @@
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { BackButton } from '@/components/ui/back-button';
+import { ProfileAvatar } from '@/components/ui/profile-avatar';
 import { useAuth } from '@/providers/auth-provider';
 import { getItem } from '@/services/items';
 import { addToCart, isInCart } from '@/services/cart';
 import { isFollowing, toggleFollow } from '@/services/users';
 import { isWishlisted, toggleWishlist } from '@/services/wishlist';
-import { Ionicons } from '@expo/vector-icons';
+import { MOCK_ITEMS } from '@/lib/mock-data';
+import { Heart } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -30,49 +32,53 @@ export default function ItemDetailScreen() {
   const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const mockItem = MOCK_ITEMS.find((i) => i.id === id);
+
   const { data: item, isLoading } = useQuery({
     queryKey: ['item', id],
     queryFn: () => getItem(id),
-    enabled: !!id,
+    enabled: !!id && !mockItem,
   });
+
+  const displayItem = mockItem ?? item;
 
   const { data: wishlisted = false } = useQuery({
     queryKey: ['wishlisted', user?.id, id],
     queryFn: () => (user ? isWishlisted(user.id, id) : false),
-    enabled: !!user && !!id,
+    enabled: !!user && !!id && !mockItem,
   });
 
   const { data: inCart = false } = useQuery({
     queryKey: ['in-cart', user?.id, id],
     queryFn: () => (user ? isInCart(user.id, id) : false),
-    enabled: !!user && !!id,
+    enabled: !!user && !!id && !mockItem,
   });
 
   const { data: userFollowing = false } = useQuery({
-    queryKey: ['following-seller', user?.id, item?.seller_id],
+    queryKey: ['following-seller', user?.id, displayItem?.seller_id],
     queryFn: () =>
-      user && item ? isFollowing(user.id, item.seller_id) : false,
-    enabled: !!user && !!item,
+      user && displayItem ? isFollowing(user.id, displayItem.seller_id) : false,
+    enabled: !!user && !!displayItem && !mockItem,
   });
 
   const handleToggleWishlist = useCallback(async () => {
-    if (!user) return;
+    if (!user || mockItem) return;
     await toggleWishlist(user.id, id);
     queryClient.invalidateQueries({ queryKey: ['wishlisted', user.id, id] });
     queryClient.invalidateQueries({ queryKey: ['wishlist-ids'] });
     queryClient.invalidateQueries({ queryKey: ['wishlist'] });
-  }, [user, id, queryClient]);
+  }, [user, id, queryClient, mockItem]);
 
   const handleToggleFollow = useCallback(async () => {
-    if (!user || !item) return;
-    await toggleFollow(user.id, item.seller_id);
+    if (!user || !displayItem || mockItem) return;
+    await toggleFollow(user.id, displayItem.seller_id);
     queryClient.invalidateQueries({
-      queryKey: ['following-seller', user.id, item.seller_id],
+      queryKey: ['following-seller', user.id, displayItem.seller_id],
     });
-  }, [user, item, queryClient]);
+  }, [user, displayItem, queryClient, mockItem]);
 
   const handleAddToCart = useCallback(async () => {
-    if (!user) return;
+    if (!user || mockItem) return;
     try {
       await addToCart(user.id, id);
       queryClient.invalidateQueries({ queryKey: ['in-cart'] });
@@ -80,32 +86,46 @@ export default function ItemDetailScreen() {
     } catch {
       Alert.alert('Error', 'Could not add to cart');
     }
-  }, [user, id, queryClient]);
+  }, [user, id, queryClient, mockItem]);
 
   const handleBuyNow = () => {
+    if (mockItem) return;
     router.push('/(app)/checkout');
   };
 
-  if (isLoading || !item) {
+  if (!mockItem && (isLoading || !item)) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <View className="flex-1 bg-background items-center justify-center">
         <ActivityIndicator size="small" color="#1A1A1A" />
-      </SafeAreaView>
+      </View>
     );
   }
 
-  const images = item.item_media ?? [];
+  if (!displayItem) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center">
+        <ActivityIndicator size="small" color="#1A1A1A" />
+      </View>
+    );
+  }
+
+  const images = displayItem.item_media ?? [];
 
   return (
     <View className="flex-1 bg-background">
       <SafeAreaView edges={['top']} className="absolute top-0 left-0 right-0 z-10">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <BackButton color="#1A1A1A" />
-          <Pressable onPress={handleToggleWishlist} hitSlop={8}>
-            <Ionicons
-              name={wishlisted ? 'heart' : 'heart-outline'}
-              size={24}
-              color={wishlisted ? '#FF4747' : '#1A1A1A'}
+          <BackButton />
+          <Pressable
+            onPress={handleToggleWishlist}
+            hitSlop={8}
+            className="w-12 h-12 rounded-full bg-white/80 items-center justify-center"
+          >
+            <Heart
+              size={22}
+              strokeWidth={2.5}
+              color={wishlisted ? '#FF4747' : '#282828'}
+              fill={wishlisted ? '#FF4747' : 'transparent'}
             />
           </Pressable>
         </View>
@@ -131,15 +151,15 @@ export default function ItemDetailScreen() {
             />
           )}
           keyExtractor={(m) => m.id}
-          scrollEnabled={false}
+          scrollEnabled={images.length > 1}
           nestedScrollEnabled
         />
         {images.length > 1 && (
-          <View className="flex-row justify-center gap-1.5 py-3">
+          <View className="flex-row justify-center gap-2 py-4">
             {images.map((_, i) => (
               <View
                 key={i}
-                className={`w-1.5 h-1.5 rounded-full ${
+                className={`w-2 h-2 rounded-full ${
                   i === currentIndex ? 'bg-foreground' : 'bg-border'
                 }`}
               />
@@ -147,41 +167,33 @@ export default function ItemDetailScreen() {
           </View>
         )}
 
-        <View className="px-6 pt-4 pb-8">
-          <Text className="text-2xl font-hell-round-bold text-foreground">
-            {item.item_name}
+        <View className="px-6 pt-5 pb-8">
+          <Text className="text-3xl font-hell-round-bold text-foreground">
+            {displayItem.item_name}
           </Text>
-          <Text className="text-xl font-hell-round-bold text-foreground mt-1">
-            ₱{item.price.toLocaleString()}
+          <Text className="text-2xl font-hell-round-bold text-foreground mt-2">
+            ₱{displayItem.price.toLocaleString()}
           </Text>
 
+          {/* Seller row */}
           <Pressable
-            onPress={() => router.push(`/(app)/profile/${item.seller_id}`)}
-            className="flex-row items-center gap-3 mt-5 mb-5"
+            onPress={() => router.push(`/(app)/profile/${displayItem.seller_id}`)}
+            className="flex-row items-center gap-4 mt-6 mb-6"
           >
-            {item.seller?.avatar_url ? (
-              <Image
-                source={{ uri: item.seller.avatar_url }}
-                className="w-10 h-10 rounded-full bg-muted"
-              />
-            ) : (
-              <View className="w-10 h-10 rounded-full bg-muted items-center justify-center">
-                <Ionicons name="person" size={16} color="#A3A3A3" />
-              </View>
-            )}
+            <ProfileAvatar uri={displayItem.seller?.avatar_url} size={44} borderWidth={0} />
             <View className="flex-1">
-              <Text className="text-base font-hell-round-bold text-foreground">
-                {item.seller?.username}
+              <Text className="text-lg font-hell-round-bold text-foreground">
+                {displayItem.seller?.username}
               </Text>
             </View>
             <Pressable
               onPress={handleToggleFollow}
-              className={`px-4 py-2 rounded-full ${
-                userFollowing ? 'bg-muted' : 'bg-accent'
+              className={`px-5 py-2.5 rounded-3xl ${
+                userFollowing ? 'bg-gray-100' : 'bg-accent'
               }`}
             >
               <Text
-                className={`text-sm font-hell-round-bold ${
+                className={`text-base font-hell-round-bold ${
                   userFollowing ? 'text-foreground' : 'text-white'
                 }`}
               >
@@ -190,38 +202,39 @@ export default function ItemDetailScreen() {
             </Pressable>
           </Pressable>
 
-          <View className="gap-4 py-4 border-t border-border">
-            <DetailRow label="Condition" value={item.condition} />
-            <DetailRow label="Size" value={item.size} />
-            <DetailRow label="Brand" value={item.brand} />
-            <DetailRow label="Category" value={item.category} />
-            {item.damage_type && item.damage_type !== 'No damage' && (
-              <DetailRow label="Damage" value={item.damage_type} />
+          {/* Details */}
+          <View className="gap-4 py-5 border-t border-border">
+            <DetailRow label="Condition" value={displayItem.condition} />
+            <DetailRow label="Size" value={displayItem.size} />
+            <DetailRow label="Brand" value={displayItem.brand} />
+            <DetailRow label="Category" value={displayItem.category} />
+            {displayItem.damage_type && displayItem.damage_type !== 'No damage' && (
+              <DetailRow label="Damage" value={displayItem.damage_type} />
             )}
-            {item.damage_details && (
-              <DetailRow label="Damage details" value={item.damage_details} />
+            {displayItem.damage_details && (
+              <DetailRow label="Damage details" value={displayItem.damage_details} />
             )}
-            {item.material && (
-              <DetailRow label="Material" value={item.material} />
+            {displayItem.material && (
+              <DetailRow label="Material" value={displayItem.material} />
             )}
-            {item.measurements && (
-              <DetailRow label="Measurements" value={item.measurements} />
+            {displayItem.measurements && (
+              <DetailRow label="Measurements" value={displayItem.measurements} />
             )}
           </View>
 
-          {item.description && (
-            <View className="py-4 border-t border-border">
-              <Text className="text-sm font-helvetica text-muted-foreground mb-1">
+          {displayItem.description && (
+            <View className="py-5 border-t border-border">
+              <Text className="text-base font-hell-round-bold text-muted-foreground mb-2">
                 Description
               </Text>
               <Text className="text-base font-helvetica text-foreground leading-6">
-                {item.description}
+                {displayItem.description}
               </Text>
             </View>
           )}
 
-          <View className="py-4 border-t border-border">
-            <Text className="text-xs font-helvetica text-muted-foreground leading-4">
+          <View className="py-5 border-t border-border">
+            <Text className="text-sm font-helvetica text-muted-foreground leading-5">
               This is a secondhand item. By purchasing, you acknowledge that the
               item is pre-owned and may show signs of wear as described above.
             </Text>
@@ -230,31 +243,31 @@ export default function ItemDetailScreen() {
       </ScrollView>
 
       <SafeAreaView edges={['bottom']} className="border-t border-border bg-background">
-        <View className="flex-row gap-2 px-6 py-3">
+        <View className="flex-row gap-3 px-6 py-3">
           {!inCart ? (
             <AnimatedButton
               onPress={handleAddToCart}
-              className="flex-1 py-4 items-center bg-muted rounded-xl"
+              className="flex-1 h-14 bg-gray-100"
             >
-              <Text className="text-sm font-hell-round-bold text-foreground">
+              <Text className="text-base font-hell-round-bold text-foreground">
                 Add to cart
               </Text>
             </AnimatedButton>
           ) : (
             <AnimatedButton
               onPress={() => router.push('/(app)/cart')}
-              className="flex-1 py-4 items-center bg-muted rounded-xl"
+              className="flex-1 h-14 bg-gray-100"
             >
-              <Text className="text-sm font-hell-round-bold text-foreground">
+              <Text className="text-base font-hell-round-bold text-foreground">
                 View cart
               </Text>
             </AnimatedButton>
           )}
           <AnimatedButton
             onPress={handleBuyNow}
-            className="flex-1 py-4 items-center bg-accent rounded-xl"
+            className="flex-1 h-14 bg-accent"
           >
-            <Text className="text-sm font-hell-round-bold text-white">
+            <Text className="text-base font-hell-round-bold text-white">
               Buy now
             </Text>
           </AnimatedButton>
@@ -267,8 +280,8 @@ export default function ItemDetailScreen() {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View className="flex-row justify-between">
-      <Text className="text-sm font-helvetica text-muted-foreground">{label}</Text>
-      <Text className="text-sm font-hell-round-bold text-foreground">{value}</Text>
+      <Text className="text-base font-helvetica text-muted-foreground">{label}</Text>
+      <Text className="text-base font-hell-round-bold text-foreground">{value}</Text>
     </View>
   );
 }

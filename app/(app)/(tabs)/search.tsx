@@ -6,8 +6,8 @@ import { useAuth } from '@/providers/auth-provider';
 import { searchCreators, searchItems, type ItemWithMedia } from '@/services/items';
 import { getWishlistIds, toggleWishlist } from '@/services/wishlist';
 import type { Tables } from '@/types/database';
-
-import { Ionicons } from '@expo/vector-icons';
+import { ProfileAvatar } from '@/components/ui/profile-avatar';
+import { Search as SearchIcon, Users } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
@@ -66,7 +66,7 @@ export default function SearchScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <View className="px-6 pt-4 pb-2">
-        <Text className="text-2xl font-hell-round-bold text-foreground mb-4">
+        <Text className="text-3xl font-hell-round-bold text-foreground mb-5">
           Search
         </Text>
         <Input
@@ -74,21 +74,20 @@ export default function SearchScreen() {
           value={query}
           onChangeText={setQuery}
           autoCapitalize="none"
-          className="bg-muted"
         />
       </View>
 
-      <View className="flex-row px-6 py-3 gap-2">
+      <View className="flex-row px-6 py-4 gap-2">
         {tabs.map((tab) => (
           <Pressable
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 rounded-full ${
-              activeTab === tab.key ? 'bg-accent' : 'bg-muted'
+            className={`px-5 py-3 rounded-3xl ${
+              activeTab === tab.key ? 'bg-accent' : 'bg-gray-100'
             }`}
           >
             <Text
-              className={`text-sm font-helvetica ${
+              className={`text-base font-helvetica ${
                 activeTab === tab.key ? 'text-white' : 'text-foreground'
               }`}
             >
@@ -106,12 +105,12 @@ export default function SearchScreen() {
             </View>
           ) : query.length < 2 ? (
             <EmptyState
-              icon="search-outline"
+              icon={SearchIcon}
               title="Search for items"
               description="Find pieces by name, brand, or category"
             />
           ) : itemResults.length === 0 ? (
-            <EmptyState icon="search-outline" title="No items found" />
+            <EmptyState icon={SearchIcon} title="No items found" />
           ) : (
             <FlatList
               data={itemResults}
@@ -130,8 +129,8 @@ export default function SearchScreen() {
               )}
               keyExtractor={(item) => item.id}
               numColumns={2}
-              contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
-              columnWrapperStyle={{ marginBottom: 20 }}
+              contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}
+              columnWrapperStyle={{ marginBottom: 24 }}
               showsVerticalScrollIndicator={false}
             />
           )}
@@ -146,37 +145,28 @@ export default function SearchScreen() {
             </View>
           ) : query.length < 2 ? (
             <EmptyState
-              icon="people-outline"
+              icon={Users}
               title="Search for creators"
               description="Find your favorite influencers and artists"
             />
           ) : creatorResults.length === 0 ? (
-            <EmptyState icon="people-outline" title="No creators found" />
+            <EmptyState icon={Users} title="No creators found" />
           ) : (
             <FlatList
               data={creatorResults}
               renderItem={({ item }: { item: Tables<'users'> }) => (
                 <Pressable
                   onPress={() => router.push(`/(app)/profile/${item.id}`)}
-                  className="flex-row items-center px-6 py-3 gap-3"
+                  className="flex-row items-center px-6 py-3.5 gap-4"
                 >
-                  {item.avatar_url ? (
-                    <Image
-                      source={{ uri: item.avatar_url }}
-                      className="w-12 h-12 rounded-full bg-muted"
-                    />
-                  ) : (
-                    <View className="w-12 h-12 rounded-full bg-muted items-center justify-center">
-                      <Ionicons name="person" size={20} color="#A3A3A3" />
-                    </View>
-                  )}
+                  <ProfileAvatar uri={item.avatar_url} size={48} borderWidth={0} />
                   <View className="flex-1">
-                    <Text className="text-base font-hell-round-bold text-foreground">
+                    <Text className="text-lg font-hell-round-bold text-foreground">
                       {item.username}
                     </Text>
                     {item.bio && (
                       <Text
-                        className="text-sm font-helvetica text-muted-foreground mt-0.5"
+                        className="text-base font-helvetica text-muted-foreground mt-0.5"
                         numberOfLines={1}
                       >
                         {item.bio}
@@ -194,7 +184,7 @@ export default function SearchScreen() {
 
       {activeTab === 'categories' && (
         <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-          <View className="flex-row flex-wrap gap-2 py-2">
+          <View className="flex-row flex-wrap gap-3 py-2">
             {CATEGORIES.map((cat) => (
               <Pressable
                 key={cat}
@@ -202,9 +192,9 @@ export default function SearchScreen() {
                   setActiveTab('items');
                   setQuery(cat);
                 }}
-                className="px-5 py-3 rounded-full bg-muted"
+                className="px-6 py-3.5 rounded-3xl bg-gray-100"
               >
-                <Text className="text-sm font-helvetica text-foreground">{cat}</Text>
+                <Text className="text-base font-helvetica text-foreground">{cat}</Text>
               </Pressable>
             ))}
           </View>

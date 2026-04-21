@@ -45,10 +45,10 @@ export default function SignupUsernameScreen() {
           <BackButton />
         </View>
         <View className="flex-1 px-6 pt-8">
-          <Text className="text-3xl font-hell-round-bold text-foreground">
+          <Text className="text-4xl font-hell-round-bold text-foreground">
             Choose a username
           </Text>
-          <Text className="text-base font-helvetica text-muted-foreground mt-2 mb-10">
+          <Text className="text-lg font-helvetica text-muted-foreground mt-3 mb-10">
             This is how others will find you
           </Text>
 

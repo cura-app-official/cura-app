@@ -1,7 +1,7 @@
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { useAuth } from '@/providers/auth-provider';
 import { updateUser } from '@/services/users';
-import { Ionicons } from '@expo/vector-icons';
+import { Bell } from 'lucide-react-native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
@@ -35,14 +35,14 @@ export default function NotificationsScreen() {
           entering={FadeInDown.duration(600)}
           className="items-center"
         >
-          <View className="w-20 h-20 rounded-full bg-muted items-center justify-center mb-8">
-            <Ionicons name="notifications-outline" size={32} color="#1A1A1A" />
+          <View className="w-24 h-24 rounded-full bg-gray-100 items-center justify-center mb-10">
+            <Bell size={36} strokeWidth={2} color="#282828" />
           </View>
 
-          <Text className="text-3xl font-hell-round-bold text-foreground text-center">
+          <Text className="text-4xl font-hell-round-bold text-foreground text-center">
             Stay in the loop
           </Text>
-          <Text className="text-base font-helvetica text-muted-foreground mt-3 text-center leading-6 px-4">
+          <Text className="text-lg font-helvetica text-muted-foreground mt-4 text-center leading-7 px-4">
             Get notified about new drops from creators you follow and updates on your orders.
           </Text>
         </Animated.View>
@@ -51,14 +51,14 @@ export default function NotificationsScreen() {
       <View className="px-6 pb-6 gap-3">
         <AnimatedButton
           onPress={handleEnable}
-          className="h-[4.75rem] justify-center items-center bg-accent"
+          className="h-[4.25rem] bg-accent"
         >
           <Text className="text-lg font-hell-round-bold text-white">
             Enable notifications
           </Text>
         </AnimatedButton>
         <Pressable onPress={handleSkip} className="py-4 items-center">
-          <Text className="text-base font-helvetica text-muted-foreground">
+          <Text className="text-lg font-helvetica text-muted-foreground">
             Maybe later
           </Text>
         </Pressable>

@@ -56,14 +56,14 @@ export default function SignupEmailScreen() {
           <BackButton />
         </View>
         <View className="flex-1 px-6 pt-8">
-          <Text className="text-3xl font-hell-round-bold text-foreground">
+          <Text className="text-4xl font-hell-round-bold text-foreground">
             Create your account
           </Text>
-          <Text className="text-base font-helvetica text-muted-foreground mt-2 mb-10">
+          <Text className="text-lg font-helvetica text-muted-foreground mt-3 mb-10">
             Almost there, {signupData.username}
           </Text>
 
-          <View className="gap-4">
+          <View className="gap-5">
             <Controller
               control={control}
               name="email"
@@ -97,7 +97,7 @@ export default function SignupEmailScreen() {
             />
           </View>
 
-          <Text className="text-xs font-helvetica text-muted-foreground mt-4 leading-4">
+          <Text className="text-sm font-helvetica text-muted-foreground mt-5 leading-5">
             By creating an account, you agree to our Terms of Service and Privacy Policy.
           </Text>
         </View>

@@ -24,21 +24,21 @@ export default function OnboardingScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 px-6 pt-16">
         <Animated.View entering={FadeInDown.duration(600)}>
-          <Text className="text-4xl font-hell-round-bold text-foreground tracking-tight">
+          <Text className="text-5xl font-hell-round-bold text-foreground tracking-tight">
             Welcome to{'\n'}cura
           </Text>
         </Animated.View>
 
-        <View className="mt-14 gap-8">
+        <View className="mt-16 gap-10">
           {FEATURES.map((feature, index) => (
             <Animated.View
               key={feature.title}
               entering={FadeInDown.duration(600).delay(200 + index * 150)}
             >
-              <Text className="text-lg font-hell-round-bold text-foreground">
+              <Text className="text-xl font-hell-round-bold text-foreground">
                 {feature.title}
               </Text>
-              <Text className="text-base font-helvetica text-muted-foreground mt-1">
+              <Text className="text-lg font-helvetica text-muted-foreground mt-1.5 leading-6">
                 {feature.description}
               </Text>
             </Animated.View>
@@ -49,7 +49,7 @@ export default function OnboardingScreen() {
       <View className="px-6 pb-6">
         <AnimatedButton
           onPress={() => router.push('/(onboarding)/notifications')}
-          className="h-[4.75rem] justify-center items-center bg-accent"
+          className="h-[4.25rem] bg-accent"
         >
           <Text className="text-lg font-hell-round-bold text-white">
             Get started

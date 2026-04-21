@@ -2,12 +2,12 @@ import { ItemCard } from '@/components/ui/item-card';
 import { useAuth } from '@/providers/auth-provider';
 import { getItems, type ItemWithMedia } from '@/services/items';
 import { getWishlistIds, toggleWishlist } from '@/services/wishlist';
-import { Ionicons } from '@expo/vector-icons';
+import { MOCK_ITEMS } from '@/lib/mock-data';
+import { ShoppingBag } from 'lucide-react-native';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Pressable,
   RefreshControl,
@@ -21,7 +21,7 @@ export default function HomeScreen() {
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
 
-  const { data: items = [], isLoading } = useQuery({
+  const { data: items = [] } = useQuery({
     queryKey: ['items'],
     queryFn: () => getItems(),
   });
@@ -31,6 +31,8 @@ export default function HomeScreen() {
     queryFn: () => (user ? getWishlistIds(user.id) : []),
     enabled: !!user,
   });
+
+  const displayItems = items.length > 0 ? items : MOCK_ITEMS;
 
   const handleToggleWishlist = useCallback(
     async (itemId: string) => {
@@ -72,32 +74,30 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <View className="flex-row items-center justify-between px-6 py-4">
-        <Text className="text-2xl font-hell-round-bold text-foreground tracking-tight">
+        <Text className="text-3xl font-hell-round-bold text-foreground tracking-tight">
           cura
         </Text>
-        <Pressable onPress={() => router.push('/(app)/cart')} hitSlop={8}>
-          <Ionicons name="bag-outline" size={24} color="#1A1A1A" />
+        <Pressable
+          onPress={() => router.push('/(app)/cart')}
+          hitSlop={8}
+          className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center"
+        >
+          <ShoppingBag size={22} strokeWidth={2.5} color="#282828" />
         </Pressable>
       </View>
 
-      {isLoading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#1A1A1A" />
-        </View>
-      ) : (
-        <FlatList
-          data={items}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
-          columnWrapperStyle={{ marginBottom: 20 }}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-      )}
+      <FlatList
+        data={displayItems}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}
+        columnWrapperStyle={{ marginBottom: 24 }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </SafeAreaView>
   );
 }

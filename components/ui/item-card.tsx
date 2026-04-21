@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
-import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { Heart } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 
 interface ItemCardProps {
@@ -35,7 +35,7 @@ export function ItemCard({
       <View className="relative">
         <Image
           source={{ uri: imageUrl }}
-          className="w-full aspect-[3/4] rounded-2xl bg-muted"
+          className="w-full aspect-[3/4] rounded-3xl bg-muted"
           contentFit="cover"
           transition={200}
         />
@@ -45,33 +45,34 @@ export function ItemCard({
               e.stopPropagation();
               onToggleWishlist();
             }}
-            className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/80 items-center justify-center"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 items-center justify-center"
           >
-            <Ionicons
-              name={isWishlisted ? 'heart' : 'heart-outline'}
+            <Heart
               size={16}
+              strokeWidth={2.5}
               color={isWishlisted ? '#FF4747' : '#1A1A1A'}
+              fill={isWishlisted ? '#FF4747' : 'transparent'}
             />
           </Pressable>
         )}
       </View>
-      <View className="mt-2 px-0.5">
-        <Text className="text-sm font-helvetica text-foreground" numberOfLines={1}>
+      <View className="mt-2.5 px-1">
+        <Text className="text-base font-helvetica text-foreground" numberOfLines={1}>
           {name}
         </Text>
-        <Text className="text-base font-hell-round-bold text-foreground mt-0.5">
+        <Text className="text-lg font-hell-round-bold text-foreground mt-0.5">
           ₱{price.toLocaleString()}
         </Text>
-        <View className="flex-row items-center mt-1.5 gap-1.5">
+        <View className="flex-row items-center mt-1.5 gap-2">
           {sellerAvatar ? (
             <Image
               source={{ uri: sellerAvatar }}
-              className="w-4 h-4 rounded-full bg-muted"
+              className="w-5 h-5 rounded-full bg-muted"
             />
           ) : (
-            <View className="w-4 h-4 rounded-full bg-muted" />
+            <View className="w-5 h-5 rounded-full bg-muted" />
           )}
-          <Text className="text-xs font-helvetica text-muted-foreground" numberOfLines={1}>
+          <Text className="text-sm font-helvetica text-muted-foreground" numberOfLines={1}>
             {sellerName}
           </Text>
         </View>

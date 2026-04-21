@@ -63,15 +63,15 @@ export default function AddAddressScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-        <View className="flex-row items-center px-6 py-3">
+        <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-lg font-hell-round-bold text-foreground ml-2">
+          <Text className="text-xl font-hell-round-bold text-foreground">
             Add address
           </Text>
         </View>
 
         <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-          <View className="gap-4 py-4">
+          <View className="gap-5 py-4">
             <Controller
               control={control}
               name="name"
@@ -129,7 +129,7 @@ export default function AddAddressScreen() {
               )}
             />
 
-            <View className="flex-row items-center justify-between py-2">
+            <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-gray-100">
               <Text className="text-base font-helvetica text-foreground">
                 Set as default
               </Text>
@@ -141,7 +141,7 @@ export default function AddAddressScreen() {
             </View>
           </View>
 
-          <Text className="text-xs font-helvetica text-muted-foreground mt-2 leading-4">
+          <Text className="text-sm font-helvetica text-muted-foreground mt-2 leading-5">
             By clicking Save, you acknowledge that you have read the Privacy Policy.
           </Text>
         </ScrollView>

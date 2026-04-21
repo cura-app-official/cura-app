@@ -5,7 +5,8 @@ import { useFonts } from 'expo-font';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
@@ -15,6 +16,7 @@ function RootNavigator() {
   const { isAuthenticated, isLoading, profile } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const [isNavigationReady, setIsNavigationReady] = useState(false);
 
   useEffect(() => {
     if (isLoading) return;
@@ -33,7 +35,15 @@ function RootNavigator() {
     } else if (isAuthenticated && profile && !profile.is_onboarded && !inOnboardingGroup) {
       router.replace('/(onboarding)');
     }
+
+    if (!isNavigationReady) {
+      setIsNavigationReady(true);
+    }
   }, [isAuthenticated, isLoading, profile, segments]);
+
+  if (!isNavigationReady && isLoading) {
+    return <View className="flex-1 bg-background" />;
+  }
 
   return <Slot />;
 }
@@ -55,7 +65,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
       <QueryProvider>
         <AuthProvider>
           <RootNavigator />

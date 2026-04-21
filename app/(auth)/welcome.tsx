@@ -8,10 +8,10 @@ export default function WelcomeScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 justify-end px-6 pb-10">
         <View className="mb-16">
-          <Text className="text-5xl font-hell-round-bold text-foreground tracking-tight">
+          <Text className="text-6xl font-hell-round-bold text-foreground tracking-tight">
             cura
           </Text>
-          <Text className="text-lg font-helvetica text-muted-foreground mt-3 leading-6">
+          <Text className="text-xl font-helvetica text-muted-foreground mt-4 leading-7">
             Curated fashion from{'\n'}your favorite creators
           </Text>
         </View>
@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
         <View className="gap-3">
           <AnimatedButton
             onPress={() => router.push('/(auth)/signup-username')}
-            className="h-[4.75rem] justify-center items-center bg-accent"
+            className="h-[4.25rem] bg-accent"
           >
             <Text className="text-lg font-hell-round-bold text-white">
               Create account
@@ -28,7 +28,7 @@ export default function WelcomeScreen() {
 
           <AnimatedButton
             onPress={() => router.push('/(auth)/login')}
-            className="h-[4.75rem] justify-center items-center bg-muted"
+            className="h-[4.25rem] bg-gray-100"
           >
             <Text className="text-lg font-hell-round-bold text-foreground">
               Sign in

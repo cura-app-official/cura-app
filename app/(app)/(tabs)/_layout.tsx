@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Tabs } from 'expo-router';
+import { Heart, Home, Search, User } from 'lucide-react-native';
 import { Platform, Pressable } from 'react-native';
 
 function TabBarButton(props: any) {
@@ -39,10 +39,11 @@ export default function TabLayout() {
         name="index"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'home' : 'home-outline'}
-              size={24}
+            <Home
+              size={26}
+              strokeWidth={focused ? 2.5 : 2}
               color={color}
+              fill={focused ? color : 'transparent'}
             />
           ),
         }}
@@ -51,9 +52,9 @@ export default function TabLayout() {
         name="search"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'search' : 'search-outline'}
-              size={24}
+            <Search
+              size={26}
+              strokeWidth={focused ? 2.5 : 2}
               color={color}
             />
           ),
@@ -63,10 +64,11 @@ export default function TabLayout() {
         name="wishlist"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'heart' : 'heart-outline'}
-              size={24}
+            <Heart
+              size={26}
+              strokeWidth={focused ? 2.5 : 2}
               color={color}
+              fill={focused ? color : 'transparent'}
             />
           ),
         }}
@@ -75,10 +77,11 @@ export default function TabLayout() {
         name="profile"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'person' : 'person-outline'}
-              size={24}
+            <User
+              size={26}
+              strokeWidth={focused ? 2.5 : 2}
               color={color}
+              fill={focused ? color : 'transparent'}
             />
           ),
         }}
