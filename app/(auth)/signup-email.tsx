@@ -1,15 +1,21 @@
-import { BackButton } from '@/components/ui/back-button';
-import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
-import { Input } from '@/components/ui/input';
-import { emailPasswordSchema, type EmailPasswordForm } from '@/lib/validations';
-import { useAuth } from '@/providers/auth-provider';
-import { createUser } from '@/services/users';
-import { useSignup } from '@/store/signup-store';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
-import { Alert, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
+import { BackButton } from "@/components/ui/back-button";
+import { Input } from "@/components/ui/input";
+import { emailPasswordSchema, type EmailPasswordForm } from "@/lib/validations";
+import { useAuth } from "@/providers/auth-provider";
+import { createUser } from "@/services/users";
+import { useSignup } from "@/store/signup-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import {
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignupEmailScreen() {
   const { data: signupData, reset } = useSignup();
@@ -20,14 +26,14 @@ export default function SignupEmailScreen() {
     formState: { errors, isSubmitting },
   } = useForm<EmailPasswordForm>({
     resolver: zodResolver(emailPasswordSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: "", password: "" },
   });
 
   const onSubmit = async (values: EmailPasswordForm) => {
     try {
       const { user, error } = await signUp(values.email, values.password);
       if (error || !user) {
-        Alert.alert('Sign up failed', error?.message ?? 'Something went wrong');
+        Alert.alert("Sign up failed", error?.message ?? "Something went wrong");
         return;
       }
 
@@ -40,26 +46,26 @@ export default function SignupEmailScreen() {
       });
 
       reset();
-      router.replace('/(onboarding)');
+      router.replace("/(onboarding)");
     } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Something went wrong');
+      Alert.alert("Error", err?.message ?? "Something went wrong");
     }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <View className="px-6 pt-2">
           <BackButton />
         </View>
         <View className="flex-1 px-6 pt-8">
-          <Text className="text-4xl font-hell-round-bold text-foreground">
+          <Text className="text-4xl font-neuton-bold text-foreground">
             Create your account
           </Text>
-          <Text className="text-lg font-helvetica text-muted-foreground mt-3 mb-10">
+          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-10">
             Almost there, {signupData.username}
           </Text>
 
@@ -97,8 +103,9 @@ export default function SignupEmailScreen() {
             />
           </View>
 
-          <Text className="text-sm font-helvetica text-muted-foreground mt-5 leading-5">
-            By creating an account, you agree to our Terms of Service and Privacy Policy.
+          <Text className="text-sm font-neuton text-muted-foreground mt-5 leading-5">
+            By creating an account, you agree to our Terms of Service and
+            Privacy Policy.
           </Text>
         </View>
 

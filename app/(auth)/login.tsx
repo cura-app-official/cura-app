@@ -1,13 +1,19 @@
-import { BackButton } from '@/components/ui/back-button';
-import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
-import { Input } from '@/components/ui/input';
-import { loginSchema, type LoginForm } from '@/lib/validations';
-import { useAuth } from '@/providers/auth-provider';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
-import { Alert, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
+import { BackButton } from "@/components/ui/back-button";
+import { Input } from "@/components/ui/input";
+import { loginSchema, type LoginForm } from "@/lib/validations";
+import { useAuth } from "@/providers/auth-provider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import {
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
@@ -17,32 +23,32 @@ export default function LoginScreen() {
     formState: { errors, isSubmitting },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: "", password: "" },
   });
 
   const onSubmit = async (values: LoginForm) => {
     const { error } = await signIn(values.email, values.password);
     if (error) {
-      Alert.alert('Sign in failed', error.message);
+      Alert.alert("Sign in failed", error.message);
     } else {
-      router.replace('/(app)/(tabs)');
+      router.replace("/(app)/(tabs)");
     }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <View className="px-6 pt-2">
           <BackButton />
         </View>
         <View className="flex-1 px-6 pt-8">
-          <Text className="text-4xl font-hell-round-bold text-foreground">
+          <Text className="text-4xl font-neuton-bold text-foreground">
             Welcome back
           </Text>
-          <Text className="text-lg font-helvetica text-muted-foreground mt-3 mb-10">
+          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-10">
             Sign in to your account
           </Text>
 

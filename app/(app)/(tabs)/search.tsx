@@ -1,72 +1,75 @@
-import { ItemCard } from '@/components/ui/item-card';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Input } from '@/components/ui/input';
-import { CATEGORIES } from '@/lib/constants';
-import { useAuth } from '@/providers/auth-provider';
-import { searchCreators, searchItems, type ItemWithMedia } from '@/services/items';
-import { getWishlistIds, toggleWishlist } from '@/services/wishlist';
-import type { Tables } from '@/types/database';
-import { ProfileAvatar } from '@/components/ui/profile-avatar';
-import { Search as SearchIcon, Users } from 'lucide-react-native';
-import { Image } from 'expo-image';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { ItemCard } from "@/components/ui/item-card";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
+import { CATEGORIES } from "@/lib/constants";
+import { useAuth } from "@/providers/auth-provider";
 import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+    searchCreators,
+    searchItems,
+    type ItemWithMedia,
+} from "@/services/items";
+import { getWishlistIds, toggleWishlist } from "@/services/wishlist";
+import type { Tables } from "@/types/database";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
+import { Search as SearchIcon, Users } from "lucide-react-native";
+import { useCallback, useState } from "react";
+import {
+    ActivityIndicator,
+    FlatList,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-type Tab = 'items' | 'creators' | 'categories';
+type Tab = "items" | "creators" | "categories";
 
 export default function SearchScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [query, setQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<Tab>('items');
+  const [query, setQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<Tab>("items");
 
   const { data: wishlistIds = [] } = useQuery({
-    queryKey: ['wishlist-ids', user?.id],
+    queryKey: ["wishlist-ids", user?.id],
     queryFn: () => (user ? getWishlistIds(user.id) : []),
     enabled: !!user,
   });
 
   const { data: itemResults = [], isLoading: itemsLoading } = useQuery({
-    queryKey: ['search-items', query],
+    queryKey: ["search-items", query],
     queryFn: () => searchItems(query),
-    enabled: query.length >= 2 && activeTab === 'items',
+    enabled: query.length >= 2 && activeTab === "items",
   });
 
   const { data: creatorResults = [], isLoading: creatorsLoading } = useQuery({
-    queryKey: ['search-creators', query],
+    queryKey: ["search-creators", query],
     queryFn: () => searchCreators(query),
-    enabled: query.length >= 2 && activeTab === 'creators',
+    enabled: query.length >= 2 && activeTab === "creators",
   });
 
   const handleToggleWishlist = useCallback(
     async (itemId: string) => {
       if (!user) return;
       await toggleWishlist(user.id, itemId);
-      queryClient.invalidateQueries({ queryKey: ['wishlist-ids'] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist-ids"] });
     },
-    [user, queryClient]
+    [user, queryClient],
   );
 
   const tabs: { key: Tab; label: string }[] = [
-    { key: 'items', label: 'Items' },
-    { key: 'creators', label: 'Creators' },
-    { key: 'categories', label: 'Categories' },
+    { key: "items", label: "Items" },
+    { key: "creators", label: "Creators" },
+    { key: "categories", label: "Categories" },
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
       <View className="px-6 pt-4 pb-2">
-        <Text className="text-3xl font-hell-round-bold text-foreground mb-5">
+        <Text className="text-3xl font-neuton-bold text-foreground mb-5">
           Search
         </Text>
         <Input
@@ -83,12 +86,12 @@ export default function SearchScreen() {
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
             className={`px-5 py-3 rounded-3xl ${
-              activeTab === tab.key ? 'bg-accent' : 'bg-gray-100'
+              activeTab === tab.key ? "bg-accent" : "bg-gray-100"
             }`}
           >
             <Text
-              className={`text-base font-helvetica ${
-                activeTab === tab.key ? 'text-white' : 'text-foreground'
+              className={`text-base font-neuton ${
+                activeTab === tab.key ? "text-white" : "text-foreground"
               }`}
             >
               {tab.label}
@@ -97,7 +100,7 @@ export default function SearchScreen() {
         ))}
       </View>
 
-      {activeTab === 'items' && (
+      {activeTab === "items" && (
         <>
           {itemsLoading ? (
             <View className="flex-1 items-center justify-center">
@@ -114,14 +117,22 @@ export default function SearchScreen() {
           ) : (
             <FlatList
               data={itemResults}
-              renderItem={({ item, index }: { item: ItemWithMedia; index: number }) => (
-                <View className={`flex-1 ${index % 2 === 0 ? 'pr-1.5' : 'pl-1.5'}`}>
+              renderItem={({
+                item,
+                index,
+              }: {
+                item: ItemWithMedia;
+                index: number;
+              }) => (
+                <View
+                  className={`flex-1 ${index % 2 === 0 ? "pr-1.5" : "pl-1.5"}`}
+                >
                   <ItemCard
                     id={item.id}
-                    imageUrl={item.item_media?.[0]?.url ?? ''}
+                    imageUrl={item.item_media?.[0]?.url ?? ""}
                     name={item.item_name}
                     price={item.price}
-                    sellerName={item.seller?.username ?? ''}
+                    sellerName={item.seller?.username ?? ""}
                     isWishlisted={wishlistIds.includes(item.id)}
                     onToggleWishlist={() => handleToggleWishlist(item.id)}
                   />
@@ -129,7 +140,10 @@ export default function SearchScreen() {
               )}
               keyExtractor={(item) => item.id}
               numColumns={2}
-              contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}
+              contentContainerStyle={{
+                paddingHorizontal: 16,
+                paddingBottom: 24,
+              }}
               columnWrapperStyle={{ marginBottom: 24 }}
               showsVerticalScrollIndicator={false}
             />
@@ -137,7 +151,7 @@ export default function SearchScreen() {
         </>
       )}
 
-      {activeTab === 'creators' && (
+      {activeTab === "creators" && (
         <>
           {creatorsLoading ? (
             <View className="flex-1 items-center justify-center">
@@ -154,19 +168,23 @@ export default function SearchScreen() {
           ) : (
             <FlatList
               data={creatorResults}
-              renderItem={({ item }: { item: Tables<'users'> }) => (
+              renderItem={({ item }: { item: Tables<"users"> }) => (
                 <Pressable
                   onPress={() => router.push(`/(app)/profile/${item.id}`)}
                   className="flex-row items-center px-6 py-3.5 gap-4"
                 >
-                  <ProfileAvatar uri={item.avatar_url} size={48} borderWidth={0} />
+                  <ProfileAvatar
+                    uri={item.avatar_url}
+                    size={48}
+                    borderWidth={0}
+                  />
                   <View className="flex-1">
-                    <Text className="text-lg font-hell-round-bold text-foreground">
+                    <Text className="text-lg font-neuton-bold text-foreground">
                       {item.username}
                     </Text>
                     {item.bio && (
                       <Text
-                        className="text-base font-helvetica text-muted-foreground mt-0.5"
+                        className="text-base font-neuton text-muted-foreground mt-0.5"
                         numberOfLines={1}
                       >
                         {item.bio}
@@ -182,19 +200,24 @@ export default function SearchScreen() {
         </>
       )}
 
-      {activeTab === 'categories' && (
-        <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+      {activeTab === "categories" && (
+        <ScrollView
+          className="flex-1 px-6"
+          showsVerticalScrollIndicator={false}
+        >
           <View className="flex-row flex-wrap gap-3 py-2">
             {CATEGORIES.map((cat) => (
               <Pressable
                 key={cat}
                 onPress={() => {
-                  setActiveTab('items');
+                  setActiveTab("items");
                   setQuery(cat);
                 }}
                 className="px-6 py-3.5 rounded-3xl bg-gray-100"
               >
-                <Text className="text-base font-helvetica text-foreground">{cat}</Text>
+                <Text className="text-base font-neuton text-foreground">
+                  {cat}
+                </Text>
               </Pressable>
             ))}
           </View>

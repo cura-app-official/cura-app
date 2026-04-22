@@ -1,24 +1,24 @@
-import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
-import { BackButton } from '@/components/ui/back-button';
-import { Input } from '@/components/ui/input';
-import { addressSchema } from '@/lib/validations';
-import { useAuth } from '@/providers/auth-provider';
-import { createAddress } from '@/services/addresses';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
+import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
+import { BackButton } from "@/components/ui/back-button";
+import { Input } from "@/components/ui/input";
+import { addressSchema } from "@/lib/validations";
+import { useAuth } from "@/providers/auth-provider";
+import { createAddress } from "@/services/addresses";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Switch,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddAddressScreen() {
   const { user } = useAuth();
@@ -33,15 +33,15 @@ export default function AddAddressScreen() {
   } = useForm({
     resolver: zodResolver(addressSchema),
     defaultValues: {
-      name: '',
-      phone_number: '',
-      address: '',
-      address_details: '',
+      name: "",
+      phone_number: "",
+      address: "",
+      address_details: "",
       is_default: false,
     },
   });
 
-  const isDefault = watch('is_default');
+  const isDefault = watch("is_default");
 
   const onSubmit = async (values: any) => {
     if (!user) return;
@@ -50,27 +50,30 @@ export default function AddAddressScreen() {
         user_id: user.id,
         ...values,
       });
-      queryClient.invalidateQueries({ queryKey: ['addresses'] });
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
       router.back();
     } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to save address');
+      Alert.alert("Error", err?.message ?? "Failed to save address");
     }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-hell-round-bold text-foreground">
+          <Text className="text-xl font-neuton-bold text-foreground">
             Add address
           </Text>
         </View>
 
-        <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          className="flex-1 px-6"
+          showsVerticalScrollIndicator={false}
+        >
           <View className="gap-5 py-4">
             <Controller
               control={control}
@@ -124,25 +127,26 @@ export default function AddAddressScreen() {
                   placeholder="Building, floor, unit (optional)"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value ?? ''}
+                  value={value ?? ""}
                 />
               )}
             />
 
             <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-gray-100">
-              <Text className="text-base font-helvetica text-foreground">
+              <Text className="text-base font-neuton text-foreground">
                 Set as default
               </Text>
               <Switch
                 value={isDefault}
-                onValueChange={(val) => setValue('is_default', val)}
-                trackColor={{ true: '#1A1A1A' }}
+                onValueChange={(val) => setValue("is_default", val)}
+                trackColor={{ true: "#1A1A1A" }}
               />
             </View>
           </View>
 
-          <Text className="text-sm font-helvetica text-muted-foreground mt-2 leading-5">
-            By clicking Save, you acknowledge that you have read the Privacy Policy.
+          <Text className="text-sm font-neuton text-muted-foreground mt-2 leading-5">
+            By clicking Save, you acknowledge that you have read the Privacy
+            Policy.
           </Text>
         </ScrollView>
 
@@ -153,7 +157,7 @@ export default function AddAddressScreen() {
             title="Save"
           />
           <Pressable onPress={router.back} className="py-3 items-center">
-            <Text className="text-base font-helvetica text-muted-foreground">
+            <Text className="text-base font-neuton text-muted-foreground">
               Cancel
             </Text>
           </Pressable>

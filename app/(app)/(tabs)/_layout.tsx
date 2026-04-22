@@ -22,15 +22,15 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#1A1A1A',
-        tabBarInactiveTintColor: '#A3A3A3',
+        tabBarActiveTintColor: "#432004",
+        tabBarInactiveTintColor: "#A3A3A3",
         tabBarShowLabel: false,
         tabBarButton: TabBarButton,
         tabBarStyle: {
           borderTopWidth: 0,
           elevation: 0,
-          backgroundColor: '#FFFFFF',
-          height: Platform.OS === 'ios' ? 88 : 64,
+          backgroundColor: "#FFF7EC",
+          height: Platform.OS === "ios" ? 88 : 64,
           paddingTop: 8,
         },
       }}
@@ -43,7 +43,7 @@ export default function TabLayout() {
               size={26}
               strokeWidth={focused ? 2.5 : 2}
               color={color}
-              fill={focused ? color : 'transparent'}
+              fill={focused ? color : "transparent"}
             />
           ),
         }}
@@ -52,11 +52,7 @@ export default function TabLayout() {
         name="search"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Search
-              size={26}
-              strokeWidth={focused ? 2.5 : 2}
-              color={color}
-            />
+            <Search size={26} strokeWidth={focused ? 2.5 : 2} color={color} />
           ),
         }}
       />
@@ -68,7 +64,7 @@ export default function TabLayout() {
               size={26}
               strokeWidth={focused ? 2.5 : 2}
               color={color}
-              fill={focused ? color : 'transparent'}
+              fill={focused ? color : "transparent"}
             />
           ),
         }}
@@ -81,7 +77,7 @@ export default function TabLayout() {
               size={26}
               strokeWidth={focused ? 2.5 : 2}
               color={color}
-              fill={focused ? color : 'transparent'}
+              fill={focused ? color : "transparent"}
             />
           ),
         }}

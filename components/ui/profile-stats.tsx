@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, View } from "react-native";
 
 interface StatItemProps {
   value: number | string;
@@ -7,16 +7,16 @@ interface StatItemProps {
 
 function StatItem({ value, label }: StatItemProps) {
   const formatted =
-    typeof value === 'number' && value >= 1000
+    typeof value === "number" && value >= 1000
       ? `${(value / 1000).toFixed(value >= 10000 ? 0 : 1)}K`
       : String(value);
 
   return (
     <View className="flex-1 items-center">
-      <Text className="text-2xl font-hell-round-bold text-foreground">
+      <Text className="text-2xl font-neuton-bold text-foreground">
         {formatted}
       </Text>
-      <Text className="text-sm font-helvetica text-muted-foreground mt-0.5">
+      <Text className="text-sm font-neuton text-muted-foreground mt-0.5">
         {label}
       </Text>
     </View>
@@ -29,7 +29,11 @@ interface ProfileStatsProps {
   items: number;
 }
 
-export function ProfileStats({ following, followers, items }: ProfileStatsProps) {
+export function ProfileStats({
+  following,
+  followers,
+  items,
+}: ProfileStatsProps) {
   return (
     <View className="flex-row py-5">
       <StatItem value={following} label="Following" />

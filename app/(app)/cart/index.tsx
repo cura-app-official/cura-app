@@ -1,21 +1,31 @@
-import { AnimatedButton } from '@/components/ui/animated-button';
-import { BackButton } from '@/components/ui/back-button';
-import { EmptyState } from '@/components/ui/empty-state';
-import { useAuth } from '@/providers/auth-provider';
-import { type CartItemWithDetails, getCartItems, removeFromCart } from '@/services/cart';
-import { ShoppingBag, X } from 'lucide-react-native';
-import { Image } from 'expo-image';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AnimatedButton } from "@/components/ui/animated-button";
+import { BackButton } from "@/components/ui/back-button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { useAuth } from "@/providers/auth-provider";
+import {
+    type CartItemWithDetails,
+    getCartItems,
+    removeFromCart,
+} from "@/services/cart";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { ShoppingBag, X } from "lucide-react-native";
+import {
+    ActivityIndicator,
+    FlatList,
+    Pressable,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CartScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: cartItems = [], isLoading } = useQuery({
-    queryKey: ['cart', user?.id],
+    queryKey: ["cart", user?.id],
     queryFn: () => (user ? getCartItems(user.id) : []),
     enabled: !!user,
   });
@@ -24,17 +34,15 @@ export default function CartScreen() {
 
   const handleRemove = async (cartItemId: string) => {
     await removeFromCart(cartItemId);
-    queryClient.invalidateQueries({ queryKey: ['cart'] });
-    queryClient.invalidateQueries({ queryKey: ['in-cart'] });
+    queryClient.invalidateQueries({ queryKey: ["cart"] });
+    queryClient.invalidateQueries({ queryKey: ["in-cart"] });
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-hell-round-bold text-foreground">
-          Cart
-        </Text>
+        <Text className="text-xl font-neuton-bold text-foreground">Cart</Text>
       </View>
 
       {isLoading ? (
@@ -52,26 +60,35 @@ export default function CartScreen() {
           <FlatList
             data={cartItems}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingHorizontal: 24, gap: 16, paddingBottom: 20 }}
+            contentContainerStyle={{
+              paddingHorizontal: 24,
+              gap: 16,
+              paddingBottom: 20,
+            }}
             renderItem={({ item: ci }: { item: CartItemWithDetails }) => (
               <View className="flex-row gap-4">
-                <Pressable onPress={() => router.push(`/(app)/item/${ci.item.id}`)}>
+                <Pressable
+                  onPress={() => router.push(`/(app)/item/${ci.item.id}`)}
+                >
                   <Image
-                    source={{ uri: ci.item.item_media?.[0]?.url ?? '' }}
+                    source={{ uri: ci.item.item_media?.[0]?.url ?? "" }}
                     className="w-28 h-28 rounded-2xl bg-muted"
                     contentFit="cover"
                   />
                 </Pressable>
                 <View className="flex-1 justify-between py-1">
                   <View>
-                    <Text className="text-lg font-hell-round-bold text-foreground" numberOfLines={1}>
+                    <Text
+                      className="text-lg font-neuton-bold text-foreground"
+                      numberOfLines={1}
+                    >
                       {ci.item.item_name}
                     </Text>
-                    <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
+                    <Text className="text-base font-neuton text-muted-foreground mt-0.5">
                       {ci.item.brand} · {ci.item.size}
                     </Text>
                   </View>
-                  <Text className="text-lg font-hell-round-bold text-foreground">
+                  <Text className="text-lg font-neuton-bold text-foreground">
                     ₱{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
@@ -88,16 +105,18 @@ export default function CartScreen() {
 
           <View className="border-t border-border px-6 py-4">
             <View className="flex-row justify-between mb-4">
-              <Text className="text-lg font-helvetica text-muted-foreground">Total</Text>
-              <Text className="text-2xl font-hell-round-bold text-foreground">
+              <Text className="text-lg font-neuton text-muted-foreground">
+                Total
+              </Text>
+              <Text className="text-2xl font-neuton-bold text-foreground">
                 ₱{total.toLocaleString()}
               </Text>
             </View>
             <AnimatedButton
-              onPress={() => router.push('/(app)/checkout')}
+              onPress={() => router.push("/(app)/checkout")}
               className="h-[4.25rem] bg-accent"
             >
-              <Text className="text-lg font-hell-round-bold text-white">
+              <Text className="text-lg font-neuton-bold text-white">
                 Checkout
               </Text>
             </AnimatedButton>

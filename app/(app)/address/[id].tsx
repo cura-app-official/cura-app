@@ -1,26 +1,26 @@
-import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
-import { BackButton } from '@/components/ui/back-button';
-import { Input } from '@/components/ui/input';
-import { addressSchema } from '@/lib/validations';
-import { useAuth } from '@/providers/auth-provider';
-import { getAddresses, updateAddress } from '@/services/addresses';
-import type { Tables } from '@/types/database';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { router, useLocalSearchParams } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
+import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
+import { BackButton } from "@/components/ui/back-button";
+import { Input } from "@/components/ui/input";
+import { addressSchema } from "@/lib/validations";
+import { useAuth } from "@/providers/auth-provider";
+import { getAddresses, updateAddress } from "@/services/addresses";
+import type { Tables } from "@/types/database";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { router, useLocalSearchParams } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
 import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+    ActivityIndicator,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Switch,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditAddressScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -28,12 +28,12 @@ export default function EditAddressScreen() {
   const queryClient = useQueryClient();
 
   const { data: addresses = [], isLoading } = useQuery({
-    queryKey: ['addresses', user?.id],
+    queryKey: ["addresses", user?.id],
     queryFn: () => (user ? getAddresses(user.id) : []),
     enabled: !!user,
   });
 
-  const address = addresses.find((a: Tables<'addresses'>) => a.id === id);
+  const address = addresses.find((a: Tables<"addresses">) => a.id === id);
 
   const {
     control,
@@ -48,21 +48,21 @@ export default function EditAddressScreen() {
           name: address.name,
           phone_number: address.phone_number,
           address: address.address,
-          address_details: address.address_details ?? '',
+          address_details: address.address_details ?? "",
           is_default: address.is_default,
         }
       : undefined,
   });
 
-  const isDefault = watch('is_default');
+  const isDefault = watch("is_default");
 
   const onSubmit = async (values: any) => {
     try {
       await updateAddress(id, values);
-      queryClient.invalidateQueries({ queryKey: ['addresses'] });
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
       router.back();
     } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to update address');
+      Alert.alert("Error", err?.message ?? "Failed to update address");
     }
   };
 
@@ -77,17 +77,20 @@ export default function EditAddressScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-hell-round-bold text-foreground">
+          <Text className="text-xl font-neuton-bold text-foreground">
             Edit address
           </Text>
         </View>
 
-        <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          className="flex-1 px-6"
+          showsVerticalScrollIndicator={false}
+        >
           <View className="gap-5 py-4">
             <Controller
               control={control}
@@ -141,19 +144,19 @@ export default function EditAddressScreen() {
                   placeholder="Building, floor, unit (optional)"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value ?? ''}
+                  value={value ?? ""}
                 />
               )}
             />
 
             <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-gray-100">
-              <Text className="text-base font-helvetica text-foreground">
+              <Text className="text-base font-neuton text-foreground">
                 Set as default
               </Text>
               <Switch
                 value={isDefault}
-                onValueChange={(val) => setValue('is_default', val)}
-                trackColor={{ true: '#1A1A1A' }}
+                onValueChange={(val) => setValue("is_default", val)}
+                trackColor={{ true: "#1A1A1A" }}
               />
             </View>
           </View>
@@ -166,7 +169,7 @@ export default function EditAddressScreen() {
             title="Save"
           />
           <Pressable onPress={router.back} className="py-3 items-center">
-            <Text className="text-base font-helvetica text-muted-foreground">
+            <Text className="text-base font-neuton text-muted-foreground">
               Cancel
             </Text>
           </Pressable>

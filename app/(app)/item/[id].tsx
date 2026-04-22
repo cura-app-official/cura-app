@@ -1,30 +1,30 @@
-import { AnimatedButton } from '@/components/ui/animated-button';
-import { BackButton } from '@/components/ui/back-button';
-import { ProfileAvatar } from '@/components/ui/profile-avatar';
-import { useAuth } from '@/providers/auth-provider';
-import { getItem } from '@/services/items';
-import { addToCart, isInCart } from '@/services/cart';
-import { isFollowing, toggleFollow } from '@/services/users';
-import { isWishlisted, toggleWishlist } from '@/services/wishlist';
-import { MOCK_ITEMS } from '@/lib/mock-data';
-import { Heart } from 'lucide-react-native';
-import { Image } from 'expo-image';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { AnimatedButton } from "@/components/ui/animated-button";
+import { BackButton } from "@/components/ui/back-button";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
+import { MOCK_ITEMS } from "@/lib/mock-data";
+import { useAuth } from "@/providers/auth-provider";
+import { addToCart, isInCart } from "@/services/cart";
+import { getItem } from "@/services/items";
+import { isFollowing, toggleFollow } from "@/services/users";
+import { isWishlisted, toggleWishlist } from "@/services/wishlist";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Image } from "expo-image";
+import { router, useLocalSearchParams } from "expo-router";
+import { Heart } from "lucide-react-native";
+import { useCallback, useState } from "react";
 import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  FlatList,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+    ActivityIndicator,
+    Alert,
+    Dimensions,
+    FlatList,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function ItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -35,7 +35,7 @@ export default function ItemDetailScreen() {
   const mockItem = MOCK_ITEMS.find((i) => i.id === id);
 
   const { data: item, isLoading } = useQuery({
-    queryKey: ['item', id],
+    queryKey: ["item", id],
     queryFn: () => getItem(id),
     enabled: !!id && !mockItem,
   });
@@ -43,19 +43,19 @@ export default function ItemDetailScreen() {
   const displayItem = mockItem ?? item;
 
   const { data: wishlisted = false } = useQuery({
-    queryKey: ['wishlisted', user?.id, id],
+    queryKey: ["wishlisted", user?.id, id],
     queryFn: () => (user ? isWishlisted(user.id, id) : false),
     enabled: !!user && !!id && !mockItem,
   });
 
   const { data: inCart = false } = useQuery({
-    queryKey: ['in-cart', user?.id, id],
+    queryKey: ["in-cart", user?.id, id],
     queryFn: () => (user ? isInCart(user.id, id) : false),
     enabled: !!user && !!id && !mockItem,
   });
 
   const { data: userFollowing = false } = useQuery({
-    queryKey: ['following-seller', user?.id, displayItem?.seller_id],
+    queryKey: ["following-seller", user?.id, displayItem?.seller_id],
     queryFn: () =>
       user && displayItem ? isFollowing(user.id, displayItem.seller_id) : false,
     enabled: !!user && !!displayItem && !mockItem,
@@ -64,16 +64,16 @@ export default function ItemDetailScreen() {
   const handleToggleWishlist = useCallback(async () => {
     if (!user || mockItem) return;
     await toggleWishlist(user.id, id);
-    queryClient.invalidateQueries({ queryKey: ['wishlisted', user.id, id] });
-    queryClient.invalidateQueries({ queryKey: ['wishlist-ids'] });
-    queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+    queryClient.invalidateQueries({ queryKey: ["wishlisted", user.id, id] });
+    queryClient.invalidateQueries({ queryKey: ["wishlist-ids"] });
+    queryClient.invalidateQueries({ queryKey: ["wishlist"] });
   }, [user, id, queryClient, mockItem]);
 
   const handleToggleFollow = useCallback(async () => {
     if (!user || !displayItem || mockItem) return;
     await toggleFollow(user.id, displayItem.seller_id);
     queryClient.invalidateQueries({
-      queryKey: ['following-seller', user.id, displayItem.seller_id],
+      queryKey: ["following-seller", user.id, displayItem.seller_id],
     });
   }, [user, displayItem, queryClient, mockItem]);
 
@@ -81,16 +81,16 @@ export default function ItemDetailScreen() {
     if (!user || mockItem) return;
     try {
       await addToCart(user.id, id);
-      queryClient.invalidateQueries({ queryKey: ['in-cart'] });
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["in-cart"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     } catch {
-      Alert.alert('Error', 'Could not add to cart');
+      Alert.alert("Error", "Could not add to cart");
     }
   }, [user, id, queryClient, mockItem]);
 
   const handleBuyNow = () => {
     if (mockItem) return;
-    router.push('/(app)/checkout');
+    router.push("/(app)/checkout");
   };
 
   if (!mockItem && (isLoading || !item)) {
@@ -113,7 +113,10 @@ export default function ItemDetailScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <SafeAreaView edges={['top']} className="absolute top-0 left-0 right-0 z-10">
+      <SafeAreaView
+        edges={["top"]}
+        className="absolute top-0 left-0 right-0 z-10"
+      >
         <View className="flex-row items-center justify-between px-4 py-2">
           <BackButton />
           <Pressable
@@ -124,8 +127,8 @@ export default function ItemDetailScreen() {
             <Heart
               size={22}
               strokeWidth={2.5}
-              color={wishlisted ? '#FF4747' : '#282828'}
-              fill={wishlisted ? '#FF4747' : 'transparent'}
+              color={wishlisted ? "#FF4747" : "#282828"}
+              fill={wishlisted ? "#FF4747" : "transparent"}
             />
           </Pressable>
         </View>
@@ -139,7 +142,7 @@ export default function ItemDetailScreen() {
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={(e) => {
             setCurrentIndex(
-              Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH)
+              Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH),
             );
           }}
           renderItem={({ item: media }) => (
@@ -160,7 +163,7 @@ export default function ItemDetailScreen() {
               <View
                 key={i}
                 className={`w-2 h-2 rounded-full ${
-                  i === currentIndex ? 'bg-foreground' : 'bg-border'
+                  i === currentIndex ? "bg-foreground" : "bg-border"
                 }`}
               />
             ))}
@@ -168,36 +171,42 @@ export default function ItemDetailScreen() {
         )}
 
         <View className="px-6 pt-5 pb-8">
-          <Text className="text-3xl font-hell-round-bold text-foreground">
+          <Text className="text-3xl font-neuton-bold text-foreground">
             {displayItem.item_name}
           </Text>
-          <Text className="text-2xl font-hell-round-bold text-foreground mt-2">
+          <Text className="text-2xl font-neuton-bold text-foreground mt-2">
             ₱{displayItem.price.toLocaleString()}
           </Text>
 
           {/* Seller row */}
           <Pressable
-            onPress={() => router.push(`/(app)/profile/${displayItem.seller_id}`)}
+            onPress={() =>
+              router.push(`/(app)/profile/${displayItem.seller_id}`)
+            }
             className="flex-row items-center gap-4 mt-6 mb-6"
           >
-            <ProfileAvatar uri={displayItem.seller?.avatar_url} size={44} borderWidth={0} />
+            <ProfileAvatar
+              uri={displayItem.seller?.avatar_url}
+              size={44}
+              borderWidth={0}
+            />
             <View className="flex-1">
-              <Text className="text-lg font-hell-round-bold text-foreground">
+              <Text className="text-lg font-neuton-bold text-foreground">
                 {displayItem.seller?.username}
               </Text>
             </View>
             <Pressable
               onPress={handleToggleFollow}
               className={`px-5 py-2.5 rounded-3xl ${
-                userFollowing ? 'bg-gray-100' : 'bg-accent'
+                userFollowing ? "bg-gray-100" : "bg-accent"
               }`}
             >
               <Text
-                className={`text-base font-hell-round-bold ${
-                  userFollowing ? 'text-foreground' : 'text-white'
+                className={`text-base font-neuton-bold ${
+                  userFollowing ? "text-foreground" : "text-white"
                 }`}
               >
-                {userFollowing ? 'Following' : 'Follow'}
+                {userFollowing ? "Following" : "Follow"}
               </Text>
             </Pressable>
           </Pressable>
@@ -208,33 +217,40 @@ export default function ItemDetailScreen() {
             <DetailRow label="Size" value={displayItem.size} />
             <DetailRow label="Brand" value={displayItem.brand} />
             <DetailRow label="Category" value={displayItem.category} />
-            {displayItem.damage_type && displayItem.damage_type !== 'No damage' && (
-              <DetailRow label="Damage" value={displayItem.damage_type} />
-            )}
+            {displayItem.damage_type &&
+              displayItem.damage_type !== "No damage" && (
+                <DetailRow label="Damage" value={displayItem.damage_type} />
+              )}
             {displayItem.damage_details && (
-              <DetailRow label="Damage details" value={displayItem.damage_details} />
+              <DetailRow
+                label="Damage details"
+                value={displayItem.damage_details}
+              />
             )}
             {displayItem.material && (
               <DetailRow label="Material" value={displayItem.material} />
             )}
             {displayItem.measurements && (
-              <DetailRow label="Measurements" value={displayItem.measurements} />
+              <DetailRow
+                label="Measurements"
+                value={displayItem.measurements}
+              />
             )}
           </View>
 
           {displayItem.description && (
             <View className="py-5 border-t border-border">
-              <Text className="text-base font-hell-round-bold text-muted-foreground mb-2">
+              <Text className="text-base font-neuton-bold text-muted-foreground mb-2">
                 Description
               </Text>
-              <Text className="text-base font-helvetica text-foreground leading-6">
+              <Text className="text-base font-neuton text-foreground leading-6">
                 {displayItem.description}
               </Text>
             </View>
           )}
 
           <View className="py-5 border-t border-border">
-            <Text className="text-sm font-helvetica text-muted-foreground leading-5">
+            <Text className="text-sm font-neuton text-muted-foreground leading-5">
               This is a secondhand item. By purchasing, you acknowledge that the
               item is pre-owned and may show signs of wear as described above.
             </Text>
@@ -242,23 +258,26 @@ export default function ItemDetailScreen() {
         </View>
       </ScrollView>
 
-      <SafeAreaView edges={['bottom']} className="border-t border-border bg-background">
+      <SafeAreaView
+        edges={["bottom"]}
+        className="border-t border-border bg-background"
+      >
         <View className="flex-row gap-3 px-6 py-3">
           {!inCart ? (
             <AnimatedButton
               onPress={handleAddToCart}
               className="flex-1 h-14 bg-gray-100"
             >
-              <Text className="text-base font-hell-round-bold text-foreground">
+              <Text className="text-base font-neuton-bold text-foreground">
                 Add to cart
               </Text>
             </AnimatedButton>
           ) : (
             <AnimatedButton
-              onPress={() => router.push('/(app)/cart')}
+              onPress={() => router.push("/(app)/cart")}
               className="flex-1 h-14 bg-gray-100"
             >
-              <Text className="text-base font-hell-round-bold text-foreground">
+              <Text className="text-base font-neuton-bold text-foreground">
                 View cart
               </Text>
             </AnimatedButton>
@@ -267,7 +286,7 @@ export default function ItemDetailScreen() {
             onPress={handleBuyNow}
             className="flex-1 h-14 bg-accent"
           >
-            <Text className="text-base font-hell-round-bold text-white">
+            <Text className="text-base font-neuton-bold text-white">
               Buy now
             </Text>
           </AnimatedButton>
@@ -280,8 +299,12 @@ export default function ItemDetailScreen() {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View className="flex-row justify-between">
-      <Text className="text-base font-helvetica text-muted-foreground">{label}</Text>
-      <Text className="text-base font-hell-round-bold text-foreground">{value}</Text>
+      <Text className="text-base font-neuton text-muted-foreground">
+        {label}
+      </Text>
+      <Text className="text-base font-neuton-bold text-foreground">
+        {value}
+      </Text>
     </View>
   );
 }

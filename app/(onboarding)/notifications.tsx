@@ -1,12 +1,12 @@
-import { AnimatedButton } from '@/components/ui/animated-button';
-import { useAuth } from '@/providers/auth-provider';
-import { updateUser } from '@/services/users';
-import { Bell } from 'lucide-react-native';
-import * as Notifications from 'expo-notifications';
-import { router } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import { AnimatedButton } from "@/components/ui/animated-button";
+import { useAuth } from "@/providers/auth-provider";
+import { updateUser } from "@/services/users";
+import * as Notifications from "expo-notifications";
+import { router } from "expo-router";
+import { Bell } from "lucide-react-native";
+import { Pressable, Text, View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NotificationsScreen() {
   const { user, refreshProfile } = useAuth();
@@ -25,7 +25,7 @@ export default function NotificationsScreen() {
       await updateUser(user.id, { is_onboarded: true });
       await refreshProfile();
     }
-    router.replace('/(app)/(tabs)');
+    router.replace("/(app)/(tabs)");
   };
 
   return (
@@ -39,11 +39,12 @@ export default function NotificationsScreen() {
             <Bell size={36} strokeWidth={2} color="#282828" />
           </View>
 
-          <Text className="text-4xl font-hell-round-bold text-foreground text-center">
+          <Text className="text-4xl font-neuton-bold text-foreground text-center">
             Stay in the loop
           </Text>
-          <Text className="text-lg font-helvetica text-muted-foreground mt-4 text-center leading-7 px-4">
-            Get notified about new drops from creators you follow and updates on your orders.
+          <Text className="text-lg font-neuton text-muted-foreground mt-4 text-center leading-7 px-4">
+            Get notified about new drops from creators you follow and updates on
+            your orders.
           </Text>
         </Animated.View>
       </View>
@@ -53,12 +54,12 @@ export default function NotificationsScreen() {
           onPress={handleEnable}
           className="h-[4.25rem] bg-accent"
         >
-          <Text className="text-lg font-hell-round-bold text-white">
+          <Text className="text-lg font-neuton-bold text-white">
             Enable notifications
           </Text>
         </AnimatedButton>
         <Pressable onPress={handleSkip} className="py-4 items-center">
-          <Text className="text-lg font-helvetica text-muted-foreground">
+          <Text className="text-lg font-neuton text-muted-foreground">
             Maybe later
           </Text>
         </Pressable>

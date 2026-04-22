@@ -1,38 +1,49 @@
-import { BackButton } from '@/components/ui/back-button';
-import { EmptyState } from '@/components/ui/empty-state';
-import { useAuth } from '@/providers/auth-provider';
-import { getOrders, type OrderWithDetails } from '@/services/orders';
-import { Package } from 'lucide-react-native';
-import { Image } from 'expo-image';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackButton } from "@/components/ui/back-button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { useAuth } from "@/providers/auth-provider";
+import { getOrders, type OrderWithDetails } from "@/services/orders";
+import { useQuery } from "@tanstack/react-query";
+import { Image } from "expo-image";
+import { Package } from "lucide-react-native";
+import { useState } from "react";
+import {
+    ActivityIndicator,
+    FlatList,
+    Pressable,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TABS = [
-  { key: 'to_pay', label: 'To Pay' },
-  { key: 'to_ship', label: 'To Ship' },
-  { key: 'to_receive', label: 'To Receive' },
-  { key: 'completed', label: 'Completed' },
+  { key: "to_pay", label: "To Pay" },
+  { key: "to_ship", label: "To Ship" },
+  { key: "to_receive", label: "To Receive" },
+  { key: "completed", label: "Completed" },
 ] as const;
 
 export default function OrdersScreen() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<string>('to_pay');
+  const [activeTab, setActiveTab] = useState<string>("to_pay");
 
   const { data: orders = [], isLoading } = useQuery({
-    queryKey: ['orders', user?.id, activeTab],
+    queryKey: ["orders", user?.id, activeTab],
     queryFn: () => (user ? getOrders(user.id, activeTab) : []),
     enabled: !!user,
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'to_pay': return 'text-error';
-      case 'to_ship': return 'text-yellow-600';
-      case 'to_receive': return 'text-blue-600';
-      case 'completed': return 'text-green-600';
-      default: return 'text-muted-foreground';
+      case "to_pay":
+        return "text-error";
+      case "to_ship":
+        return "text-yellow-600";
+      case "to_receive":
+        return "text-blue-600";
+      case "completed":
+        return "text-green-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -40,7 +51,7 @@ export default function OrdersScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-hell-round-bold text-foreground">
+        <Text className="text-xl font-neuton-bold text-foreground">
           My Orders
         </Text>
       </View>
@@ -51,12 +62,12 @@ export default function OrdersScreen() {
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
             className={`flex-1 py-3 items-center rounded-3xl ${
-              activeTab === tab.key ? 'bg-accent' : 'bg-gray-100'
+              activeTab === tab.key ? "bg-accent" : "bg-gray-100"
             }`}
           >
             <Text
-              className={`text-sm font-hell-round-bold ${
-                activeTab === tab.key ? 'text-white' : 'text-foreground'
+              className={`text-sm font-neuton-bold ${
+                activeTab === tab.key ? "text-white" : "text-foreground"
               }`}
             >
               {tab.label}
@@ -73,30 +84,39 @@ export default function OrdersScreen() {
         <EmptyState
           icon={Package}
           title="No orders yet"
-          description={`You have no ${activeTab.replace('_', ' ')} orders`}
+          description={`You have no ${activeTab.replace("_", " ")} orders`}
         />
       ) : (
         <FlatList
           data={orders}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingHorizontal: 24, gap: 12, paddingBottom: 20 }}
+          contentContainerStyle={{
+            paddingHorizontal: 24,
+            gap: 12,
+            paddingBottom: 20,
+          }}
           renderItem={({ item: order }: { item: OrderWithDetails }) => (
             <View className="p-5 rounded-3xl bg-gray-100">
               <View className="flex-row gap-4">
                 <Image
-                  source={{ uri: order.item?.item_media?.[0]?.url ?? '' }}
+                  source={{ uri: order.item?.item_media?.[0]?.url ?? "" }}
                   className="w-20 h-20 rounded-2xl bg-border"
                   contentFit="cover"
                 />
                 <View className="flex-1">
-                  <Text className="text-lg font-hell-round-bold text-foreground" numberOfLines={1}>
+                  <Text
+                    className="text-lg font-neuton-bold text-foreground"
+                    numberOfLines={1}
+                  >
                     {order.item?.item_name}
                   </Text>
-                  <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
+                  <Text className="text-base font-neuton text-muted-foreground mt-0.5">
                     ₱{order.total_amount.toLocaleString()}
                   </Text>
-                  <Text className={`text-sm font-hell-round-bold mt-1.5 ${getStatusColor(order.status)}`}>
-                    {order.status.replace('_', ' ').toUpperCase()}
+                  <Text
+                    className={`text-sm font-neuton-bold mt-1.5 ${getStatusColor(order.status)}`}
+                  >
+                    {order.status.replace("_", " ").toUpperCase()}
                   </Text>
                 </View>
               </View>

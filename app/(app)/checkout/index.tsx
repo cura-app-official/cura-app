@@ -1,16 +1,23 @@
-import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
-import { BackButton } from '@/components/ui/back-button';
-import { useAuth } from '@/providers/auth-provider';
-import { getCartItems, clearCart } from '@/services/cart';
-import { getDefaultAddress } from '@/services/addresses';
-import { createOrder } from '@/services/orders';
-import { ChevronRight, Plus } from 'lucide-react-native';
-import { Image } from 'expo-image';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
+import { BackButton } from "@/components/ui/back-button";
+import { useAuth } from "@/providers/auth-provider";
+import { getDefaultAddress } from "@/services/addresses";
+import { clearCart, getCartItems } from "@/services/cart";
+import { createOrder } from "@/services/orders";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { ChevronRight, Plus } from "lucide-react-native";
+import { useState } from "react";
+import {
+    ActivityIndicator,
+    Alert,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CheckoutScreen() {
   const { user } = useAuth();
@@ -18,13 +25,13 @@ export default function CheckoutScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: cartItems = [], isLoading: cartLoading } = useQuery({
-    queryKey: ['cart', user?.id],
+    queryKey: ["cart", user?.id],
     queryFn: () => (user ? getCartItems(user.id) : []),
     enabled: !!user,
   });
 
   const { data: defaultAddress, isLoading: addressLoading } = useQuery({
-    queryKey: ['default-address', user?.id],
+    queryKey: ["default-address", user?.id],
     queryFn: () => (user ? getDefaultAddress(user.id) : null),
     enabled: !!user,
   });
@@ -34,9 +41,12 @@ export default function CheckoutScreen() {
   const handlePlaceOrder = async () => {
     if (!user) return;
     if (!defaultAddress) {
-      Alert.alert('No address', 'Please add a shipping address first.', [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Add address', onPress: () => router.push('/(app)/address/add') },
+      Alert.alert("No address", "Please add a shipping address first.", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Add address",
+          onPress: () => router.push("/(app)/address/add"),
+        },
       ]);
       return;
     }
@@ -53,13 +63,13 @@ export default function CheckoutScreen() {
         });
       }
       await clearCart(user.id);
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-      Alert.alert('Order placed', 'Your order has been placed successfully!', [
-        { text: 'OK', onPress: () => router.replace('/(app)/orders') },
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      Alert.alert("Order placed", "Your order has been placed successfully!", [
+        { text: "OK", onPress: () => router.replace("/(app)/orders") },
       ]);
     } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to place order');
+      Alert.alert("Error", err?.message ?? "Failed to place order");
     } finally {
       setIsSubmitting(false);
     }
@@ -77,29 +87,29 @@ export default function CheckoutScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-hell-round-bold text-foreground">
+        <Text className="text-xl font-neuton-bold text-foreground">
           Checkout
         </Text>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="px-6">
-          <Text className="text-base font-hell-round-bold text-foreground mb-3">
+          <Text className="text-base font-neuton-bold text-foreground mb-3">
             Shipping Address
           </Text>
           {defaultAddress ? (
             <Pressable
-              onPress={() => router.push('/(app)/address')}
+              onPress={() => router.push("/(app)/address")}
               className="p-5 rounded-3xl bg-gray-100 flex-row items-center"
             >
               <View className="flex-1">
-                <Text className="text-lg font-hell-round-bold text-foreground">
+                <Text className="text-lg font-neuton-bold text-foreground">
                   {defaultAddress.name}
                 </Text>
-                <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
+                <Text className="text-base font-neuton text-muted-foreground mt-0.5">
                   {defaultAddress.phone_number}
                 </Text>
-                <Text className="text-base font-helvetica text-foreground mt-1">
+                <Text className="text-base font-neuton text-foreground mt-1">
                   {defaultAddress.address}
                 </Text>
               </View>
@@ -107,32 +117,35 @@ export default function CheckoutScreen() {
             </Pressable>
           ) : (
             <Pressable
-              onPress={() => router.push('/(app)/address/add')}
+              onPress={() => router.push("/(app)/address/add")}
               className="p-5 rounded-3xl bg-gray-100 flex-row items-center justify-center gap-2"
             >
               <Plus size={20} strokeWidth={2.5} color="#282828" />
-              <Text className="text-base font-hell-round-bold text-foreground">
+              <Text className="text-base font-neuton-bold text-foreground">
                 Add shipping address
               </Text>
             </Pressable>
           )}
 
-          <Text className="text-base font-hell-round-bold text-foreground mt-8 mb-4">
+          <Text className="text-base font-neuton-bold text-foreground mt-8 mb-4">
             Items
           </Text>
           <View className="gap-4">
             {cartItems.map((ci) => (
               <View key={ci.id} className="flex-row gap-4">
                 <Image
-                  source={{ uri: ci.item.item_media?.[0]?.url ?? '' }}
+                  source={{ uri: ci.item.item_media?.[0]?.url ?? "" }}
                   className="w-20 h-20 rounded-2xl bg-muted"
                   contentFit="cover"
                 />
                 <View className="flex-1 justify-center">
-                  <Text className="text-base font-hell-round-bold text-foreground" numberOfLines={1}>
+                  <Text
+                    className="text-base font-neuton-bold text-foreground"
+                    numberOfLines={1}
+                  >
                     {ci.item.item_name}
                   </Text>
-                  <Text className="text-base font-helvetica text-muted-foreground mt-0.5">
+                  <Text className="text-base font-neuton text-muted-foreground mt-0.5">
                     ₱{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
@@ -141,16 +154,19 @@ export default function CheckoutScreen() {
           </View>
 
           <View className="flex-row justify-between mt-8 py-5 border-t border-border">
-            <Text className="text-lg font-helvetica text-muted-foreground">Total</Text>
-            <Text className="text-2xl font-hell-round-bold text-foreground">
+            <Text className="text-lg font-neuton text-muted-foreground">
+              Total
+            </Text>
+            <Text className="text-2xl font-neuton-bold text-foreground">
               ₱{total.toLocaleString()}
             </Text>
           </View>
 
           <View className="py-4 border-t border-border">
-            <Text className="text-sm font-helvetica text-muted-foreground leading-5">
-              By placing this order, you agree that all items are secondhand and may
-              show signs of wear as described in their listings. All sales are final.
+            <Text className="text-sm font-neuton text-muted-foreground leading-5">
+              By placing this order, you agree that all items are secondhand and
+              may show signs of wear as described in their listings. All sales
+              are final.
             </Text>
           </View>
         </View>

@@ -1,15 +1,20 @@
-import { cn } from '@/lib/utils';
-import * as Haptics from 'expo-haptics';
-import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, type LayoutChangeEvent, Text, View } from 'react-native';
+import { cn } from "@/lib/utils";
+import * as Haptics from "expo-haptics";
+import { useEffect, useRef, useState } from "react";
 import {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import { AnimatedButton } from './animated-button';
+    ActivityIndicator,
+    type LayoutChangeEvent,
+    Text,
+    View,
+} from "react-native";
+import {
+    Extrapolation,
+    interpolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
+import { AnimatedButton } from "./animated-button";
 
 const BUTTON_SIZE = 68;
 
@@ -59,27 +64,27 @@ export function AnimatedLoadingButton({
         widthAnim.value,
         [0, 1],
         [BUTTON_SIZE, fullWidth],
-        Extrapolation.CLAMP
+        Extrapolation.CLAMP,
       ),
-      alignSelf: 'center' as const,
+      alignSelf: "center" as const,
     };
   }, [containerWidth]);
 
   return (
-    <View onLayout={onLayout} style={{ width: '100%' }}>
+    <View onLayout={onLayout} style={{ width: "100%" }}>
       <AnimatedButton
         onPress={handlePress}
         disabled={isSubmitting || disabled}
         style={animatedStyle}
-        className={cn('justify-center items-center h-[4.25rem]', className)}
+        className={cn("justify-center items-center h-[4.25rem]", className)}
       >
         {isSubmitting ? (
           <ActivityIndicator size="small" color="white" />
         ) : (
           <Text
             className={cn(
-              'text-lg font-hell-round-bold text-white',
-              titleClassName
+              "text-lg font-neuton-bold text-white",
+              titleClassName,
             )}
           >
             {title}

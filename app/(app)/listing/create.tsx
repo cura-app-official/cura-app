@@ -1,28 +1,28 @@
-import { AnimatedLoadingButton } from '@/components/ui/animated-loading-button';
-import { BackButton } from '@/components/ui/back-button';
-import { Input } from '@/components/ui/input';
-import { CATEGORIES, CONDITIONS, DAMAGE_OPTIONS } from '@/lib/constants';
-import { createListingSchema, type CreateListingForm } from '@/lib/validations';
-import { useAuth } from '@/providers/auth-provider';
-import { createItem, createItemMedia } from '@/services/items';
-import { Camera, X } from 'lucide-react-native';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Image } from 'expo-image';
-import * as ImagePicker from 'expo-image-picker';
-import { useQueryClient } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
+import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
+import { BackButton } from "@/components/ui/back-button";
+import { Input } from "@/components/ui/input";
+import { CATEGORIES, CONDITIONS, DAMAGE_OPTIONS } from "@/lib/constants";
+import { createListingSchema, type CreateListingForm } from "@/lib/validations";
+import { useAuth } from "@/providers/auth-provider";
+import { createItem, createItemMedia } from "@/services/items";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
+import { Camera, X } from "lucide-react-native";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CreateListingScreen() {
   const { user } = useAuth();
@@ -38,33 +38,35 @@ export default function CreateListingScreen() {
   } = useForm<CreateListingForm>({
     resolver: zodResolver(createListingSchema),
     defaultValues: {
-      item_name: '',
-      brand: '',
+      item_name: "",
+      brand: "",
       category: undefined,
-      size: '',
+      size: "",
       condition: undefined,
       price: undefined,
-      description: '',
+      description: "",
       damage_type: undefined,
-      damage_details: '',
-      material: '',
-      measurements: '',
+      damage_details: "",
+      material: "",
+      measurements: "",
     },
   });
 
-  const selectedCategory = watch('category');
-  const selectedCondition = watch('condition');
-  const selectedDamage = watch('damage_type');
+  const selectedCategory = watch("category");
+  const selectedCondition = watch("condition");
+  const selectedDamage = watch("damage_type");
 
   const pickMedia = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       allowsMultipleSelection: true,
       selectionLimit: 10 - mediaUris.length,
       quality: 0.8,
     });
     if (!result.canceled) {
-      setMediaUris((prev) => [...prev, ...result.assets.map((a) => a.uri)].slice(0, 10));
+      setMediaUris((prev) =>
+        [...prev, ...result.assets.map((a) => a.uri)].slice(0, 10),
+      );
     }
   };
 
@@ -75,7 +77,7 @@ export default function CreateListingScreen() {
   const onSubmit = async (values: CreateListingForm) => {
     if (!user) return;
     if (mediaUris.length === 0) {
-      Alert.alert('Error', 'Please add at least one photo');
+      Alert.alert("Error", "Please add at least one photo");
       return;
     }
 
@@ -102,34 +104,37 @@ export default function CreateListingScreen() {
       }));
       await createItemMedia(media);
 
-      queryClient.invalidateQueries({ queryKey: ['items'] });
-      queryClient.invalidateQueries({ queryKey: ['my-listings'] });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: ["my-listings"] });
 
-      Alert.alert('Published!', 'Your listing is now live.', [
-        { text: 'OK', onPress: () => router.back() },
+      Alert.alert("Published!", "Your listing is now live.", [
+        { text: "OK", onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to create listing');
+      Alert.alert("Error", err?.message ?? "Failed to create listing");
     }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-hell-round-bold text-foreground">
+          <Text className="text-xl font-neuton-bold text-foreground">
             Create listing
           </Text>
         </View>
 
-        <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          className="flex-1 px-6"
+          showsVerticalScrollIndicator={false}
+        >
           {/* Photos */}
           <View className="mb-8">
-            <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
+            <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
               Photos
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -155,7 +160,7 @@ export default function CreateListingScreen() {
                     className="w-28 h-28 rounded-2xl bg-gray-100 items-center justify-center"
                   >
                     <Camera size={28} strokeWidth={2} color="#A3A3A3" />
-                    <Text className="text-sm font-helvetica text-muted-foreground mt-1">
+                    <Text className="text-sm font-neuton text-muted-foreground mt-1">
                       {mediaUris.length}/10
                     </Text>
                   </Pressable>
@@ -196,21 +201,25 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
+              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
                 Category
               </Text>
               <View className="flex-row flex-wrap gap-2">
                 {CATEGORIES.map((cat) => (
                   <Pressable
                     key={cat}
-                    onPress={() => setValue('category', cat, { shouldValidate: true })}
+                    onPress={() =>
+                      setValue("category", cat, { shouldValidate: true })
+                    }
                     className={`px-5 py-3 rounded-3xl ${
-                      selectedCategory === cat ? 'bg-accent' : 'bg-gray-100'
+                      selectedCategory === cat ? "bg-accent" : "bg-gray-100"
                     }`}
                   >
                     <Text
-                      className={`text-base font-helvetica ${
-                        selectedCategory === cat ? 'text-white' : 'text-foreground'
+                      className={`text-base font-neuton ${
+                        selectedCategory === cat
+                          ? "text-white"
+                          : "text-foreground"
                       }`}
                     >
                       {cat}
@@ -219,7 +228,9 @@ export default function CreateListingScreen() {
                 ))}
               </View>
               {errors.category && (
-                <Text className="text-sm text-error ml-2 mt-1.5">{errors.category.message}</Text>
+                <Text className="text-sm text-error ml-2 mt-1.5">
+                  {errors.category.message}
+                </Text>
               )}
             </View>
 
@@ -239,21 +250,25 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
+              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
                 Condition
               </Text>
               <View className="flex-row flex-wrap gap-2">
                 {CONDITIONS.map((cond) => (
                   <Pressable
                     key={cond}
-                    onPress={() => setValue('condition', cond, { shouldValidate: true })}
+                    onPress={() =>
+                      setValue("condition", cond, { shouldValidate: true })
+                    }
                     className={`px-5 py-3 rounded-3xl ${
-                      selectedCondition === cond ? 'bg-accent' : 'bg-gray-100'
+                      selectedCondition === cond ? "bg-accent" : "bg-gray-100"
                     }`}
                   >
                     <Text
-                      className={`text-base font-helvetica ${
-                        selectedCondition === cond ? 'text-white' : 'text-foreground'
+                      className={`text-base font-neuton ${
+                        selectedCondition === cond
+                          ? "text-white"
+                          : "text-foreground"
                       }`}
                     >
                       {cond}
@@ -262,7 +277,9 @@ export default function CreateListingScreen() {
                 ))}
               </View>
               {errors.condition && (
-                <Text className="text-sm text-error ml-2 mt-1.5">{errors.condition.message}</Text>
+                <Text className="text-sm text-error ml-2 mt-1.5">
+                  {errors.condition.message}
+                </Text>
               )}
             </View>
 
@@ -275,29 +292,33 @@ export default function CreateListingScreen() {
                   placeholder="0"
                   keyboardType="numeric"
                   onBlur={onBlur}
-                  onChangeText={(text) => onChange(text ? parseFloat(text) : undefined)}
-                  value={value?.toString() ?? ''}
+                  onChangeText={(text) =>
+                    onChange(text ? parseFloat(text) : undefined)
+                  }
+                  value={value?.toString() ?? ""}
                   error={errors.price?.message}
                 />
               )}
             />
 
             <View>
-              <Text className="text-base font-hell-round-bold text-neutral-600 mb-3">
+              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
                 Damage
               </Text>
               <View className="flex-row flex-wrap gap-2">
                 {DAMAGE_OPTIONS.map((dmg) => (
                   <Pressable
                     key={dmg}
-                    onPress={() => setValue('damage_type', dmg)}
+                    onPress={() => setValue("damage_type", dmg)}
                     className={`px-5 py-3 rounded-3xl ${
-                      selectedDamage === dmg ? 'bg-accent' : 'bg-gray-100'
+                      selectedDamage === dmg ? "bg-accent" : "bg-gray-100"
                     }`}
                   >
                     <Text
-                      className={`text-base font-helvetica ${
-                        selectedDamage === dmg ? 'text-white' : 'text-foreground'
+                      className={`text-base font-neuton ${
+                        selectedDamage === dmg
+                          ? "text-white"
+                          : "text-foreground"
                       }`}
                     >
                       {dmg}
@@ -317,7 +338,7 @@ export default function CreateListingScreen() {
                   multiline
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value ?? ''}
+                  value={value ?? ""}
                 />
               )}
             />
@@ -333,7 +354,7 @@ export default function CreateListingScreen() {
                   numberOfLines={3}
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value ?? ''}
+                  value={value ?? ""}
                   className="min-h-[100px]"
                 />
               )}
@@ -348,7 +369,7 @@ export default function CreateListingScreen() {
                   placeholder="e.g. Cotton, Polyester"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value ?? ''}
+                  value={value ?? ""}
                 />
               )}
             />
@@ -359,10 +380,10 @@ export default function CreateListingScreen() {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
                   label="Measurements"
-                  placeholder="e.g. Chest: 40&quot;, Length: 28&quot;"
+                  placeholder='e.g. Chest: 40", Length: 28"'
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value ?? ''}
+                  value={value ?? ""}
                 />
               )}
             />

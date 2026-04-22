@@ -1,20 +1,14 @@
-import { ItemCard } from '@/components/ui/item-card';
-import { useAuth } from '@/providers/auth-provider';
-import { getItems, type ItemWithMedia } from '@/services/items';
-import { getWishlistIds, toggleWishlist } from '@/services/wishlist';
-import { MOCK_ITEMS } from '@/lib/mock-data';
-import { ShoppingBag } from 'lucide-react-native';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import { useCallback, useState } from 'react';
-import {
-  FlatList,
-  Pressable,
-  RefreshControl,
-  Text,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ItemCard } from "@/components/ui/item-card";
+import { MOCK_ITEMS } from "@/lib/mock-data";
+import { useAuth } from "@/providers/auth-provider";
+import { getItems, type ItemWithMedia } from "@/services/items";
+import { getWishlistIds, toggleWishlist } from "@/services/wishlist";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
+import { Search, ShoppingBag } from "lucide-react-native";
+import { useCallback, useState } from "react";
+import { FlatList, Pressable, RefreshControl, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -22,12 +16,12 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const { data: items = [] } = useQuery({
-    queryKey: ['items'],
+    queryKey: ["items"],
     queryFn: () => getItems(),
   });
 
   const { data: wishlistIds = [] } = useQuery({
-    queryKey: ['wishlist-ids', user?.id],
+    queryKey: ["wishlist-ids", user?.id],
     queryFn: () => (user ? getWishlistIds(user.id) : []),
     enabled: !!user,
   });
@@ -38,15 +32,15 @@ export default function HomeScreen() {
     async (itemId: string) => {
       if (!user) return;
       await toggleWishlist(user.id, itemId);
-      queryClient.invalidateQueries({ queryKey: ['wishlist-ids'] });
-      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist-ids"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     },
-    [user, queryClient]
+    [user, queryClient],
   );
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await queryClient.invalidateQueries({ queryKey: ['items'] });
+    await queryClient.invalidateQueries({ queryKey: ["items"] });
     setRefreshing(false);
   };
 
@@ -54,13 +48,13 @@ export default function HomeScreen() {
     ({ item, index }: { item: ItemWithMedia; index: number }) => {
       const firstMedia = item.item_media?.[0];
       return (
-        <View className={`flex-1 ${index % 2 === 0 ? 'pr-1.5' : 'pl-1.5'}`}>
+        <View className={`flex-1 ${index % 2 === 0 ? "pr-1.5" : "pl-1.5"}`}>
           <ItemCard
             id={item.id}
-            imageUrl={firstMedia?.url ?? ''}
+            imageUrl={firstMedia?.url ?? ""}
             name={item.item_name}
             price={item.price}
-            sellerName={item.seller?.username ?? ''}
+            sellerName={item.seller?.username ?? ""}
             sellerAvatar={item.seller?.avatar_url ?? undefined}
             isWishlisted={wishlistIds.includes(item.id)}
             onToggleWishlist={() => handleToggleWishlist(item.id)}
@@ -68,21 +62,20 @@ export default function HomeScreen() {
         </View>
       );
     },
-    [wishlistIds, handleToggleWishlist]
+    [wishlistIds, handleToggleWishlist],
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
       <View className="flex-row items-center justify-between px-6 py-4">
-        <Text className="text-3xl font-hell-round-bold text-foreground tracking-tight">
+        <Pressable onPress={() => router.push("/(app)/cart")} hitSlop={8}>
+          <Search size={24} strokeWidth={2.5} color="#422006" />
+        </Pressable>
+        <Text className="text-3xl font-neuton-bold text-yellow-950 tracking-tight">
           cura
         </Text>
-        <Pressable
-          onPress={() => router.push('/(app)/cart')}
-          hitSlop={8}
-          className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center"
-        >
-          <ShoppingBag size={22} strokeWidth={2.5} color="#282828" />
+        <Pressable onPress={() => router.push("/(app)/cart")} hitSlop={8}>
+          <ShoppingBag size={24} strokeWidth={2.5} color="#422006" />
         </Pressable>
       </View>
 
