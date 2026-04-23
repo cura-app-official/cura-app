@@ -33,7 +33,7 @@ export function ItemCard({
       className={cn("flex-1", className)}
     >
       {/* Product Image */}
-      <View className="relative bg-red-500 w-full aspect-[3/4] rounded-3xl">
+      <View className="relative bg-muted w-full aspect-[3/4] rounded-3xl">
         <Image
           source={{
             uri: "https://golflefleur.com/cdn/shop/files/NAUT-1-MNT-01.jpg?v=1757029019&width=1920",
@@ -63,25 +63,25 @@ export function ItemCard({
               e.stopPropagation();
               onToggleWishlist();
             }}
-            className="absolute bottom-3 right-3 w-10 h-10 rounded-full items-center justify-center bg-white/90"
+            className="absolute bottom-3 right-3 w-10 h-10 rounded-full items-center justify-center bg-background/95 border border-border"
           >
             <Heart
               size={18}
-              strokeWidth={3}
-              color={isWishlisted ? "#FF4747" : "#422006"}
+              strokeWidth={1}
+              color={isWishlisted ? "#FF4747" : "#5B3B1B"}
               fill={isWishlisted ? "#FF4747" : "transparent"}
             />
           </Pressable>
         )}
       </View>
       <Text
-        className="text-base font-neuton-bold text-yellow-950 mt-2"
+        className="text-base font-neuton-bold text-foreground mt-2"
         numberOfLines={1}
       >
         {name}
       </Text>
       {/* Product Price */}
-      <Text className="text-lg font-neuton text-yellow-950">
+      <Text className="text-lg font-neuton text-foreground">
         ฿{price.toLocaleString()}
       </Text>
     </Pressable>
@@ -117,7 +117,7 @@ export function ItemCard({
 //       {name}
 //     </Text>
 //     <Text className="text-lg font-neuton-bold text-foreground mt-0.5">
-//       ₱{price.toLocaleString()}
+//       ฿{price.toLocaleString()}
 //     </Text>
 //     <View className="flex-row items-center mt-1.5 gap-2">
 //       {sellerAvatar ? (

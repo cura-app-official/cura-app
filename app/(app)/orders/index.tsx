@@ -62,7 +62,9 @@ export default function OrdersScreen() {
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
             className={`flex-1 py-3 items-center rounded-3xl ${
-              activeTab === tab.key ? "bg-accent" : "bg-gray-100"
+              activeTab === tab.key
+                ? "bg-accent"
+                : "bg-muted border border-border"
             }`}
           >
             <Text
@@ -96,7 +98,7 @@ export default function OrdersScreen() {
             paddingBottom: 20,
           }}
           renderItem={({ item: order }: { item: OrderWithDetails }) => (
-            <View className="p-5 rounded-3xl bg-gray-100">
+            <View className="p-5 rounded-3xl bg-muted border border-border">
               <View className="flex-row gap-4">
                 <Image
                   source={{ uri: order.item?.item_media?.[0]?.url ?? "" }}
@@ -111,7 +113,7 @@ export default function OrdersScreen() {
                     {order.item?.item_name}
                   </Text>
                   <Text className="text-base font-neuton text-muted-foreground mt-0.5">
-                    ₱{order.total_amount.toLocaleString()}
+                    ฿{order.total_amount.toLocaleString()}
                   </Text>
                   <Text
                     className={`text-sm font-neuton-bold mt-1.5 ${getStatusColor(order.status)}`}

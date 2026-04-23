@@ -113,14 +113,14 @@ export default function CheckoutScreen() {
                   {defaultAddress.address}
                 </Text>
               </View>
-              <ChevronRight size={20} strokeWidth={2.5} color="#A3A3A3" />
+              <ChevronRight size={20} strokeWidth={1} color="#A3A3A3" />
             </Pressable>
           ) : (
             <Pressable
               onPress={() => router.push("/(app)/address/add")}
               className="p-5 rounded-3xl bg-gray-100 flex-row items-center justify-center gap-2"
             >
-              <Plus size={20} strokeWidth={2.5} color="#282828" />
+              <Plus size={20} strokeWidth={1} color="#5B3B1B" />
               <Text className="text-base font-neuton-bold text-foreground">
                 Add shipping address
               </Text>
@@ -146,7 +146,7 @@ export default function CheckoutScreen() {
                     {ci.item.item_name}
                   </Text>
                   <Text className="text-base font-neuton text-muted-foreground mt-0.5">
-                    ₱{ci.item.price.toLocaleString()}
+                    ฿{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
               </View>
@@ -158,7 +158,7 @@ export default function CheckoutScreen() {
               Total
             </Text>
             <Text className="text-2xl font-neuton-bold text-foreground">
-              ₱{total.toLocaleString()}
+              ฿{total.toLocaleString()}
             </Text>
           </View>
 

@@ -3,15 +3,15 @@ import { useAuth } from "@/providers/auth-provider";
 import { router } from "expo-router";
 import type { LucideIcon } from "lucide-react-native";
 import {
-    ChevronRight,
-    CircleHelp,
-    FileText,
-    LogOut,
-    MapPin,
-    Package,
-    Shield,
-    Store,
-    UserPen,
+  ChevronRight,
+  CircleHelp,
+  FileText,
+  LogOut,
+  MapPin,
+  Package,
+  Shield,
+  Store,
+  UserPen,
 } from "lucide-react-native";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,11 +31,11 @@ function SettingsRow({
 }: SettingsRowProps) {
   return (
     <Pressable onPress={onPress} className="flex-row items-center py-5 gap-4">
-      <View className="w-12 h-12 rounded-2xl bg-gray-100 items-center justify-center">
+      <View className="w-12 h-12 rounded-2xl bg-muted border border-border items-center justify-center">
         <Icon
           size={24}
-          strokeWidth={2}
-          color={destructive ? "#FF4747" : "#282828"}
+          strokeWidth={1}
+          color={destructive ? "#FF4747" : "#5B3B1B"}
         />
       </View>
       <Text
@@ -45,7 +45,7 @@ function SettingsRow({
       >
         {label}
       </Text>
-      <ChevronRight size={20} strokeWidth={2.5} color="#D4D4D4" />
+      <ChevronRight size={20} strokeWidth={1} color="#8A6B4D" />
     </Pressable>
   );
 }
@@ -83,7 +83,7 @@ export default function SettingsScreen() {
           </Text>
           <SettingsRow
             icon={UserPen}
-            label="Edit profile"
+            label="Edit Profile"
             onPress={() => router.push("/(app)/profile/edit")}
           />
           <SettingsRow

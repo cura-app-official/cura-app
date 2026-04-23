@@ -7,6 +7,7 @@ import { createAddress } from "@/services/addresses";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     Alert,
@@ -16,6 +17,7 @@ import {
     ScrollView,
     Switch,
     Text,
+    TextInput,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,6 +25,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function AddAddressScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
 
   const {
     control,
@@ -49,6 +52,7 @@ export default function AddAddressScreen() {
       await createAddress({
         user_id: user.id,
         ...values,
+        phone_number: `+66${values.phone_number}`,
       });
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
       router.back();
@@ -93,15 +97,40 @@ export default function AddAddressScreen() {
               control={control}
               name="phone_number"
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  label="Phone Number"
-                  placeholder="+63 XXX XXX XXXX"
-                  keyboardType="phone-pad"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  error={errors.phone_number?.message}
-                />
+                <View>
+                  <Text className="text-base font-neuton-bold text-muted-foreground mb-3">
+                    Phone Number
+                  </Text>
+                  <View
+                    className={`flex-row items-center px-5 rounded-2xl border border-border ${
+                      isPhoneFocused ? "border-2 border-black" : ""
+                    } ${errors.phone_number?.message ? "border border-error" : ""}`}
+                  >
+                    <Text className="text-base font-neuton-bold text-foreground mr-3">
+                      +66
+                    </Text>
+                    <TextInput
+                      className="flex-1 text-base text-foreground font-neuton py-4"
+                      placeholder="XXXXXXXXX"
+                      placeholderTextColor="#8A6B4D"
+                      selectionColor="#5B3B1B"
+                      keyboardType="number-pad"
+                      maxLength={9}
+                      value={value}
+                      onFocus={() => setIsPhoneFocused(true)}
+                      onBlur={() => {
+                        setIsPhoneFocused(false);
+                        onBlur();
+                      }}
+                      onChangeText={(text) => onChange(text.replace(/\D/g, ""))}
+                    />
+                  </View>
+                  {errors.phone_number?.message && (
+                    <Text className="text-sm font-neuton text-error ml-2 mt-1.5">
+                      {errors.phone_number.message}
+                    </Text>
+                  )}
+                </View>
               )}
             />
             <Controller
@@ -132,14 +161,14 @@ export default function AddAddressScreen() {
               )}
             />
 
-            <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-gray-100">
+            <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-muted border border-border">
               <Text className="text-base font-neuton text-foreground">
                 Set as default
               </Text>
               <Switch
                 value={isDefault}
                 onValueChange={(val) => setValue("is_default", val)}
-                trackColor={{ true: "#1A1A1A" }}
+                trackColor={{ true: "#8BAD80" }}
               />
             </View>
           </View>

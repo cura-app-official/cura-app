@@ -41,7 +41,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Home
               size={26}
-              strokeWidth={focused ? 2.5 : 2}
+              strokeWidth={1}
               color={color}
               fill={focused ? color : "transparent"}
             />
@@ -52,7 +52,7 @@ export default function TabLayout() {
         name="search"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Search size={26} strokeWidth={focused ? 2.5 : 2} color={color} />
+            <Search size={26} strokeWidth={1} color={color} />
           ),
         }}
       />
@@ -62,7 +62,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Heart
               size={26}
-              strokeWidth={focused ? 2.5 : 2}
+              strokeWidth={1}
               color={color}
               fill={focused ? color : "transparent"}
             />
@@ -75,7 +75,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <User
               size={26}
-              strokeWidth={focused ? 2.5 : 2}
+              strokeWidth={1}
               color={color}
               fill={focused ? color : "transparent"}
             />

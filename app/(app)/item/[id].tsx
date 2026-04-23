@@ -96,7 +96,7 @@ export default function ItemDetailScreen() {
   if (!mockItem && (isLoading || !item)) {
     return (
       <View className="flex-1 bg-background items-center justify-center">
-        <ActivityIndicator size="small" color="#1A1A1A" />
+        <ActivityIndicator size="small" color="#5B3B1B" />
       </View>
     );
   }
@@ -104,7 +104,7 @@ export default function ItemDetailScreen() {
   if (!displayItem) {
     return (
       <View className="flex-1 bg-background items-center justify-center">
-        <ActivityIndicator size="small" color="#1A1A1A" />
+        <ActivityIndicator size="small" color="#5B3B1B" />
       </View>
     );
   }
@@ -122,12 +122,12 @@ export default function ItemDetailScreen() {
           <Pressable
             onPress={handleToggleWishlist}
             hitSlop={8}
-            className="w-12 h-12 rounded-full bg-white/80 items-center justify-center"
+            className="w-12 h-12 rounded-full bg-background items-center justify-center"
           >
             <Heart
               size={22}
-              strokeWidth={2.5}
-              color={wishlisted ? "#FF4747" : "#282828"}
+              strokeWidth={1}
+              color={wishlisted ? "#FF4747" : "#5B3B1B"}
               fill={wishlisted ? "#FF4747" : "transparent"}
             />
           </Pressable>
@@ -175,7 +175,7 @@ export default function ItemDetailScreen() {
             {displayItem.item_name}
           </Text>
           <Text className="text-2xl font-neuton-bold text-foreground mt-2">
-            ₱{displayItem.price.toLocaleString()}
+            ฿{displayItem.price.toLocaleString()}
           </Text>
 
           {/* Seller row */}
@@ -198,7 +198,7 @@ export default function ItemDetailScreen() {
             <Pressable
               onPress={handleToggleFollow}
               className={`px-5 py-2.5 rounded-3xl ${
-                userFollowing ? "bg-gray-100" : "bg-accent"
+                userFollowing ? "bg-muted border border-border" : "bg-accent"
               }`}
             >
               <Text
@@ -266,7 +266,7 @@ export default function ItemDetailScreen() {
           {!inCart ? (
             <AnimatedButton
               onPress={handleAddToCart}
-              className="flex-1 h-14 bg-gray-100"
+              className="flex-1 h-14 bg-muted border border-border"
             >
               <Text className="text-base font-neuton-bold text-foreground">
                 Add to cart
@@ -275,7 +275,7 @@ export default function ItemDetailScreen() {
           ) : (
             <AnimatedButton
               onPress={() => router.push("/(app)/cart")}
-              className="flex-1 h-14 bg-gray-100"
+              className="flex-1 h-14 bg-muted border border-border"
             >
               <Text className="text-base font-neuton-bold text-foreground">
                 View cart
@@ -286,7 +286,7 @@ export default function ItemDetailScreen() {
             onPress={handleBuyNow}
             className="flex-1 h-14 bg-accent"
           >
-            <Text className="text-base font-neuton-bold text-white">
+            <Text className="text-base font-neuton-bold text-background">
               Buy now
             </Text>
           </AnimatedButton>

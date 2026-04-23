@@ -149,14 +149,14 @@ export default function EditAddressScreen() {
               )}
             />
 
-            <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-gray-100">
+            <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-muted border border-border">
               <Text className="text-base font-neuton text-foreground">
                 Set as default
               </Text>
               <Switch
                 value={isDefault}
                 onValueChange={(val) => setValue("is_default", val)}
-                trackColor={{ true: "#1A1A1A" }}
+                trackColor={{ true: "#8BAD80" }}
               />
             </View>
           </View>

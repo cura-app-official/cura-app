@@ -13,8 +13,8 @@ export function EmptyState({
   description,
 }: EmptyStateProps) {
   return (
-    <View className="flex-1 items-center justify-center px-8 py-20">
-      <Icon size={48} strokeWidth={1.5} color="#D4D4D4" />
+    <View className="flex-1 items-center justify-center px-8 pb-32">
+      <Icon size={48} strokeWidth={1} color="#8A6B4D" />
       <Text className="text-xl font-neuton-bold text-foreground mt-5 text-center">
         {title}
       </Text>

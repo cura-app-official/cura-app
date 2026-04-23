@@ -80,7 +80,7 @@ export default function EditProfileScreen() {
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
           <Text className="text-xl font-neuton-bold text-foreground">
-            Edit profile
+            Edit Profile
           </Text>
         </View>
 
@@ -88,43 +88,53 @@ export default function EditProfileScreen() {
           className="flex-1 px-6"
           showsVerticalScrollIndicator={false}
         >
-          {/* Cover photo */}
-          <Pressable
-            onPress={() => pickImage("background_url")}
-            className="relative h-36 rounded-3xl bg-gray-100 overflow-hidden mb-8"
-          >
-            {backgroundUrl && (
-              <Image
-                source={{ uri: backgroundUrl }}
-                className="absolute inset-0"
-                contentFit="cover"
-              />
-            )}
-            <View className="absolute inset-0 items-center justify-center bg-black/20">
-              <Camera size={26} strokeWidth={2} color="white" />
-            </View>
-          </Pressable>
-
-          {/* Avatar */}
-          <View className="items-center mb-10">
+          <View className="mb-6">
+            {/* Cover photo */}
             <Pressable
-              onPress={() => pickImage("avatar_url")}
-              className="relative"
+              onPress={() => pickImage("background_url")}
+              className="relative h-[256px] rounded-3xl bg-muted border border-border overflow-hidden"
             >
-              {avatarUrl ? (
+              {backgroundUrl && (
                 <Image
-                  source={{ uri: avatarUrl }}
-                  className="w-28 h-28 rounded-full bg-muted"
+                  source={{ uri: backgroundUrl }}
+                  className="absolute inset-0"
+                  contentFit="cover"
                 />
-              ) : (
-                <View className="w-28 h-28 rounded-full bg-gray-100 items-center justify-center">
-                  <User size={36} strokeWidth={2} color="#A3A3A3" />
-                </View>
               )}
-              <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center">
-                <Camera size={16} strokeWidth={2.5} color="white" />
+              <View
+                className={`absolute inset-0 items-center justify-center ${
+                  backgroundUrl ? "bg-black/15" : "bg-muted"
+                }`}
+              >
+                <Camera
+                  size={26}
+                  strokeWidth={1}
+                  color={backgroundUrl ? "#FFF7EC" : "#8A6B4D"}
+                />
               </View>
             </Pressable>
+
+            {/* Avatar */}
+            <View className="items-center -mt-16">
+              <Pressable
+                onPress={() => pickImage("avatar_url")}
+                className="relative"
+              >
+                {avatarUrl ? (
+                  <Image
+                    source={{ uri: avatarUrl }}
+                    className="w-32 h-32 rounded-full bg-muted border-2 border-background"
+                  />
+                ) : (
+                  <View className="w-32 h-32 rounded-full bg-muted border-2 border-background items-center justify-center">
+                    <User size={36} strokeWidth={1} color="#8A6B4D" />
+                  </View>
+                )}
+                <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center border-2 border-background">
+                  <Camera size={16} strokeWidth={1} color="#FFF7EC" />
+                </View>
+              </Pressable>
+            </View>
           </View>
 
           {/* Form fields */}

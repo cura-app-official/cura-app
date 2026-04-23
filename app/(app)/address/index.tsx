@@ -53,9 +53,9 @@ export default function AddressListScreen() {
         <Pressable
           onPress={() => router.push("/(app)/address/add")}
           hitSlop={12}
-          className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center"
+          className="w-12 h-12 rounded-full bg-muted border border-border items-center justify-center"
         >
-          <Plus size={22} strokeWidth={2.5} color="#282828" />
+          <Plus size={22} strokeWidth={1} color="#5B3B1B" />
         </Pressable>
       </View>
 
@@ -91,7 +91,7 @@ export default function AddressListScreen() {
             gap: 12,
           }}
           renderItem={({ item }: { item: Tables<"addresses"> }) => (
-            <View className="p-5 rounded-3xl bg-gray-100">
+            <View className="p-5 rounded-3xl bg-muted border border-border">
               <View className="flex-row items-start justify-between">
                 <View className="flex-1">
                   <View className="flex-row items-center gap-2">
@@ -123,10 +123,10 @@ export default function AddressListScreen() {
                     onPress={() => router.push(`/(app)/address/${item.id}`)}
                     hitSlop={12}
                   >
-                    <Pencil size={18} strokeWidth={2.5} color="#282828" />
+                    <Pencil size={18} strokeWidth={1} color="#5B3B1B" />
                   </Pressable>
                   <Pressable onPress={() => handleDelete(item.id)} hitSlop={12}>
-                    <Trash2 size={18} strokeWidth={2.5} color="#FF4747" />
+                    <Trash2 size={18} strokeWidth={1} color="#FF4747" />
                   </Pressable>
                 </View>
               </View>

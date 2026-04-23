@@ -5,7 +5,7 @@ import { getItems, type ItemWithMedia } from "@/services/items";
 import { getWishlistIds, toggleWishlist } from "@/services/wishlist";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { Search, ShoppingBag } from "lucide-react-native";
+import { Bell, ShoppingBag } from "lucide-react-native";
 import { useCallback, useState } from "react";
 import { FlatList, Pressable, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -68,14 +68,14 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
       <View className="flex-row items-center justify-between px-6 py-4">
-        <Pressable onPress={() => router.push("/(app)/cart")} hitSlop={8}>
-          <Search size={24} strokeWidth={2.5} color="#422006" />
+        <Pressable onPress={() => router.push("/(app)/notifications")} hitSlop={8}>
+          <Bell size={24} strokeWidth={1} color="#5B3B1B" />
         </Pressable>
-        <Text className="text-3xl font-neuton-bold text-yellow-950 tracking-tight">
+        <Text className="text-3xl font-neuton-bold text-foreground tracking-tight">
           cura
         </Text>
         <Pressable onPress={() => router.push("/(app)/cart")} hitSlop={8}>
-          <ShoppingBag size={24} strokeWidth={2.5} color="#422006" />
+          <ShoppingBag size={24} strokeWidth={1} color="#5B3B1B" />
         </Pressable>
       </View>
 

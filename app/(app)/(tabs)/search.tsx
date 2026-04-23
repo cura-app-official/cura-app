@@ -86,7 +86,9 @@ export default function SearchScreen() {
             key={tab.key}
             onPress={() => setActiveTab(tab.key)}
             className={`px-5 py-3 rounded-3xl ${
-              activeTab === tab.key ? "bg-accent" : "bg-gray-100"
+              activeTab === tab.key
+                ? "bg-accent"
+                : "bg-muted"
             }`}
           >
             <Text
@@ -213,7 +215,7 @@ export default function SearchScreen() {
                   setActiveTab("items");
                   setQuery(cat);
                 }}
-                className="px-6 py-3.5 rounded-3xl bg-gray-100"
+                className="px-6 py-3.5 rounded-3xl bg-muted border border-border"
               >
                 <Text className="text-base font-neuton text-foreground">
                   {cat}

@@ -23,7 +23,7 @@ export function ProfileAvatar({ uri, size = 96, borderWidth = 4 }: ProfileAvatar
           contentFit="cover"
         />
       ) : (
-        <User size={size * 0.35} strokeWidth={2} color="#A3A3A3" />
+        <User size={size * 0.35} strokeWidth={1} color="#A3A3A3" />
       )}
     </View>
   );

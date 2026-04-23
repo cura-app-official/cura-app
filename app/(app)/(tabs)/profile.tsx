@@ -11,12 +11,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { Ellipsis, ExternalLink } from "lucide-react-native";
 import {
-    Dimensions,
-    FlatList,
-    Linking,
-    Pressable,
-    Text,
-    View,
+  Dimensions,
+  FlatList,
+  Linking,
+  Pressable,
+  Text,
+  View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -76,7 +76,7 @@ export default function ProfileScreen() {
                   contentFit="cover"
                 />
               ) : (
-                <View className="absolute inset-0 bg-neutral-200" />
+                <View className="absolute inset-0 bg-muted" />
               )}
 
               <LinearGradient
@@ -89,9 +89,9 @@ export default function ProfileScreen() {
               <Pressable
                 onPress={() => router.push("/(app)/settings")}
                 style={{ top: insets.top + 8 }}
-                className="absolute right-5 w-11 h-11 rounded-full bg-black/30 items-center justify-center"
+                className="absolute right-5 w-11 h-11 rounded-full bg-background/90 border border-border items-center justify-center"
               >
-                <Ellipsis size={22} strokeWidth={2.5} color="white" />
+                <Ellipsis size={22} strokeWidth={1} color="#5B3B1B" />
               </Pressable>
 
               {/* Name overlay at bottom of hero */}
@@ -119,7 +119,7 @@ export default function ProfileScreen() {
               <ProfileAvatar
                 uri={displayProfile.avatar_url}
                 size={96}
-                borderWidth={5}
+                borderWidth={2}
               />
             </View>
 
@@ -130,7 +130,7 @@ export default function ProfileScreen() {
                 className="flex-1 h-14 bg-accent"
               >
                 <Text className="text-base font-neuton-bold text-white">
-                  Edit profile
+                  Edit Profile
                 </Text>
               </AnimatedButton>
               {displayProfile.instagram_link && (
@@ -138,9 +138,9 @@ export default function ProfileScreen() {
                   onPress={() =>
                     Linking.openURL(displayProfile.instagram_link!)
                   }
-                  className="w-14 h-14 bg-gray-100"
+                  className="w-14 h-14 bg-muted border border-border"
                 >
-                  <ExternalLink size={20} strokeWidth={2.5} color="#282828" />
+                  <ExternalLink size={20} strokeWidth={1} color="#5B3B1B" />
                 </AnimatedButton>
               )}
             </View>
@@ -156,7 +156,7 @@ export default function ProfileScreen() {
 
             {/* Bio */}
             {displayProfile.bio && (
-              <View className="mx-6 px-5 py-4 rounded-3xl bg-gray-100 mt-1">
+              <View className="mx-6 px-5 py-4 rounded-3xl bg-muted border border-border mt-1">
                 <Text className="text-base font-neuton text-foreground leading-6">
                   {displayProfile.bio}
                 </Text>

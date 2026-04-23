@@ -57,6 +57,10 @@ export default function AppLayout() {
         name="orders/index"
         options={{ animation: 'slide_from_right' }}
       />
+      <Stack.Screen
+        name="notifications/index"
+        options={{ animation: 'slide_from_right' }}
+      />
     </Stack>
   );
 }

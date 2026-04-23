@@ -165,7 +165,7 @@ export default function UserProfileScreen() {
               <ProfileAvatar
                 uri={displayProfile.avatar_url}
                 size={96}
-                borderWidth={5}
+                borderWidth={2}
               />
             </View>
 
@@ -185,7 +185,7 @@ export default function UserProfileScreen() {
                   </Text>
                 </AnimatedButton>
                 <AnimatedButton className="w-14 h-14 bg-gray-100">
-                  <MessageCircle size={20} strokeWidth={2.5} color="#282828" />
+                  <MessageCircle size={20} strokeWidth={1} color="#5B3B1B" />
                 </AnimatedButton>
               </View>
             )}

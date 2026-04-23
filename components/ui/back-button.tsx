@@ -31,13 +31,13 @@ export function BackButton({
   return (
     <AnimatedButton
       onPress={handlePress}
-      className={cn('bg-white rounded-[1.25rem] w-16 h-12', className)}
+      className={cn('bg-background rounded-[1.25rem] w-16 h-12', className)}
       accessibilityLabel="Navigate back"
     >
       {useCrossIcon ? (
-        <X size={iconSize} strokeWidth={3} color="#282828" />
+        <X size={iconSize} strokeWidth={1} color="#5B3B1B" />
       ) : (
-        <ChevronLeft size={iconSize} strokeWidth={3} color="#282828" />
+        <ChevronLeft size={iconSize} strokeWidth={1.5} color="#5B3B1B" />
       )}
     </AnimatedButton>
   );

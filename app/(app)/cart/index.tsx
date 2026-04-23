@@ -89,7 +89,7 @@ export default function CartScreen() {
                     </Text>
                   </View>
                   <Text className="text-lg font-neuton-bold text-foreground">
-                    ₱{ci.item.price.toLocaleString()}
+                    ฿{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
                 <Pressable
@@ -97,7 +97,7 @@ export default function CartScreen() {
                   className="self-start pt-1"
                   hitSlop={12}
                 >
-                  <X size={18} strokeWidth={2.5} color="#A3A3A3" />
+                  <X size={18} strokeWidth={1} color="#A3A3A3" />
                 </Pressable>
               </View>
             )}
@@ -109,7 +109,7 @@ export default function CartScreen() {
                 Total
               </Text>
               <Text className="text-2xl font-neuton-bold text-foreground">
-                ₱{total.toLocaleString()}
+                ฿{total.toLocaleString()}
               </Text>
             </View>
             <AnimatedButton
