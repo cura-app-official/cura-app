@@ -107,8 +107,9 @@ export default function SignupEmailScreen() {
           </View>
 
           <Text className="text-base font-neuton text-muted-foreground mt-5 leading-6">
-            By creating an account, you agree to our Terms of Service and
-            Privacy Policy.
+            By creating an account, you agree to our{" "}
+            <Text className="text-foreground">Terms of Service</Text> and{" "}
+            <Text className="text-foreground">Privacy Policy</Text>.
           </Text>
         </View>
 

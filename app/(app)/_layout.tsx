@@ -30,6 +30,22 @@ export default function AppLayout() {
         options={{ animation: 'slide_from_right' }}
       />
       <Stack.Screen
+        name="profile/edit-bio"
+        options={{ animation: 'slide_from_right' }}
+      />
+      <Stack.Screen
+        name="profile/edit-instagram"
+        options={{ animation: 'slide_from_right' }}
+      />
+      <Stack.Screen
+        name="profile/edit-username"
+        options={{ animation: 'slide_from_right' }}
+      />
+      <Stack.Screen
+        name="profile/edit-gender"
+        options={{ animation: 'slide_from_right' }}
+      />
+      <Stack.Screen
         name="settings/index"
         options={{ animation: 'slide_from_right' }}
       />

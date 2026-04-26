@@ -1,15 +1,19 @@
 import { z } from 'zod';
+import { USERNAME_REGEX } from './regex';
 
 export const usernameSchema = z.object({
   username: z
     .string()
     .min(3, 'Username must be at least 3 characters')
-    .max(20, 'Username must be at most 20 characters')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Only letters, numbers, and underscores'),
+    .max(30, 'Username must be at most 30 characters')
+    .regex(
+      USERNAME_REGEX,
+      'Use lowercase letters, numbers, underscores, or dots. Include at least one letter.',
+    ),
 });
 
 export const birthDateGenderSchema = z.object({
-  birth_date: z.string().min(1, 'Birth date is required'),
+  birth_date: z.string().optional(),
   gender: z.enum(['Male', 'Female', 'Non-binary', 'Prefer not to say'], {
     message: 'Please select a gender',
   }),
@@ -32,8 +36,17 @@ export const loginSchema = z.object({
 export const editProfileSchema = z.object({
   avatar_url: z.string().nullable().optional(),
   background_url: z.string().nullable().optional(),
-  instagram_link: z.string().url('Must be a valid URL').nullable().optional().or(z.literal('')),
-  bio: z.string().max(150, 'Bio must be at most 150 characters').nullable().optional(),
+});
+
+export const editBioSchema = z.object({
+  bio: z.string().max(160, 'Bio must be at most 160 characters'),
+});
+
+export const editInstagramSchema = z.object({
+  instagram_username: z
+    .string()
+    .max(30, 'Instagram username must be at most 30 characters')
+    .regex(/^[a-zA-Z0-9._]*$/, 'Only letters, numbers, periods, and underscores'),
 });
 
 export const addressSchema = z.object({
@@ -83,6 +96,8 @@ export type BirthDateGenderForm = z.infer<typeof birthDateGenderSchema>;
 export type EmailPasswordForm = z.infer<typeof emailPasswordSchema>;
 export type LoginForm = z.infer<typeof loginSchema>;
 export type EditProfileForm = z.infer<typeof editProfileSchema>;
+export type EditBioForm = z.infer<typeof editBioSchema>;
+export type EditInstagramForm = z.infer<typeof editInstagramSchema>;
 export type AddressForm = z.infer<typeof addressSchema>;
 export type SellerApplicationForm = z.infer<typeof sellerApplicationSchema>;
 export type CreateListingForm = z.infer<typeof createListingSchema>;

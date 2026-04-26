@@ -1,5 +1,10 @@
 import { cn } from '@/lib/utils';
-import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
+import {
+  Pressable,
+  type PressableProps,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -8,9 +13,9 @@ import Animated, {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-interface AnimatedButtonProps extends PressableProps {
+interface AnimatedButtonProps extends Omit<PressableProps, 'style'> {
   className?: string;
-  style?: ViewStyle | ReturnType<typeof useAnimatedStyle>;
+  style?: StyleProp<ViewStyle> | ReturnType<typeof useAnimatedStyle>;
   children: React.ReactNode;
 }
 

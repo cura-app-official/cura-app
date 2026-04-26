@@ -33,7 +33,7 @@ export default function WelcomeScreen() {
             </AnimatedButton>
 
             <AnimatedButton
-              onPress={() => router.push("/(auth)/login")}
+              onPress={() => router.push("/(auth)/login-email")}
               className="bg-transparent border border-border"
             >
               <Text className="text-xl font-neuton-bold text-foreground">

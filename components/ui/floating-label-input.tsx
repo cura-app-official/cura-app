@@ -63,11 +63,9 @@ export const FloatingLabelInput = forwardRef<
     const fieldStyle = useAnimatedStyle(() => ({
       borderColor: error
         ? COLORS.error
-        : interpolateColor(
-            progress.value,
-            [0, 1],
-            [COLORS.border, COLORS.foreground],
-          ),
+        : isFocused
+          ? COLORS.foreground
+          : COLORS.border,
       borderWidth: isFocused || error ? 2 : 1,
     }));
 

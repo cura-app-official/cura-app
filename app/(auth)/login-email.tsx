@@ -1,45 +1,31 @@
 import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
 import { BackButton } from "@/components/ui/back-button";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import { USERNAME_DISALLOWED_CHARS_REGEX } from "@/lib/regex";
-import { usernameSchema, type UsernameForm } from "@/lib/validations";
-import { checkUsernameAvailable } from "@/services/users";
-import { useSignup } from "@/store/signup-store";
+import { loginSchema, type LoginForm } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SignupUsernameScreen() {
-  const { setData } = useSignup();
+type LoginEmailForm = Pick<LoginForm, "email">;
+
+export default function LoginEmailScreen() {
+  const { email } = useLocalSearchParams<{ email?: string }>();
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<UsernameForm>({
-    resolver: zodResolver(usernameSchema),
-    defaultValues: { username: "" },
+  } = useForm<LoginEmailForm>({
+    resolver: zodResolver(loginSchema.pick({ email: true })),
+    defaultValues: { email: email ?? "" },
   });
 
-  const onSubmit = async (values: UsernameForm) => {
-    try {
-      const available = await checkUsernameAvailable(values.username);
-      if (!available) {
-        Alert.alert("Username taken", "Please choose a different username.");
-        return;
-      }
-      setData({ username: values.username });
-      router.push("/(auth)/signup-birthdate");
-    } catch {
-      Alert.alert("Error", "Something went wrong. Please try again.");
-    }
+  const onContinue = (values: LoginEmailForm) => {
+    router.push({
+      pathname: "/(auth)/login-password",
+      params: { email: values.email },
+    });
   };
 
   return (
@@ -51,32 +37,31 @@ export default function SignupUsernameScreen() {
         <View className="px-6 pt-2">
           <BackButton />
         </View>
+
         <View className="flex-1 px-6 pt-8">
           <Text className="text-4xl font-neuton-bold text-foreground">
-            Choose a username
+            Welcome back
           </Text>
           <Text className="text-xl font-neuton text-muted-foreground mt-3 mb-10">
-            This is how others will find you
+            Sign in to your account
           </Text>
 
           <Controller
             control={control}
-            name="username"
+            name="email"
             render={({ field: { onChange, onBlur, value } }) => (
               <FloatingLabelInput
-                label="Username"
+                label="Email"
+                keyboardType="email-address"
                 autoCapitalize="none"
-                autoCorrect={false}
+                autoComplete="email"
+                textContentType="emailAddress"
+                returnKeyType="next"
+                onSubmitEditing={handleSubmit(onContinue)}
                 onBlur={onBlur}
-                onChangeText={(text) =>
-                  onChange(
-                    text
-                      .toLowerCase()
-                      .replace(USERNAME_DISALLOWED_CHARS_REGEX, ""),
-                  )
-                }
+                onChangeText={onChange}
                 value={value}
-                error={errors.username?.message}
+                error={errors.email?.message}
               />
             )}
           />
@@ -85,7 +70,7 @@ export default function SignupUsernameScreen() {
         <View className="px-6 pb-6">
           <AnimatedLoadingButton
             isSubmitting={isSubmitting}
-            onPress={handleSubmit(onSubmit)}
+            onPress={handleSubmit(onContinue)}
             title="Continue"
           />
         </View>

@@ -1,73 +1,78 @@
-import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
 import { BackButton } from "@/components/ui/back-button";
-import { Input } from "@/components/ui/input";
-import { editProfileSchema, type EditProfileForm } from "@/lib/validations";
+import { extractInstagramUsername } from "@/lib/instagram";
 import { useAuth } from "@/providers/auth-provider";
 import { updateUser } from "@/services/users";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { Camera, User } from "lucide-react-native";
-import { Controller, useForm } from "react-hook-form";
+import { Camera, ChevronRight, User } from "lucide-react-native";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    Text,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+function formatGender(gender?: string | null) {
+  if (!gender) return "";
+  return gender === "Non-binary" ? "Other" : gender;
+}
+
+function ProfileRow({
+  label,
+  value,
+  placeholder,
+  onPress,
+}: {
+  label: string;
+  value?: string | null;
+  placeholder: string;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      className="flex-row items-center px-5 py-5"
+    >
+      <Text className="w-28 text-xl font-neuton text-foreground">{label}</Text>
+      <Text
+        className={`flex-1 text-xl font-neuton ${
+          value ? "text-foreground" : "text-neutral"
+        }`}
+        numberOfLines={label === "Bio" ? 2 : 1}
+      >
+        {value || placeholder}
+      </Text>
+      <ChevronRight size={22} strokeWidth={1.5} color="#858585" />
+    </Pressable>
+  );
+}
+
 export default function EditProfileScreen() {
   const { user, profile, refreshProfile } = useAuth();
-
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<EditProfileForm>({
-    resolver: zodResolver(editProfileSchema),
-    defaultValues: {
-      avatar_url: profile?.avatar_url ?? null,
-      background_url: profile?.background_url ?? null,
-      instagram_link: profile?.instagram_link ?? "",
-      bio: profile?.bio ?? "",
-    },
-  });
-
-  const avatarUrl = watch("avatar_url");
-  const backgroundUrl = watch("background_url");
+  const instagramUsername = extractInstagramUsername(profile?.instagram_link);
 
   const pickImage = async (field: "avatar_url" | "background_url") => {
+    if (!user) return;
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: field === "avatar_url" ? [1, 1] : [16, 9],
       quality: 0.8,
     });
-    if (!result.canceled) {
-      setValue(field, result.assets[0].uri, { shouldDirty: true });
-    }
-  };
 
-  const onSubmit = async (values: EditProfileForm) => {
-    if (!user) return;
+    if (result.canceled) return;
+
     try {
-      await updateUser(user.id, {
-        avatar_url: values.avatar_url,
-        background_url: values.background_url,
-        instagram_link: values.instagram_link || null,
-        bio: values.bio || null,
-      });
+      await updateUser(user.id, { [field]: result.assets[0].uri });
       await refreshProfile();
-      router.back();
     } catch (err: any) {
-      Alert.alert("Error", err?.message ?? "Failed to update profile");
+      Alert.alert("Error", err?.message ?? "Failed to update image");
     }
   };
 
@@ -88,42 +93,41 @@ export default function EditProfileScreen() {
           className="flex-1 px-6"
           showsVerticalScrollIndicator={false}
         >
-          <View className="mb-6">
-            {/* Cover photo */}
+          <View className="mb-8">
             <Pressable
               onPress={() => pickImage("background_url")}
               className="relative h-[256px] rounded-3xl bg-muted border border-border overflow-hidden"
             >
-              {backgroundUrl && (
+              {profile?.background_url && (
                 <Image
-                  source={{ uri: backgroundUrl }}
+                  source={{ uri: profile.background_url }}
                   className="absolute inset-0"
                   contentFit="cover"
                 />
               )}
               <View
                 className={`absolute inset-0 items-center justify-center ${
-                  backgroundUrl ? "bg-black/15" : "bg-muted"
+                  profile?.background_url ? "bg-black/15" : "bg-muted"
                 }`}
               >
                 <Camera
                   size={26}
                   strokeWidth={1.5}
-                  color={backgroundUrl ? "#FFF7EC" : "#8A6B4D"}
+                  color={profile?.background_url ? "#FFF7EC" : "#8A6B4D"}
                 />
               </View>
             </Pressable>
 
-            {/* Avatar */}
             <View className="items-center -mt-16">
               <Pressable
                 onPress={() => pickImage("avatar_url")}
                 className="relative"
               >
-                {avatarUrl ? (
+                {profile?.avatar_url ? (
                   <Image
-                    source={{ uri: avatarUrl }}
+                    source={{ uri: profile.avatar_url }}
                     className="w-32 h-32 rounded-full bg-muted border-2 border-background"
+                    contentFit="cover"
                   />
                 ) : (
                   <View className="w-32 h-32 rounded-full bg-muted border-2 border-background items-center justify-center">
@@ -137,50 +141,35 @@ export default function EditProfileScreen() {
             </View>
           </View>
 
-          {/* Form fields */}
-          <View className="gap-5 pb-8">
-            <Controller
-              control={control}
-              name="instagram_link"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  label="Instagram link"
-                  placeholder="https://instagram.com/username"
-                  autoCapitalize="none"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value ?? ""}
-                  error={errors.instagram_link?.message}
-                />
-              )}
+          <View className="rounded-3xl overflow-hidden border border-border mb-10">
+            <ProfileRow
+              label="Username"
+              value={profile?.username}
+              placeholder="Add username"
+              onPress={() => router.push("/(app)/profile/edit-username")}
             />
-            <Controller
-              control={control}
-              name="bio"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  label="Bio"
-                  placeholder="Tell people about yourself"
-                  multiline
-                  numberOfLines={3}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value ?? ""}
-                  error={errors.bio?.message}
-                  className="min-h-[100px]"
-                />
-              )}
+            <ProfileRow
+              label="Bio"
+              value={profile?.bio}
+              placeholder="Write a short description about who you are"
+              onPress={() => router.push("/(app)/profile/edit-bio")}
+            />
+            <ProfileRow
+              label="Instagram"
+              value={
+                instagramUsername ? `instagram.com/${instagramUsername}` : ""
+              }
+              placeholder="Add Instagram"
+              onPress={() => router.push("/(app)/profile/edit-instagram")}
+            />
+            <ProfileRow
+              label="Gender"
+              value={formatGender(profile?.gender)}
+              placeholder="Add gender"
+              onPress={() => router.push("/(app)/profile/edit-gender")}
             />
           </View>
         </ScrollView>
-
-        <View className="px-6 pb-6">
-          <AnimatedLoadingButton
-            isSubmitting={isSubmitting}
-            onPress={handleSubmit(onSubmit)}
-            title="Save Changes"
-          />
-        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
