@@ -17,7 +17,7 @@ export default function WelcomeScreen() {
           <Text className="text-6xl font-neuton-bold text-foreground tracking-tight">
             cura
           </Text>
-          <Text className="text-xl font-neuton text-muted-foreground mt-2 leading-7">
+          <Text className="text-xl font-neuton text-muted-foreground mt-2">
             Curated fashion from{"\n"}your favorite creators
           </Text>
           </View>
@@ -27,7 +27,7 @@ export default function WelcomeScreen() {
               onPress={() => router.push("/(auth)/signup-username")}
               className="bg-accent"
             >
-              <Text className="text-lg font-neuton-bold text-white">
+              <Text className="text-xl font-neuton-bold text-white">
                 Create account
               </Text>
             </AnimatedButton>
@@ -36,7 +36,7 @@ export default function WelcomeScreen() {
               onPress={() => router.push("/(auth)/login")}
               className="bg-transparent border border-border"
             >
-              <Text className="text-lg font-neuton-bold text-foreground">
+              <Text className="text-xl font-neuton-bold text-foreground">
                 Sign in
               </Text>
             </AnimatedButton>

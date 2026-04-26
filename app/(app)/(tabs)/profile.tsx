@@ -106,7 +106,7 @@ export default function ProfileScreen() {
                     }
                     className="flex-row items-center gap-1.5 mt-2"
                   >
-                    <Text className="text-base font-neuton text-white/70">
+                    <Text className="text-lg font-neuton text-white/70">
                       @{displayProfile.username}
                     </Text>
                   </Pressable>
@@ -129,7 +129,7 @@ export default function ProfileScreen() {
                 onPress={() => router.push("/(app)/profile/edit")}
                 className="flex-1 h-14 bg-accent"
               >
-                <Text className="text-base font-neuton-bold text-white">
+                <Text className="text-lg font-neuton-bold text-white">
                   Edit Profile
                 </Text>
               </AnimatedButton>
@@ -157,7 +157,7 @@ export default function ProfileScreen() {
             {/* Bio */}
             {displayProfile.bio && (
               <View className="mx-6 px-5 py-4 rounded-3xl bg-muted border border-border mt-1">
-                <Text className="text-base font-neuton text-foreground leading-6">
+                <Text className="text-lg font-neuton text-foreground leading-7">
                   {displayProfile.bio}
                 </Text>
               </View>
@@ -165,7 +165,7 @@ export default function ProfileScreen() {
 
             {/* Listings header */}
             {displayListings.length > 0 && (
-              <Text className="text-lg font-neuton-bold text-foreground px-6 mt-7 mb-2">
+              <Text className="text-xl font-neuton-bold text-foreground px-6 mt-7 mb-2">
                 Listings
               </Text>
             )}
@@ -185,7 +185,7 @@ export default function ProfileScreen() {
         )}
         ListEmptyComponent={
           <View className="items-center py-12 px-8">
-            <Text className="text-base font-neuton text-muted-foreground text-center leading-6">
+            <Text className="text-lg font-neuton text-muted-foreground text-center leading-7">
               Your pieces will show up here.
             </Text>
           </View>

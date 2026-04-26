@@ -69,7 +69,7 @@ export default function AddAddressScreen() {
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-neuton-bold text-foreground">
+          <Text className="text-2xl font-neuton-bold text-foreground">
             Add address
           </Text>
         </View>
@@ -98,7 +98,7 @@ export default function AddAddressScreen() {
               name="phone_number"
               render={({ field: { onChange, onBlur, value } }) => (
                 <View>
-                  <Text className="text-base font-neuton-bold text-muted-foreground mb-3">
+                  <Text className="text-lg font-neuton-bold text-muted-foreground mb-3">
                     Phone Number
                   </Text>
                   <View
@@ -106,11 +106,11 @@ export default function AddAddressScreen() {
                       isPhoneFocused ? "border-2 border-black" : ""
                     } ${errors.phone_number?.message ? "border border-error" : ""}`}
                   >
-                    <Text className="text-base font-neuton-bold text-foreground mr-3">
+                    <Text className="text-lg font-neuton-bold text-foreground mr-3">
                       +66
                     </Text>
                     <TextInput
-                      className="flex-1 text-base text-foreground font-neuton py-4"
+                      className="flex-1 text-lg text-foreground font-neuton py-4"
                       placeholder="XXXXXXXXX"
                       placeholderTextColor="#8A6B4D"
                       selectionColor="#5B3B1B"
@@ -126,7 +126,7 @@ export default function AddAddressScreen() {
                     />
                   </View>
                   {errors.phone_number?.message && (
-                    <Text className="text-sm font-neuton text-error ml-2 mt-1.5">
+                    <Text className="text-base font-neuton text-error ml-2 mt-1.5">
                       {errors.phone_number.message}
                     </Text>
                   )}
@@ -162,7 +162,7 @@ export default function AddAddressScreen() {
             />
 
             <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-muted border border-border">
-              <Text className="text-base font-neuton text-foreground">
+              <Text className="text-lg font-neuton text-foreground">
                 Set as default
               </Text>
               <Switch
@@ -173,7 +173,7 @@ export default function AddAddressScreen() {
             </View>
           </View>
 
-          <Text className="text-sm font-neuton text-muted-foreground mt-2 leading-5">
+          <Text className="text-base font-neuton text-muted-foreground mt-2 leading-6">
             By clicking Save, you acknowledge that you have read the Privacy
             Policy.
           </Text>
@@ -186,7 +186,7 @@ export default function AddAddressScreen() {
             title="Save"
           />
           <Pressable onPress={router.back} className="py-3 items-center">
-            <Text className="text-base font-neuton text-muted-foreground">
+            <Text className="text-lg font-neuton text-muted-foreground">
               Cancel
             </Text>
           </Pressable>

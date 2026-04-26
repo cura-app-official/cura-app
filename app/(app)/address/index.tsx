@@ -46,7 +46,7 @@ export default function AddressListScreen() {
       <View className="flex-row items-center justify-between px-6 py-3">
         <View className="flex-row items-center gap-3">
           <BackButton />
-          <Text className="text-xl font-neuton-bold text-foreground">
+          <Text className="text-2xl font-neuton-bold text-foreground">
             Shopping Info
           </Text>
         </View>
@@ -75,7 +75,7 @@ export default function AddressListScreen() {
               onPress={() => router.push("/(app)/address/add")}
               className=" bg-accent"
             >
-              <Text className="text-base font-neuton-bold text-white">
+              <Text className="text-xl font-neuton-bold text-white">
                 Add New Address
               </Text>
             </AnimatedButton>
@@ -100,20 +100,20 @@ export default function AddressListScreen() {
                     </Text>
                     {item.is_default && (
                       <View className="px-3 py-1 rounded-full bg-accent">
-                        <Text className="text-xs font-neuton-bold text-white">
+                        <Text className="text-sm font-neuton-bold text-white">
                           Default
                         </Text>
                       </View>
                     )}
                   </View>
-                  <Text className="text-base font-neuton text-muted-foreground mt-1.5">
+                  <Text className="text-lg font-neuton text-muted-foreground mt-1.5">
                     {item.phone_number}
                   </Text>
-                  <Text className="text-base font-neuton text-foreground mt-1">
+                  <Text className="text-lg font-neuton text-foreground mt-1">
                     {item.address}
                   </Text>
                   {item.address_details && (
-                    <Text className="text-base font-neuton text-muted-foreground mt-0.5">
+                    <Text className="text-lg font-neuton text-muted-foreground mt-0.5">
                       {item.address_details}
                     </Text>
                   )}

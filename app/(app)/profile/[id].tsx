@@ -154,7 +154,7 @@ export default function UserProfileScreen() {
                 <Text className="text-4xl font-neuton-bold text-white text-center">
                   {displayProfile.username}
                 </Text>
-                <Text className="text-base font-neuton text-white/70 mt-1">
+                <Text className="text-lg font-neuton text-white/70 mt-1">
                   @{displayProfile.username}
                 </Text>
               </View>
@@ -177,7 +177,7 @@ export default function UserProfileScreen() {
                   className={`flex-1 h-14 ${userFollowing ? "bg-gray-100" : "bg-accent"}`}
                 >
                   <Text
-                    className={`text-base font-neuton-bold ${
+                    className={`text-lg font-neuton-bold ${
                       userFollowing ? "text-foreground" : "text-white"
                     }`}
                   >
@@ -202,14 +202,14 @@ export default function UserProfileScreen() {
             {/* Bio */}
             {displayProfile.bio && (
               <View className="mx-6 px-5 py-4 rounded-3xl bg-gray-100 mt-1">
-                <Text className="text-base font-neuton text-foreground leading-6">
+                <Text className="text-lg font-neuton text-foreground leading-7">
                   {displayProfile.bio}
                 </Text>
               </View>
             )}
 
             {displayListings.length > 0 && (
-              <Text className="text-lg font-neuton-bold text-foreground px-6 mt-7 mb-2">
+              <Text className="text-xl font-neuton-bold text-foreground px-6 mt-7 mb-2">
                 Listings
               </Text>
             )}

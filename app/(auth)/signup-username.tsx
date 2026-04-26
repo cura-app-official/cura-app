@@ -1,6 +1,6 @@
 import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
 import { BackButton } from "@/components/ui/back-button";
-import { Input } from "@/components/ui/input";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { usernameSchema, type UsernameForm } from "@/lib/validations";
 import { checkUsernameAvailable } from "@/services/users";
 import { useSignup } from "@/store/signup-store";
@@ -8,11 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -54,7 +54,7 @@ export default function SignupUsernameScreen() {
           <Text className="text-4xl font-neuton-bold text-foreground">
             Choose a username
           </Text>
-          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-10">
+          <Text className="text-xl font-neuton text-muted-foreground mt-3 mb-10">
             This is how others will find you
           </Text>
 
@@ -62,8 +62,8 @@ export default function SignupUsernameScreen() {
             control={control}
             name="username"
             render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                placeholder="username"
+              <FloatingLabelInput
+                label="Username"
                 autoCapitalize="none"
                 autoCorrect={false}
                 onBlur={onBlur}

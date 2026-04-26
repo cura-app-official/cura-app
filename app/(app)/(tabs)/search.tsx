@@ -92,7 +92,7 @@ export default function SearchScreen() {
             }`}
           >
             <Text
-              className={`text-base font-neuton ${
+              className={`text-lg font-neuton ${
                 activeTab === tab.key ? "text-white" : "text-foreground"
               }`}
             >
@@ -186,7 +186,7 @@ export default function SearchScreen() {
                     </Text>
                     {item.bio && (
                       <Text
-                        className="text-base font-neuton text-muted-foreground mt-0.5"
+                        className="text-lg font-neuton text-muted-foreground mt-0.5"
                         numberOfLines={1}
                       >
                         {item.bio}
@@ -217,7 +217,7 @@ export default function SearchScreen() {
                 }}
                 className="px-6 py-3.5 rounded-3xl bg-muted border border-border"
               >
-                <Text className="text-base font-neuton text-foreground">
+                <Text className="text-lg font-neuton text-foreground">
                   {cat}
                 </Text>
               </Pressable>

@@ -42,7 +42,7 @@ export default function CartScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-neuton-bold text-foreground">Cart</Text>
+        <Text className="text-2xl font-neuton-bold text-foreground">Cart</Text>
       </View>
 
       {isLoading ? (
@@ -84,7 +84,7 @@ export default function CartScreen() {
                     >
                       {ci.item.item_name}
                     </Text>
-                    <Text className="text-base font-neuton text-muted-foreground mt-0.5">
+                    <Text className="text-lg font-neuton text-muted-foreground mt-0.5">
                       {ci.item.brand} · {ci.item.size}
                     </Text>
                   </View>
@@ -114,9 +114,9 @@ export default function CartScreen() {
             </View>
             <AnimatedButton
               onPress={() => router.push("/(app)/checkout")}
-              className="h-[4.25rem] bg-accent"
+              className="bg-accent"
             >
-              <Text className="text-lg font-neuton-bold text-white">
+              <Text className="text-xl font-neuton-bold text-white">
                 Checkout
               </Text>
             </AnimatedButton>

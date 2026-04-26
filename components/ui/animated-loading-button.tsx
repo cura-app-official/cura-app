@@ -16,7 +16,7 @@ import {
 } from "react-native-reanimated";
 import { AnimatedButton } from "./animated-button";
 
-const BUTTON_SIZE = 68;
+const BUTTON_SIZE = 76;
 
 interface AnimatedLoadingButtonProps {
   isSubmitting: boolean;
@@ -41,7 +41,7 @@ export function AnimatedLoadingButton({
 
   useEffect(() => {
     widthAnim.value = withTiming(isSubmitting ? 0 : 1, { duration: 380 });
-  }, [isSubmitting]);
+  }, [isSubmitting, widthAnim]);
 
   const onLayout = (e: LayoutChangeEvent) => {
     if (!measured.current) {
@@ -76,14 +76,14 @@ export function AnimatedLoadingButton({
         onPress={handlePress}
         disabled={isSubmitting || disabled}
         style={animatedStyle}
-        className={cn("justify-center items-center h-[4.25rem]", className)}
+        className={cn("justify-center items-center h-[4.75rem]", className)}
       >
         {isSubmitting ? (
           <ActivityIndicator size="small" color="white" />
         ) : (
           <Text
             className={cn(
-              "text-lg font-neuton-bold text-white",
+              "text-xl font-neuton-bold text-white",
               titleClassName,
             )}
           >

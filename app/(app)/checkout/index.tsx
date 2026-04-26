@@ -87,14 +87,14 @@ export default function CheckoutScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-neuton-bold text-foreground">
+        <Text className="text-2xl font-neuton-bold text-foreground">
           Checkout
         </Text>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="px-6">
-          <Text className="text-base font-neuton-bold text-foreground mb-3">
+          <Text className="text-lg font-neuton-bold text-foreground mb-3">
             Shipping Address
           </Text>
           {defaultAddress ? (
@@ -106,10 +106,10 @@ export default function CheckoutScreen() {
                 <Text className="text-lg font-neuton-bold text-foreground">
                   {defaultAddress.name}
                 </Text>
-                <Text className="text-base font-neuton text-muted-foreground mt-0.5">
+                <Text className="text-lg font-neuton text-muted-foreground mt-0.5">
                   {defaultAddress.phone_number}
                 </Text>
-                <Text className="text-base font-neuton text-foreground mt-1">
+                <Text className="text-lg font-neuton text-foreground mt-1">
                   {defaultAddress.address}
                 </Text>
               </View>
@@ -121,13 +121,13 @@ export default function CheckoutScreen() {
               className="p-5 rounded-3xl bg-gray-100 flex-row items-center justify-center gap-2"
             >
               <Plus size={20} strokeWidth={1.5} color="#5B3B1B" />
-              <Text className="text-base font-neuton-bold text-foreground">
+              <Text className="text-lg font-neuton-bold text-foreground">
                 Add shipping address
               </Text>
             </Pressable>
           )}
 
-          <Text className="text-base font-neuton-bold text-foreground mt-8 mb-4">
+          <Text className="text-lg font-neuton-bold text-foreground mt-8 mb-4">
             Items
           </Text>
           <View className="gap-4">
@@ -140,12 +140,12 @@ export default function CheckoutScreen() {
                 />
                 <View className="flex-1 justify-center">
                   <Text
-                    className="text-base font-neuton-bold text-foreground"
+                    className="text-lg font-neuton-bold text-foreground"
                     numberOfLines={1}
                   >
                     {ci.item.item_name}
                   </Text>
-                  <Text className="text-base font-neuton text-muted-foreground mt-0.5">
+                  <Text className="text-lg font-neuton text-muted-foreground mt-0.5">
                     ฿{ci.item.price.toLocaleString()}
                   </Text>
                 </View>
@@ -163,7 +163,7 @@ export default function CheckoutScreen() {
           </View>
 
           <View className="py-4 border-t border-border">
-            <Text className="text-sm font-neuton text-muted-foreground leading-5">
+            <Text className="text-base font-neuton text-muted-foreground leading-6">
               By placing this order, you agree that all items are secondhand and
               may show signs of wear as described in their listings. All sales
               are final.

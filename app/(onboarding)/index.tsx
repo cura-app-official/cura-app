@@ -49,7 +49,7 @@ export default function OnboardingScreen() {
       <View className="px-6 pb-6">
         <AnimatedButton
           onPress={() => router.push("/(onboarding)/notifications")}
-          className="h-[4.25rem] bg-accent"
+          className="bg-accent"
         >
           <Text className="text-lg font-neuton-bold text-white">
             Get started

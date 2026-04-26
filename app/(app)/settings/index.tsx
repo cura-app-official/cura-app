@@ -39,7 +39,7 @@ function SettingsRow({
         />
       </View>
       <Text
-        className={`flex-1 text-lg font-neuton ${
+        className={`flex-1 text-xl font-neuton ${
           destructive ? "text-error" : "text-foreground"
         }`}
       >
@@ -71,14 +71,14 @@ export default function SettingsScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-neuton-bold text-foreground">
+        <Text className="text-2xl font-neuton-bold text-foreground">
           Settings
         </Text>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="px-6 mt-6">
-          <Text className="text-sm font-neuton-bold text-muted-foreground mb-4 uppercase tracking-wider">
+          <Text className="text-base font-neuton-bold text-muted-foreground mb-4 uppercase tracking-wider">
             Account
           </Text>
           <SettingsRow
@@ -106,7 +106,7 @@ export default function SettingsScreen() {
         </View>
 
         <View className="px-6 mt-10">
-          <Text className="text-sm font-neuton-bold text-muted-foreground mb-4 uppercase tracking-wider">
+          <Text className="text-base font-neuton-bold text-muted-foreground mb-4 uppercase tracking-wider">
             Support
           </Text>
           <SettingsRow
@@ -135,7 +135,7 @@ export default function SettingsScreen() {
           />
         </View>
 
-        <Text className="text-sm font-neuton text-muted-foreground text-center mt-12 pb-10">
+        <Text className="text-base font-neuton text-muted-foreground text-center mt-12 pb-10">
           Cura v1.0.0
         </Text>
       </ScrollView>

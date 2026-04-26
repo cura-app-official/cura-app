@@ -79,7 +79,7 @@ export default function EditProfileScreen() {
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-neuton-bold text-foreground">
+          <Text className="text-2xl font-neuton-bold text-foreground">
             Edit Profile
           </Text>
         </View>

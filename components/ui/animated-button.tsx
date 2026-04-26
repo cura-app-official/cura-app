@@ -1,11 +1,10 @@
 import { cn } from '@/lib/utils';
-import { Pressable, type PressableProps } from 'react-native';
+import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import type { ViewStyle } from 'react-native';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -41,7 +40,7 @@ export function AnimatedButton({
       disabled={disabled}
       style={[animatedStyle, style]}
       className={cn(
-        'h-[4.25rem] rounded-full bg-accent overflow-hidden items-center justify-center',
+        'h-[4.75rem] rounded-full bg-accent overflow-hidden items-center justify-center',
         className
       )}
       {...props}

@@ -1,6 +1,6 @@
 import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
 import { BackButton } from "@/components/ui/back-button";
-import { Input } from "@/components/ui/input";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { emailPasswordSchema, type EmailPasswordForm } from "@/lib/validations";
 import { useAuth } from "@/providers/auth-provider";
 import { createUser } from "@/services/users";
@@ -9,11 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -65,7 +65,7 @@ export default function SignupEmailScreen() {
           <Text className="text-4xl font-neuton-bold text-foreground">
             Create your account
           </Text>
-          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-10">
+          <Text className="text-xl font-neuton text-muted-foreground mt-3 mb-10">
             Almost there, {signupData.username}
           </Text>
 
@@ -74,11 +74,12 @@ export default function SignupEmailScreen() {
               control={control}
               name="email"
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <FloatingLabelInput
                   label="Email"
-                  placeholder="your@email.com"
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  autoComplete="email"
+                  textContentType="emailAddress"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -90,10 +91,12 @@ export default function SignupEmailScreen() {
               control={control}
               name="password"
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <FloatingLabelInput
                   label="Password"
-                  placeholder="At least 8 characters"
                   secureTextEntry
+                  autoCapitalize="none"
+                  autoComplete="new-password"
+                  textContentType="newPassword"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -103,7 +106,7 @@ export default function SignupEmailScreen() {
             />
           </View>
 
-          <Text className="text-sm font-neuton text-muted-foreground mt-5 leading-5">
+          <Text className="text-base font-neuton text-muted-foreground mt-5 leading-6">
             By creating an account, you agree to our Terms of Service and
             Privacy Policy.
           </Text>

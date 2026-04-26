@@ -82,7 +82,7 @@ export default function EditAddressScreen() {
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-neuton-bold text-foreground">
+          <Text className="text-2xl font-neuton-bold text-foreground">
             Edit address
           </Text>
         </View>
@@ -150,7 +150,7 @@ export default function EditAddressScreen() {
             />
 
             <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-muted border border-border">
-              <Text className="text-base font-neuton text-foreground">
+              <Text className="text-lg font-neuton text-foreground">
                 Set as default
               </Text>
               <Switch
@@ -169,7 +169,7 @@ export default function EditAddressScreen() {
             title="Save"
           />
           <Pressable onPress={router.back} className="py-3 items-center">
-            <Text className="text-base font-neuton text-muted-foreground">
+            <Text className="text-lg font-neuton text-muted-foreground">
               Cancel
             </Text>
           </Pressable>

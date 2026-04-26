@@ -18,7 +18,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     return (
       <View className={cn("w-full", containerClassName)}>
         {label && (
-          <Text className="text-base font-neuton-bold text-muted-foreground mb-3">
+          <Text className="text-lg font-neuton-bold text-muted-foreground mb-3">
             {label}
           </Text>
         )}
@@ -32,7 +32,7 @@ export const Input = forwardRef<TextInput, InputProps>(
           <TextInput
             ref={ref}
             className={cn(
-              "text-base text-foreground font-neuton py-4 leading-[1.1]",
+              "text-lg text-foreground font-neuton py-4",
               className,
             )}
             placeholderTextColor="#8A6B4D"
@@ -49,7 +49,7 @@ export const Input = forwardRef<TextInput, InputProps>(
           />
         </View>
         {error && (
-          <Text className="text-sm font-neuton text-error ml-2 mt-1.5">
+          <Text className="text-base font-neuton text-error ml-2 mt-1.5">
             {error}
           </Text>
         )}

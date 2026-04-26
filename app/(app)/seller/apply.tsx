@@ -96,7 +96,7 @@ export default function SellerApplyScreen() {
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-neuton-bold text-foreground">
+          <Text className="text-2xl font-neuton-bold text-foreground">
             Become a Seller
           </Text>
         </View>
@@ -105,7 +105,7 @@ export default function SellerApplyScreen() {
           className="flex-1 px-6"
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-base font-neuton text-muted-foreground mb-8 leading-6">
+          <Text className="text-lg font-neuton text-muted-foreground mb-8 leading-7">
             Tell us about yourself so we can review your seller application.
           </Text>
 
@@ -194,7 +194,7 @@ export default function SellerApplyScreen() {
             />
 
             <View>
-              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+              <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
                 Sample photos
               </Text>
               <View className="flex-row flex-wrap gap-3">
@@ -219,7 +219,7 @@ export default function SellerApplyScreen() {
                     className="w-24 h-24 rounded-2xl bg-background border border-border items-center justify-center"
                   >
                     <Camera size={26} strokeWidth={1.5} color="#8A6B4D" />
-                    <Text className="text-sm font-neuton text-muted-foreground mt-1">
+                    <Text className="text-base font-neuton text-muted-foreground mt-1">
                       {samplePhotos.length}/6
                     </Text>
                   </Pressable>

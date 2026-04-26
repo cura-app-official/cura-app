@@ -51,7 +51,7 @@ export default function OrdersScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
-        <Text className="text-xl font-neuton-bold text-foreground">
+        <Text className="text-2xl font-neuton-bold text-foreground">
           My Orders
         </Text>
       </View>
@@ -68,7 +68,7 @@ export default function OrdersScreen() {
             }`}
           >
             <Text
-              className={`text-sm font-neuton-bold ${
+              className={`text-base font-neuton-bold ${
                 activeTab === tab.key ? "text-white" : "text-foreground"
               }`}
             >
@@ -112,11 +112,11 @@ export default function OrdersScreen() {
                   >
                     {order.item?.item_name}
                   </Text>
-                  <Text className="text-base font-neuton text-muted-foreground mt-0.5">
+                  <Text className="text-lg font-neuton text-muted-foreground mt-0.5">
                     ฿{order.total_amount.toLocaleString()}
                   </Text>
                   <Text
-                    className={`text-sm font-neuton-bold mt-1.5 ${getStatusColor(order.status)}`}
+                    className={`text-base font-neuton-bold mt-1.5 ${getStatusColor(order.status)}`}
                   >
                     {order.status.replace("_", " ").toUpperCase()}
                   </Text>

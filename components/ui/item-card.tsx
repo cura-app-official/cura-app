@@ -50,7 +50,7 @@ export function ItemCard({
             <View className="w-5 h-5 rounded-full bg-muted" />
           )}
           <Text
-            className="text-sm font-neuton-bold text-foreground"
+            className="text-base font-neuton-bold text-foreground"
             numberOfLines={1}
           >
             {sellerName}
@@ -75,13 +75,13 @@ export function ItemCard({
         )}
       </View>
       <Text
-        className="text-base font-neuton-bold text-foreground mt-2"
+        className="text-lg font-neuton-bold text-foreground mt-2"
         numberOfLines={1}
       >
         {name}
       </Text>
       {/* Product Price */}
-      <Text className="text-lg font-neuton text-foreground">
+      <Text className="text-xl font-neuton text-foreground">
         ฿{price.toLocaleString()}
       </Text>
     </Pressable>

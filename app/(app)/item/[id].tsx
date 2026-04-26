@@ -202,7 +202,7 @@ export default function ItemDetailScreen() {
               }`}
             >
               <Text
-                className={`text-base font-neuton-bold ${
+                className={`text-lg font-neuton-bold ${
                   userFollowing ? "text-foreground" : "text-white"
                 }`}
               >
@@ -240,17 +240,17 @@ export default function ItemDetailScreen() {
 
           {displayItem.description && (
             <View className="py-5 border-t border-border">
-              <Text className="text-base font-neuton-bold text-muted-foreground mb-2">
+              <Text className="text-lg font-neuton-bold text-muted-foreground mb-2">
                 Description
               </Text>
-              <Text className="text-base font-neuton text-foreground leading-6">
+              <Text className="text-lg font-neuton text-foreground leading-7">
                 {displayItem.description}
               </Text>
             </View>
           )}
 
           <View className="py-5 border-t border-border">
-            <Text className="text-sm font-neuton text-muted-foreground leading-5">
+            <Text className="text-base font-neuton text-muted-foreground leading-6">
               This is a secondhand item. By purchasing, you acknowledge that the
               item is pre-owned and may show signs of wear as described above.
             </Text>
@@ -268,7 +268,7 @@ export default function ItemDetailScreen() {
               onPress={handleAddToCart}
               className="flex-1 h-14 bg-muted border border-border"
             >
-              <Text className="text-base font-neuton-bold text-foreground">
+              <Text className="text-lg font-neuton-bold text-foreground">
                 Add to cart
               </Text>
             </AnimatedButton>
@@ -277,7 +277,7 @@ export default function ItemDetailScreen() {
               onPress={() => router.push("/(app)/cart")}
               className="flex-1 h-14 bg-muted border border-border"
             >
-              <Text className="text-base font-neuton-bold text-foreground">
+              <Text className="text-lg font-neuton-bold text-foreground">
                 View cart
               </Text>
             </AnimatedButton>
@@ -286,7 +286,7 @@ export default function ItemDetailScreen() {
             onPress={handleBuyNow}
             className="flex-1 h-14 bg-accent"
           >
-            <Text className="text-base font-neuton-bold text-background">
+            <Text className="text-lg font-neuton-bold text-background">
               Buy now
             </Text>
           </AnimatedButton>
@@ -299,10 +299,10 @@ export default function ItemDetailScreen() {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View className="flex-row justify-between">
-      <Text className="text-base font-neuton text-muted-foreground">
+      <Text className="text-lg font-neuton text-muted-foreground">
         {label}
       </Text>
-      <Text className="text-base font-neuton-bold text-foreground">
+      <Text className="text-lg font-neuton-bold text-foreground">
         {value}
       </Text>
     </View>

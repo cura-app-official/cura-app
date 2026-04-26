@@ -1,5 +1,6 @@
 import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
 import { BackButton } from "@/components/ui/back-button";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import {
     birthDateGenderSchema,
     type BirthDateGenderForm,
@@ -7,7 +8,7 @@ import {
 import { useSignup } from "@/store/signup-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     KeyboardAvoidingView,
@@ -25,6 +26,9 @@ export default function SignupBirthdateScreen() {
   const { setData } = useSignup();
   const monthRef = useRef<TextInput>(null);
   const yearRef = useRef<TextInput>(null);
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
 
   const {
     control,
@@ -70,13 +74,13 @@ export default function SignupBirthdateScreen() {
           <Text className="text-4xl font-neuton-bold text-foreground">
             About you
           </Text>
-          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-10">
+          <Text className="text-xl font-neuton text-muted-foreground mt-3 mb-10">
             Tell us a bit about yourself
           </Text>
 
           {/* DOB Fields */}
           <View className="mb-8">
-            <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+            <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
               Date of birth
             </Text>
             <Controller
@@ -84,57 +88,54 @@ export default function SignupBirthdateScreen() {
               name="birth_date"
               render={() => (
                 <View className="flex-row gap-3">
-                  <View className="flex-1 px-5 rounded-3xl bg-gray-100">
-                    <TextInput
-                      className="text-base text-foreground font-neuton py-4 text-center"
-                      placeholder="DD"
-                      placeholderTextColor="#a3a3a3"
-                      keyboardType="number-pad"
-                      maxLength={2}
-                      selectionColor="#1A1A1A"
-                      onChangeText={(v) => {
-                        dayRef.current = v;
-                        buildDate();
-                        if (v.length === 2) monthRef.current?.focus();
-                      }}
-                    />
-                  </View>
-                  <View className="flex-1 px-5 rounded-3xl bg-gray-100">
-                    <TextInput
-                      ref={monthRef}
-                      className="text-base text-foreground font-neuton py-4 text-center"
-                      placeholder="MM"
-                      placeholderTextColor="#a3a3a3"
-                      keyboardType="number-pad"
-                      maxLength={2}
-                      selectionColor="#1A1A1A"
-                      onChangeText={(v) => {
-                        monthValRef.current = v;
-                        buildDate();
-                        if (v.length === 2) yearRef.current?.focus();
-                      }}
-                    />
-                  </View>
-                  <View className="flex-[1.4] px-5 rounded-3xl bg-gray-100">
-                    <TextInput
-                      ref={yearRef}
-                      className="text-base text-foreground font-neuton py-4 text-center"
-                      placeholder="YYYY"
-                      placeholderTextColor="#a3a3a3"
-                      keyboardType="number-pad"
-                      maxLength={4}
-                      selectionColor="#1A1A1A"
-                      onChangeText={(v) => {
-                        yearValRef.current = v;
-                        buildDate();
-                      }}
-                    />
-                  </View>
+                  <FloatingLabelInput
+                    label="DD"
+                    value={day}
+                    containerClassName="flex-1"
+                    className="text-center"
+                    keyboardType="number-pad"
+                    maxLength={2}
+                    onChangeText={(v) => {
+                      setDay(v);
+                      dayRef.current = v;
+                      buildDate();
+                      if (v.length === 2) monthRef.current?.focus();
+                    }}
+                  />
+                  <FloatingLabelInput
+                    ref={monthRef}
+                    label="MM"
+                    value={month}
+                    containerClassName="flex-1"
+                    className="text-center"
+                    keyboardType="number-pad"
+                    maxLength={2}
+                    onChangeText={(v) => {
+                      setMonth(v);
+                      monthValRef.current = v;
+                      buildDate();
+                      if (v.length === 2) yearRef.current?.focus();
+                    }}
+                  />
+                  <FloatingLabelInput
+                    ref={yearRef}
+                    label="YYYY"
+                    value={year}
+                    containerClassName="flex-[1.4]"
+                    className="text-center"
+                    keyboardType="number-pad"
+                    maxLength={4}
+                    onChangeText={(v) => {
+                      setYear(v);
+                      yearValRef.current = v;
+                      buildDate();
+                    }}
+                  />
                 </View>
               )}
             />
             {errors.birth_date && (
-              <Text className="text-sm font-neuton text-error ml-2 mt-2">
+              <Text className="text-base font-neuton text-error ml-2 mt-2">
                 {errors.birth_date.message}
               </Text>
             )}
@@ -142,7 +143,7 @@ export default function SignupBirthdateScreen() {
 
           {/* Gender chips */}
           <View>
-            <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+            <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
               Gender
             </Text>
             <View className="flex-row flex-wrap gap-3">
@@ -157,7 +158,7 @@ export default function SignupBirthdateScreen() {
                   }`}
                 >
                   <Text
-                    className={`text-base font-neuton ${
+                    className={`text-lg font-neuton ${
                       selectedGender === g ? "text-white" : "text-foreground"
                     }`}
                   >
@@ -167,7 +168,7 @@ export default function SignupBirthdateScreen() {
               ))}
             </View>
             {errors.gender && (
-              <Text className="text-sm font-neuton text-error ml-2 mt-2">
+              <Text className="text-base font-neuton text-error ml-2 mt-2">
                 {errors.gender.message}
               </Text>
             )}

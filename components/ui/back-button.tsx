@@ -37,7 +37,7 @@ export function BackButton({
       {useCrossIcon ? (
         <X size={iconSize} strokeWidth={1.5} color="#5B3B1B" />
       ) : (
-        <ChevronLeft size={iconSize} strokeWidth={1.5} color="#5B3B1B" />
+        <ChevronLeft size={iconSize} strokeWidth={2} color="#5B3B1B" />
       )}
     </AnimatedButton>
   );

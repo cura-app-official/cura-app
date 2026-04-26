@@ -16,7 +16,7 @@ function StatItem({ value, label }: StatItemProps) {
       <Text className="text-2xl font-neuton-bold text-foreground">
         {formatted}
       </Text>
-      <Text className="text-sm font-neuton text-muted-foreground mt-0.5">
+      <Text className="text-base font-neuton text-muted-foreground mt-0.5">
         {label}
       </Text>
     </View>

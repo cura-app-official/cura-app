@@ -42,7 +42,7 @@ export default function NotificationsScreen() {
           <Text className="text-4xl font-neuton-bold text-foreground text-center">
             Stay in the loop
           </Text>
-          <Text className="text-lg font-neuton text-muted-foreground mt-4 text-center leading-7 px-4">
+          <Text className="text-xl font-neuton text-muted-foreground mt-4 text-center leading-8 px-4">
             Get notified about new drops from creators you follow and updates on
             your orders.
           </Text>
@@ -52,14 +52,14 @@ export default function NotificationsScreen() {
       <View className="px-6 pb-6 gap-3">
         <AnimatedButton
           onPress={handleEnable}
-          className="h-[4.25rem] bg-accent"
+          className="bg-accent"
         >
-          <Text className="text-lg font-neuton-bold text-white">
+          <Text className="text-xl font-neuton-bold text-white">
             Enable notifications
           </Text>
         </AnimatedButton>
         <Pressable onPress={handleSkip} className="py-4 items-center">
-          <Text className="text-lg font-neuton text-muted-foreground">
+          <Text className="text-xl font-neuton text-muted-foreground">
             Maybe later
           </Text>
         </Pressable>

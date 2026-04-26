@@ -123,7 +123,7 @@ export default function CreateListingScreen() {
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-xl font-neuton-bold text-foreground">
+          <Text className="text-2xl font-neuton-bold text-foreground">
             Create listing
           </Text>
         </View>
@@ -134,7 +134,7 @@ export default function CreateListingScreen() {
         >
           {/* Photos */}
           <View className="mb-8">
-            <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+            <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
               Photos
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -160,7 +160,7 @@ export default function CreateListingScreen() {
                     className="w-28 h-28 rounded-2xl bg-gray-100 items-center justify-center"
                   >
                     <Camera size={28} strokeWidth={1.5} color="#A3A3A3" />
-                    <Text className="text-sm font-neuton text-muted-foreground mt-1">
+                    <Text className="text-base font-neuton text-muted-foreground mt-1">
                       {mediaUris.length}/10
                     </Text>
                   </Pressable>
@@ -201,7 +201,7 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+              <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
                 Category
               </Text>
               <View className="flex-row flex-wrap gap-2">
@@ -216,7 +216,7 @@ export default function CreateListingScreen() {
                     }`}
                   >
                     <Text
-                      className={`text-base font-neuton ${
+                      className={`text-lg font-neuton ${
                         selectedCategory === cat
                           ? "text-white"
                           : "text-foreground"
@@ -228,7 +228,7 @@ export default function CreateListingScreen() {
                 ))}
               </View>
               {errors.category && (
-                <Text className="text-sm text-error ml-2 mt-1.5">
+                <Text className="text-base text-error ml-2 mt-1.5">
                   {errors.category.message}
                 </Text>
               )}
@@ -250,7 +250,7 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+              <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
                 Condition
               </Text>
               <View className="flex-row flex-wrap gap-2">
@@ -265,7 +265,7 @@ export default function CreateListingScreen() {
                     }`}
                   >
                     <Text
-                      className={`text-base font-neuton ${
+                      className={`text-lg font-neuton ${
                         selectedCondition === cond
                           ? "text-white"
                           : "text-foreground"
@@ -277,7 +277,7 @@ export default function CreateListingScreen() {
                 ))}
               </View>
               {errors.condition && (
-                <Text className="text-sm text-error ml-2 mt-1.5">
+                <Text className="text-base text-error ml-2 mt-1.5">
                   {errors.condition.message}
                 </Text>
               )}
@@ -302,7 +302,7 @@ export default function CreateListingScreen() {
             />
 
             <View>
-              <Text className="text-base font-neuton-bold text-neutral-600 mb-3">
+              <Text className="text-lg font-neuton-bold text-neutral-600 mb-3">
                 Damage
               </Text>
               <View className="flex-row flex-wrap gap-2">
@@ -315,7 +315,7 @@ export default function CreateListingScreen() {
                     }`}
                   >
                     <Text
-                      className={`text-base font-neuton ${
+                      className={`text-lg font-neuton ${
                         selectedDamage === dmg
                           ? "text-white"
                           : "text-foreground"
