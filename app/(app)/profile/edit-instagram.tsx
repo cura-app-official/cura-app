@@ -4,6 +4,7 @@ import {
   sanitizeInstagramUsername,
   toInstagramUrl,
 } from "@/lib/instagram";
+import type { EditInstagramForm } from "@/lib/validations";
 import { editInstagramSchema } from "@/lib/validations";
 import { useAuth } from "@/providers/auth-provider";
 import { updateUser } from "@/services/users";
@@ -21,7 +22,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import type { EditInstagramForm } from "@/lib/validations";
 
 export default function EditInstagramScreen() {
   const { user, profile, refreshProfile } = useAuth();

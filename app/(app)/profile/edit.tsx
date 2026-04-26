@@ -34,10 +34,7 @@ function ProfileRow({
   onPress: () => void;
 }) {
   return (
-    <Pressable
-      onPress={onPress}
-      className="flex-row items-center px-5 py-5"
-    >
+    <Pressable onPress={onPress} className="flex-row items-center px-5 py-5">
       <Text className="w-28 text-xl font-neuton text-foreground">{label}</Text>
       <Text
         className={`flex-1 text-xl font-neuton ${

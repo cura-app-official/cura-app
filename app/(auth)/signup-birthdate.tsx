@@ -2,8 +2,8 @@ import { AnimatedLoadingButton } from "@/components/ui/animated-loading-button";
 import { BackButton } from "@/components/ui/back-button";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import {
-    birthDateGenderSchema,
-    type BirthDateGenderForm,
+  birthDateGenderSchema,
+  type BirthDateGenderForm,
 } from "@/lib/validations";
 import { useSignup } from "@/store/signup-store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,13 +11,13 @@ import { router } from "expo-router";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    Text,
-    TextInput,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
