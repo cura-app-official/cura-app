@@ -13,7 +13,7 @@ module.exports = {
         foreground: "#5B3B1B",
         muted: "#F3E8D8",
         "muted-foreground": "#8A6B4D",
-        border: "#E2D1BB",
+        border: "#E8D8A8",
         error: {
           DEFAULT: "#FF4747",
         },

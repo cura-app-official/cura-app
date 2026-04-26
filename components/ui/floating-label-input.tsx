@@ -10,8 +10,8 @@ import Animated, {
 
 const COLORS = {
   foreground: "#5B3B1B",
-  mutedForeground: "#8A6B4D",
-  border: "#E2D1BB",
+  mutedForeground: "#858585",
+  border: "#E8D8A8",
   error: "#FF4747",
 };
 
@@ -23,7 +23,10 @@ interface FloatingLabelInputProps extends TextInputProps {
   containerClassName?: string;
 }
 
-export const FloatingLabelInput = forwardRef<TextInput, FloatingLabelInputProps>(
+export const FloatingLabelInput = forwardRef<
+  TextInput,
+  FloatingLabelInputProps
+>(
   (
     {
       label,
@@ -86,7 +89,7 @@ export const FloatingLabelInput = forwardRef<TextInput, FloatingLabelInputProps>
         >
           <Animated.Text
             pointerEvents="none"
-            className="absolute left-5 font-neuton-bold"
+            className="absolute left-5 font-neuton"
             style={labelStyle}
           >
             {label}
