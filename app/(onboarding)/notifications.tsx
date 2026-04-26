@@ -36,7 +36,7 @@ export default function NotificationsScreen() {
           className="items-center"
         >
           <View className="w-24 h-24 rounded-full bg-gray-100 items-center justify-center mb-10">
-            <Bell size={36} strokeWidth={1} color="#5B3B1B" />
+            <Bell size={36} strokeWidth={1.5} color="#5B3B1B" />
           </View>
 
           <Text className="text-4xl font-neuton-bold text-foreground text-center">

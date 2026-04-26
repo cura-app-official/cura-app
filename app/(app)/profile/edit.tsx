@@ -108,7 +108,7 @@ export default function EditProfileScreen() {
               >
                 <Camera
                   size={26}
-                  strokeWidth={1}
+                  strokeWidth={1.5}
                   color={backgroundUrl ? "#FFF7EC" : "#8A6B4D"}
                 />
               </View>
@@ -127,11 +127,11 @@ export default function EditProfileScreen() {
                   />
                 ) : (
                   <View className="w-32 h-32 rounded-full bg-muted border-2 border-background items-center justify-center">
-                    <User size={36} strokeWidth={1} color="#8A6B4D" />
+                    <User size={36} strokeWidth={1.5} color="#8A6B4D" />
                   </View>
                 )}
                 <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center border-2 border-background">
-                  <Camera size={16} strokeWidth={1} color="#FFF7EC" />
+                  <Camera size={16} strokeWidth={1.5} color="#FFF7EC" />
                 </View>
               </Pressable>
             </View>
@@ -178,7 +178,7 @@ export default function EditProfileScreen() {
           <AnimatedLoadingButton
             isSubmitting={isSubmitting}
             onPress={handleSubmit(onSubmit)}
-            title="Save changes"
+            title="Save Changes"
           />
         </View>
       </KeyboardAvoidingView>

@@ -68,14 +68,17 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
       <View className="flex-row items-center justify-between px-6 py-4">
-        <Pressable onPress={() => router.push("/(app)/notifications")} hitSlop={8}>
-          <Bell size={24} strokeWidth={1} color="#5B3B1B" />
+        <Pressable
+          onPress={() => router.push("/(app)/notifications")}
+          hitSlop={8}
+        >
+          <Bell size={24} strokeWidth={1.5} color="#5B3B1B" />
         </Pressable>
         <Text className="text-3xl font-neuton-bold text-foreground tracking-tight">
           cura
         </Text>
         <Pressable onPress={() => router.push("/(app)/cart")} hitSlop={8}>
-          <ShoppingBag size={24} strokeWidth={1} color="#5B3B1B" />
+          <ShoppingBag size={24} strokeWidth={1.5} color="#5B3B1B" />
         </Pressable>
       </View>
 

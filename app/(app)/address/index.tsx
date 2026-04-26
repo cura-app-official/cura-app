@@ -8,12 +8,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { MapPin, Pencil, Plus, Trash2 } from "lucide-react-native";
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    Pressable,
-    Text,
-    View,
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Pressable,
+  Text,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -55,7 +55,7 @@ export default function AddressListScreen() {
           hitSlop={12}
           className="w-12 h-12 rounded-full bg-muted border border-border items-center justify-center"
         >
-          <Plus size={22} strokeWidth={1} color="#5B3B1B" />
+          <Plus size={22} strokeWidth={1.5} color="#5B3B1B" />
         </Pressable>
       </View>
 
@@ -73,10 +73,10 @@ export default function AddressListScreen() {
           <View className="px-6 pb-6">
             <AnimatedButton
               onPress={() => router.push("/(app)/address/add")}
-              className="h-14 bg-accent"
+              className=" bg-accent"
             >
               <Text className="text-base font-neuton-bold text-white">
-                Add new address
+                Add New Address
               </Text>
             </AnimatedButton>
           </View>
@@ -123,10 +123,10 @@ export default function AddressListScreen() {
                     onPress={() => router.push(`/(app)/address/${item.id}`)}
                     hitSlop={12}
                   >
-                    <Pencil size={18} strokeWidth={1} color="#5B3B1B" />
+                    <Pencil size={18} strokeWidth={1.5} color="#5B3B1B" />
                   </Pressable>
                   <Pressable onPress={() => handleDelete(item.id)} hitSlop={12}>
-                    <Trash2 size={18} strokeWidth={1} color="#FF4747" />
+                    <Trash2 size={18} strokeWidth={1.5} color="#FF4747" />
                   </Pressable>
                 </View>
               </View>

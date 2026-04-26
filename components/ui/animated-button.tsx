@@ -41,7 +41,7 @@ export function AnimatedButton({
       disabled={disabled}
       style={[animatedStyle, style]}
       className={cn(
-        'rounded-full bg-accent overflow-hidden items-center justify-center',
+        'h-[4.25rem] rounded-full bg-accent overflow-hidden items-center justify-center',
         className
       )}
       {...props}

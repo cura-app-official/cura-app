@@ -1,8 +1,8 @@
-import { cn } from '@/lib/utils';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import { ChevronLeft, X } from 'lucide-react-native';
-import { AnimatedButton } from './animated-button';
+import { cn } from "@/lib/utils";
+import * as Haptics from "expo-haptics";
+import { useRouter } from "expo-router";
+import { ChevronLeft, X } from "lucide-react-native";
+import { AnimatedButton } from "./animated-button";
 
 interface BackButtonProps {
   onPress?: () => void;
@@ -31,11 +31,11 @@ export function BackButton({
   return (
     <AnimatedButton
       onPress={handlePress}
-      className={cn('bg-background rounded-[1.25rem] w-16 h-12', className)}
+      className={cn("bg-background rounded-[1.25rem] w-16 h-12", className)}
       accessibilityLabel="Navigate back"
     >
       {useCrossIcon ? (
-        <X size={iconSize} strokeWidth={1} color="#5B3B1B" />
+        <X size={iconSize} strokeWidth={1.5} color="#5B3B1B" />
       ) : (
         <ChevronLeft size={iconSize} strokeWidth={1.5} color="#5B3B1B" />
       )}

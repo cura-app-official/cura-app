@@ -209,7 +209,7 @@ export default function SellerApplyScreen() {
                       onPress={() => removePhoto(i)}
                       className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-foreground items-center justify-center"
                     >
-                      <X size={12} strokeWidth={1} color="white" />
+                      <X size={12} strokeWidth={1.5} color="white" />
                     </Pressable>
                   </View>
                 ))}
@@ -218,7 +218,7 @@ export default function SellerApplyScreen() {
                     onPress={pickPhotos}
                     className="w-24 h-24 rounded-2xl bg-background border border-border items-center justify-center"
                   >
-                    <Camera size={26} strokeWidth={1} color="#8A6B4D" />
+                    <Camera size={26} strokeWidth={1.5} color="#8A6B4D" />
                     <Text className="text-sm font-neuton text-muted-foreground mt-1">
                       {samplePhotos.length}/6
                     </Text>

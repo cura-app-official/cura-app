@@ -67,7 +67,7 @@ export function ItemCard({
           >
             <Heart
               size={18}
-              strokeWidth={1}
+              strokeWidth={1.5}
               color={isWishlisted ? "#FF4747" : "#5B3B1B"}
               fill={isWishlisted ? "#FF4747" : "transparent"}
             />

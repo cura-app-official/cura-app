@@ -185,7 +185,7 @@ export default function UserProfileScreen() {
                   </Text>
                 </AnimatedButton>
                 <AnimatedButton className="w-14 h-14 bg-gray-100">
-                  <MessageCircle size={20} strokeWidth={1} color="#5B3B1B" />
+                  <MessageCircle size={20} strokeWidth={1.5} color="#5B3B1B" />
                 </AnimatedButton>
               </View>
             )}

@@ -34,7 +34,7 @@ function SettingsRow({
       <View className="w-12 h-12 rounded-2xl bg-muted border border-border items-center justify-center">
         <Icon
           size={24}
-          strokeWidth={1}
+          strokeWidth={1.5}
           color={destructive ? "#FF4747" : "#5B3B1B"}
         />
       </View>
@@ -45,7 +45,7 @@ function SettingsRow({
       >
         {label}
       </Text>
-      <ChevronRight size={20} strokeWidth={1} color="#8A6B4D" />
+      <ChevronRight size={20} strokeWidth={1.5} color="#8A6B4D" />
     </Pressable>
   );
 }

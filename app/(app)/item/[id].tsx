@@ -126,7 +126,7 @@ export default function ItemDetailScreen() {
           >
             <Heart
               size={22}
-              strokeWidth={1}
+              strokeWidth={1.5}
               color={wishlisted ? "#FF4747" : "#5B3B1B"}
               fill={wishlisted ? "#FF4747" : "transparent"}
             />

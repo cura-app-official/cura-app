@@ -14,7 +14,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <View className="flex-1 items-center justify-center px-8 pb-32">
-      <Icon size={48} strokeWidth={1} color="#8A6B4D" />
+      <Icon size={48} strokeWidth={1.5} color="#8A6B4D" />
       <Text className="text-xl font-neuton-bold text-foreground mt-5 text-center">
         {title}
       </Text>

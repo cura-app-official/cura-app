@@ -150,7 +150,7 @@ export default function CreateListingScreen() {
                       onPress={() => removeMedia(i)}
                       className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-foreground items-center justify-center"
                     >
-                      <X size={12} strokeWidth={1} color="white" />
+                      <X size={12} strokeWidth={1.5} color="white" />
                     </Pressable>
                   </View>
                 ))}
@@ -159,7 +159,7 @@ export default function CreateListingScreen() {
                     onPress={pickMedia}
                     className="w-28 h-28 rounded-2xl bg-gray-100 items-center justify-center"
                   >
-                    <Camera size={28} strokeWidth={1} color="#A3A3A3" />
+                    <Camera size={28} strokeWidth={1.5} color="#A3A3A3" />
                     <Text className="text-sm font-neuton text-muted-foreground mt-1">
                       {mediaUris.length}/10
                     </Text>

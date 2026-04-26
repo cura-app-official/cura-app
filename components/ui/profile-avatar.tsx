@@ -1,6 +1,6 @@
-import { Image } from 'expo-image';
-import { User } from 'lucide-react-native';
-import { View } from 'react-native';
+import { Image } from "expo-image";
+import { User } from "lucide-react-native";
+import { View } from "react-native";
 
 interface ProfileAvatarProps {
   uri?: string | null;
@@ -8,12 +8,21 @@ interface ProfileAvatarProps {
   borderWidth?: number;
 }
 
-export function ProfileAvatar({ uri, size = 96, borderWidth = 4 }: ProfileAvatarProps) {
+export function ProfileAvatar({
+  uri,
+  size = 96,
+  borderWidth = 4,
+}: ProfileAvatarProps) {
   const outerSize = size + borderWidth * 2;
 
   return (
     <View
-      style={{ width: outerSize, height: outerSize, borderRadius: outerSize / 2, borderWidth }}
+      style={{
+        width: outerSize,
+        height: outerSize,
+        borderRadius: outerSize / 2,
+        borderWidth,
+      }}
       className="border-background bg-muted items-center justify-center overflow-hidden"
     >
       {uri ? (
@@ -23,7 +32,7 @@ export function ProfileAvatar({ uri, size = 96, borderWidth = 4 }: ProfileAvatar
           contentFit="cover"
         />
       ) : (
-        <User size={size * 0.35} strokeWidth={1} color="#A3A3A3" />
+        <User size={size * 0.35} strokeWidth={1.5} color="#A3A3A3" />
       )}
     </View>
   );

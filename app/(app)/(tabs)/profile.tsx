@@ -91,7 +91,7 @@ export default function ProfileScreen() {
                 style={{ top: insets.top + 8 }}
                 className="absolute right-5 w-11 h-11 rounded-full bg-background/90 border border-border items-center justify-center"
               >
-                <Ellipsis size={22} strokeWidth={1} color="#5B3B1B" />
+                <Ellipsis size={22} strokeWidth={1.5} color="#5B3B1B" />
               </Pressable>
 
               {/* Name overlay at bottom of hero */}
@@ -140,7 +140,7 @@ export default function ProfileScreen() {
                   }
                   className="w-14 h-14 bg-muted border border-border"
                 >
-                  <ExternalLink size={20} strokeWidth={1} color="#5B3B1B" />
+                  <ExternalLink size={20} strokeWidth={1.5} color="#5B3B1B" />
                 </AnimatedButton>
               )}
             </View>
