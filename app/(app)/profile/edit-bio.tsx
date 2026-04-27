@@ -1,17 +1,13 @@
+import {
+  ProfileEditScreen,
+  useAutoFocusTextInput,
+} from "@/components/ui/profile-edit-screen";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/providers/auth-provider";
 import { updateUser } from "@/services/users";
 import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useRef, useState } from "react";
+import { Alert, Text, TextInput } from "react-native";
 
 const BIO_MAX_LENGTH = 160;
 
@@ -21,10 +17,7 @@ export default function EditBioScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => inputRef.current?.focus(), 100);
-    return () => clearTimeout(timer);
-  }, []);
+  useAutoFocusTextInput(inputRef);
 
   const onSave = async () => {
     if (!user || isSaving) return;
@@ -42,51 +35,27 @@ export default function EditBioScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
-      >
-        <View className="flex-row items-center justify-between px-6 py-4">
-          <Pressable onPress={router.back} hitSlop={10}>
-            <Text className="text-xl font-neuton text-foreground">Cancel</Text>
-          </Pressable>
-          <Pressable onPress={onSave} hitSlop={10} disabled={isSaving}>
-            <Text
-              className={`text-xl font-neuton-bold ${
-                isSaving ? "text-neutral" : "text-accent"
-              }`}
-            >
-              Save
-            </Text>
-          </Pressable>
-        </View>
-
-        <View className="flex-1 px-6 pt-8">
-          <Text className="text-3xl font-neuton-bold text-foreground">Bio</Text>
-          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-5">
-            You can edit your bio anytime.
-          </Text>
-
-          <View className="rounded-3xl border border-border px-5 py-4 min-h-[170px]">
-            <TextInput
-              ref={inputRef}
-              value={bio}
-              onChangeText={setBio}
-              multiline
-              maxLength={BIO_MAX_LENGTH}
-              placeholder="My account is all about..."
-              placeholderTextColor="#858585"
-              selectionColor="#5B3B1B"
-              className="min-h-[130px] text-xl font-neuton text-foreground"
-              style={{ textAlignVertical: "top" }}
-            />
-          </View>
-          <Text className="text-base font-neuton text-neutral text-right mt-2">
-            {bio.length} / {BIO_MAX_LENGTH}
-          </Text>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <ProfileEditScreen
+      title="Bio"
+      description="You can edit your bio anytime."
+      isSaving={isSaving}
+      onSave={onSave}
+      keyboardAvoiding
+    >
+      <Input
+        ref={inputRef}
+        label="Bio"
+        value={bio}
+        onChangeText={setBio}
+        multiline
+        maxLength={BIO_MAX_LENGTH}
+        placeholder="My account is all about..."
+        fieldClassName="min-h-[170px]"
+        className="min-h-[130px] max-h-[200px]"
+      />
+      <Text className="text-base font-neuton text-neutral text-right mt-2">
+        {bio.length} / {BIO_MAX_LENGTH}
+      </Text>
+    </ProfileEditScreen>
   );
 }

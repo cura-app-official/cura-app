@@ -1,21 +1,17 @@
+import {
+  ProfileEditScreen,
+  useAutoFocusTextInput,
+} from "@/components/ui/profile-edit-screen";
+import { Input } from "@/components/ui/input";
 import { USERNAME_DISALLOWED_CHARS_REGEX } from "@/lib/regex";
 import { usernameSchema, type UsernameForm } from "@/lib/validations";
 import { useAuth } from "@/providers/auth-provider";
 import { checkUsernameAvailable, updateUser } from "@/services/users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, Text, TextInput } from "react-native";
 
 const USERNAME_MAX_LENGTH = 30;
 
@@ -35,10 +31,7 @@ export default function EditUsernameScreen() {
 
   const username = watch("username");
 
-  useEffect(() => {
-    const timer = setTimeout(() => inputRef.current?.focus(), 100);
-    return () => clearTimeout(timer);
-  }, []);
+  useAutoFocusTextInput(inputRef);
 
   const onSave = async (values: UsernameForm) => {
     if (!user || isSaving) return;
@@ -65,77 +58,40 @@ export default function EditUsernameScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
-      >
-        <View className="flex-row items-center justify-between px-6 py-4">
-          <Pressable onPress={router.back} hitSlop={10}>
-            <Text className="text-xl font-neuton text-foreground">Cancel</Text>
-          </Pressable>
-          <Pressable
-            onPress={handleSubmit(onSave)}
-            hitSlop={10}
-            disabled={isSaving}
-          >
-            <Text
-              className={`text-xl font-neuton-bold ${
-                isSaving ? "text-neutral" : "text-accent"
-              }`}
-            >
-              Save
+    <ProfileEditScreen
+      title="Username"
+      description="Use lowercase letters, numbers, underscores, and dots."
+      isSaving={isSaving}
+      onSave={handleSubmit(onSave)}
+      keyboardAvoiding
+    >
+      <Controller
+        control={control}
+        name="username"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <>
+            <Input
+              ref={inputRef}
+              label="Username"
+              value={value}
+              onBlur={onBlur}
+              onChangeText={(text) =>
+                onChange(
+                  text.toLowerCase().replace(USERNAME_DISALLOWED_CHARS_REGEX, ""),
+                )
+              }
+              error={errors.username?.message}
+              autoCapitalize="none"
+              autoCorrect={false}
+              maxLength={USERNAME_MAX_LENGTH}
+              placeholder="username"
+            />
+            <Text className="text-base font-neuton text-neutral text-right mt-2">
+              {username.length} / {USERNAME_MAX_LENGTH}
             </Text>
-          </Pressable>
-        </View>
-
-        <View className="flex-1 px-6 pt-8">
-          <Text className="text-3xl font-neuton-bold text-foreground">
-            Username
-          </Text>
-          <Text className="text-lg font-neuton text-muted-foreground mt-3 mb-5">
-            Use lowercase letters, numbers, underscores, and dots.
-          </Text>
-
-          <Controller
-            control={control}
-            name="username"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View>
-                <View className="rounded-3xl border border-border px-5 h-[4.25rem] justify-center">
-                  <TextInput
-                    ref={inputRef}
-                    value={value}
-                    onBlur={onBlur}
-                    onChangeText={(text) =>
-                      onChange(
-                        text
-                          .toLowerCase()
-                          .replace(USERNAME_DISALLOWED_CHARS_REGEX, ""),
-                      )
-                    }
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={USERNAME_MAX_LENGTH}
-                    placeholder="username"
-                    placeholderTextColor="#858585"
-                    selectionColor="#5B3B1B"
-                    className="text-xl font-neuton text-foreground"
-                  />
-                </View>
-                <View className="flex-row justify-between mt-2">
-                  <Text className="text-base font-neuton text-error">
-                    {errors.username?.message}
-                  </Text>
-                  <Text className="text-base font-neuton text-neutral">
-                    {username.length} / {USERNAME_MAX_LENGTH}
-                  </Text>
-                </View>
-              </View>
-            )}
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          </>
+        )}
+      />
+    </ProfileEditScreen>
   );
 }

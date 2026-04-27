@@ -7,25 +7,22 @@ import { createAddress } from "@/services/addresses";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    Switch,
-    Text,
-    TextInput,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Switch,
+  Text,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddAddressScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
 
   const {
     control,
@@ -97,40 +94,17 @@ export default function AddAddressScreen() {
               control={control}
               name="phone_number"
               render={({ field: { onChange, onBlur, value } }) => (
-                <View>
-                  <Text className="text-lg font-neuton-bold text-muted-foreground mb-3">
-                    Phone Number
-                  </Text>
-                  <View
-                    className={`flex-row items-center px-5 rounded-2xl border border-border ${
-                      isPhoneFocused ? "border-2 border-black" : ""
-                    } ${errors.phone_number?.message ? "border border-error" : ""}`}
-                  >
-                    <Text className="text-lg font-neuton-bold text-foreground mr-3">
-                      +66
-                    </Text>
-                    <TextInput
-                      className="flex-1 text-lg text-foreground font-neuton py-4"
-                      placeholder="XXXXXXXXX"
-                      placeholderTextColor="#8A6B4D"
-                      selectionColor="#5B3B1B"
-                      keyboardType="number-pad"
-                      maxLength={9}
-                      value={value}
-                      onFocus={() => setIsPhoneFocused(true)}
-                      onBlur={() => {
-                        setIsPhoneFocused(false);
-                        onBlur();
-                      }}
-                      onChangeText={(text) => onChange(text.replace(/\D/g, ""))}
-                    />
-                  </View>
-                  {errors.phone_number?.message && (
-                    <Text className="text-base font-neuton text-error ml-2 mt-1.5">
-                      {errors.phone_number.message}
-                    </Text>
-                  )}
-                </View>
+                <Input
+                  label="Phone Number"
+                  placeholder="XXXXXXXXX"
+                  prefix="+66"
+                  onBlur={onBlur}
+                  onChangeText={(text) => onChange(text.replace(/\D/g, ""))}
+                  value={value}
+                  error={errors.phone_number?.message}
+                  keyboardType="number-pad"
+                  maxLength={9}
+                />
               )}
             />
             <Controller
@@ -161,15 +135,17 @@ export default function AddAddressScreen() {
               )}
             />
 
-            <View className="flex-row items-center justify-between py-3 px-5 rounded-3xl bg-muted border border-border">
+            <View className="flex-row items-center justify-between h-[4.25rem] px-5 rounded-3xl bg-muted border border-border">
               <Text className="text-lg font-neuton text-foreground">
                 Set as default
               </Text>
-              <Switch
-                value={isDefault}
-                onValueChange={(val) => setValue("is_default", val)}
-                trackColor={{ true: "#8BAD80" }}
-              />
+              <View className="items-center justify-center">
+                <Switch
+                  value={isDefault}
+                  onValueChange={(val) => setValue("is_default", val)}
+                  trackColor={{ true: "#8BAD80" }}
+                />
+              </View>
             </View>
           </View>
 

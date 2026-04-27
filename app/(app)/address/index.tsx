@@ -6,7 +6,7 @@ import { deleteAddress, getAddresses } from "@/services/addresses";
 import type { Tables } from "@/types/database";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { MapPin, Pencil, Plus, Trash2 } from "lucide-react-native";
+import { MapPin, Pencil, Trash2 } from "lucide-react-native";
 import {
   ActivityIndicator,
   Alert,
@@ -50,13 +50,6 @@ export default function AddressListScreen() {
             Shopping Info
           </Text>
         </View>
-        <Pressable
-          onPress={() => router.push("/(app)/address/add")}
-          hitSlop={12}
-          className="w-12 h-12 rounded-full bg-muted border border-border items-center justify-center"
-        >
-          <Plus size={22} strokeWidth={1.5} color="#5B3B1B" />
-        </Pressable>
       </View>
 
       {isLoading ? (
@@ -76,7 +69,7 @@ export default function AddressListScreen() {
               className=" bg-accent"
             >
               <Text className="text-xl font-neuton-bold text-white">
-                Add New Address
+                Add new address
               </Text>
             </AnimatedButton>
           </View>
