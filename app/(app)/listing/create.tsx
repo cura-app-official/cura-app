@@ -143,7 +143,12 @@ export default function CreateListingScreen() {
                   <View key={uri} className="relative">
                     <Image
                       source={{ uri }}
-                      className="w-28 h-28 rounded-2xl bg-muted"
+                      style={{
+                        width: 112,
+                        height: 112,
+                        borderRadius: 16,
+                        backgroundColor: "#F5EBDD",
+                      }}
                       contentFit="cover"
                     />
                     <Pressable

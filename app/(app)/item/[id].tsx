@@ -1,6 +1,7 @@
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { BackButton } from "@/components/ui/back-button";
 import { ProfileAvatar } from "@/components/ui/profile-avatar";
+import { SCREEN_WIDTH } from "@/lib/dimensions";
 import { MOCK_ITEMS } from "@/lib/mock-data";
 import { useAuth } from "@/providers/auth-provider";
 import { addToCart, isInCart } from "@/services/cart";
@@ -15,7 +16,6 @@ import { useCallback, useState } from "react";
 import {
     ActivityIndicator,
     Alert,
-    Dimensions,
     FlatList,
     Pressable,
     ScrollView,
@@ -23,8 +23,6 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function ItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -148,9 +146,12 @@ export default function ItemDetailScreen() {
           renderItem={({ item: media }) => (
             <Image
               source={{ uri: media.url }}
-              style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH * 1.25 }}
+              style={{
+                width: SCREEN_WIDTH,
+                height: SCREEN_WIDTH * 1.25,
+                backgroundColor: "#F5EBDD",
+              }}
               contentFit="cover"
-              className="bg-muted"
             />
           )}
           keyExtractor={(m) => m.id}

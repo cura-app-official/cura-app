@@ -135,7 +135,12 @@ export default function CheckoutScreen() {
               <View key={ci.id} className="flex-row gap-4">
                 <Image
                   source={{ uri: ci.item.item_media?.[0]?.url ?? "" }}
-                  className="w-20 h-20 rounded-2xl bg-muted"
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 16,
+                    backgroundColor: "#F5EBDD",
+                  }}
                   contentFit="cover"
                 />
                 <View className="flex-1 justify-center">

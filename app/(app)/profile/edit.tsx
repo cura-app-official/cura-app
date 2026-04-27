@@ -98,7 +98,13 @@ export default function EditProfileScreen() {
               {profile?.background_url && (
                 <Image
                   source={{ uri: profile.background_url }}
-                  className="absolute inset-0"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                  }}
                   contentFit="cover"
                 />
               )}
@@ -123,7 +129,14 @@ export default function EditProfileScreen() {
                 {profile?.avatar_url ? (
                   <Image
                     source={{ uri: profile.avatar_url }}
-                    className="w-32 h-32 rounded-full bg-muted border-2 border-background"
+                    style={{
+                      width: 128,
+                      height: 128,
+                      borderRadius: 64,
+                      borderWidth: 2,
+                      borderColor: "#FFF7EC",
+                      backgroundColor: "#F5EBDD",
+                    }}
                     contentFit="cover"
                   />
                 ) : (

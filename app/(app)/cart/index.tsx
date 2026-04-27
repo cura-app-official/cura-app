@@ -72,7 +72,12 @@ export default function CartScreen() {
                 >
                   <Image
                     source={{ uri: ci.item.item_media?.[0]?.url ?? "" }}
-                    className="w-28 h-28 rounded-2xl bg-muted"
+                    style={{
+                      width: 112,
+                      height: 112,
+                      borderRadius: 16,
+                      backgroundColor: "#F5EBDD",
+                    }}
                     contentFit="cover"
                   />
                 </Pressable>

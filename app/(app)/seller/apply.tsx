@@ -202,7 +202,12 @@ export default function SellerApplyScreen() {
                   <View key={uri} className="relative w-24 h-24">
                     <Image
                       source={{ uri }}
-                      className="w-24 h-24 rounded-2xl bg-muted"
+                      style={{
+                        width: 96,
+                        height: 96,
+                        borderRadius: 16,
+                        backgroundColor: "#F5EBDD",
+                      }}
                       contentFit="cover"
                     />
                     <Pressable

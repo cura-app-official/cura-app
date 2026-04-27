@@ -38,8 +38,7 @@ export function ItemCard({
           source={{
             uri: "https://golflefleur.com/cdn/shop/files/NAUT-1-MNT-01.jpg?v=1757029019&width=1920",
           }}
-          style={{ width: "100%", height: "100%", borderRadius: 20 }}
-          className="rounded-3xl bg-muted"
+          style={{ width: "100%", height: "100%", borderRadius: 16 }}
           contentFit="cover"
           transition={200}
         />
@@ -87,49 +86,3 @@ export function ItemCard({
     </Pressable>
   );
 }
-
-//  <View className="relative">
-//     <Image
-//       source={{ uri: imageUrl }}
-//       className="w-full aspect-[3/4] rounded-3xl bg-muted"
-//       contentFit="cover"
-//       transition={200}
-//     />
-//     {onToggleWishlist && (
-//       <Pressable
-//         onPress={(e) => {
-//           e.stopPropagation();
-//           onToggleWishlist();
-//         }}
-//         className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 items-center justify-center"
-//       >
-//         <Heart
-//           size={16}
-//           strokeWidth={2.5}
-//           color={isWishlisted ? '#FF4747' : '#1A1A1A'}
-//           fill={isWishlisted ? '#FF4747' : 'transparent'}
-//         />
-//       </Pressable>
-//     )}
-//   </View>
-//   <View className="mt-2.5 px-1">
-//     <Text className="text-base font-neuton text-foreground" numberOfLines={1}>
-//       {name}
-//     </Text>
-//     <Text className="text-lg font-neuton-bold text-foreground mt-0.5">
-//       ฿{price.toLocaleString()}
-//     </Text>
-//     <View className="flex-row items-center mt-1.5 gap-2">
-//       {sellerAvatar ? (
-//         <Image
-//           source={{ uri: sellerAvatar }}
-//           className="w-5 h-5 rounded-full bg-muted"
-//         />
-//       ) : (
-//         <View className="w-5 h-5 rounded-full bg-muted" />
-//       )}
-//       <Text className="text-sm font-neuton text-muted-foreground" numberOfLines={1}>
-//         {sellerName}
-//       </Text>
-//     </View>
-//   </View>

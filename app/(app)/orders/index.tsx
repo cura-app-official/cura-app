@@ -102,7 +102,12 @@ export default function OrdersScreen() {
               <View className="flex-row gap-4">
                 <Image
                   source={{ uri: order.item?.item_media?.[0]?.url ?? "" }}
-                  className="w-20 h-20 rounded-2xl bg-border"
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 16,
+                    backgroundColor: "#E8D8A8",
+                  }}
                   contentFit="cover"
                 />
                 <View className="flex-1">
