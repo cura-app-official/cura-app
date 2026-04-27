@@ -32,7 +32,7 @@ export function ProfileAvatar({
           contentFit="cover"
         />
       ) : (
-        <User size={size * 0.35} strokeWidth={1.5} color="#A3A3A3" />
+        <User size={size * 0.35} strokeWidth={1.5} color="#8A6B4D" />
       )}
     </View>
   );

@@ -8,8 +8,9 @@ export interface OrderWithDetails extends Tables<'orders'> {
   address: Tables<'addresses'>;
 }
 
-export async function getOrders(
+async function getOrdersByRole(
   userId: string,
+  role: "buyer" | "seller",
   status?: string
 ): Promise<OrderWithDetails[]> {
   let query = supabase
@@ -17,16 +18,30 @@ export async function getOrders(
     .select(
       '*, item:items(*, item_media(*)), buyer:users!buyer_id(*), seller:users!seller_id(*), address:addresses(*)'
     )
-    .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
+    .eq(role === "buyer" ? "buyer_id" : "seller_id", userId)
     .order('created_at', { ascending: false });
 
-  if (status) {
+  if (status && status !== "all") {
     query = query.eq('status', status);
   }
 
   const { data, error } = await query;
   if (error) throw error;
   return (data ?? []) as unknown as OrderWithDetails[];
+}
+
+export async function getBuyingOrders(
+  userId: string,
+  status?: string
+): Promise<OrderWithDetails[]> {
+  return getOrdersByRole(userId, "buyer", status);
+}
+
+export async function getSellingOrders(
+  userId: string,
+  status?: string
+): Promise<OrderWithDetails[]> {
+  return getOrdersByRole(userId, "seller", status);
 }
 
 export async function createOrder(order: InsertTables<'orders'>) {

@@ -47,7 +47,7 @@ export default function AddressListScreen() {
         <View className="flex-row items-center gap-3">
           <BackButton />
           <Text className="text-2xl font-neuton-bold text-foreground">
-            Shopping Info
+            Shipping Address
           </Text>
         </View>
       </View>

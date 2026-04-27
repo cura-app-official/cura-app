@@ -1,7 +1,7 @@
 import { BackButton } from "@/components/ui/back-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useAuth } from "@/providers/auth-provider";
-import { getBuyingOrders, type OrderWithDetails } from "@/services/orders";
+import { getSellingOrders, type OrderWithDetails } from "@/services/orders";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
@@ -25,7 +25,7 @@ const TABS = [
   { key: "completed", label: "Completed" },
 ] as const;
 
-export default function OrdersScreen() {
+export default function SellingOrdersScreen() {
   const { user } = useAuth();
   const params = useLocalSearchParams<{ tab?: string }>();
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -37,8 +37,8 @@ export default function OrdersScreen() {
   }, [params.tab]);
 
   const { data: orders = [], isLoading } = useQuery({
-    queryKey: ["buying-orders", user?.id, activeTab],
-    queryFn: () => (user ? getBuyingOrders(user.id, activeTab) : []),
+    queryKey: ["selling-orders", user?.id, activeTab],
+    queryFn: () => (user ? getSellingOrders(user.id, activeTab) : []),
     enabled: !!user,
   });
 
@@ -62,7 +62,7 @@ export default function OrdersScreen() {
       <View className="flex-row items-center px-6 py-3 gap-3">
         <BackButton />
         <Text className="text-2xl font-neuton-bold text-foreground">
-          Buying Orders
+          Selling Orders
         </Text>
       </View>
 
@@ -104,8 +104,8 @@ export default function OrdersScreen() {
       ) : orders.length === 0 ? (
         <EmptyState
           icon={Package}
-          title="No orders yet"
-          description={`You have no ${activeTab.replace("_", " ")} orders`}
+          title="No selling orders yet"
+          description={`You have no ${activeTab.replace("_", " ")} selling orders`}
         />
       ) : (
         <FlatList

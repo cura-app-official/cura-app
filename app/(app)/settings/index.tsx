@@ -8,7 +8,6 @@ import {
   FileText,
   LogOut,
   MapPin,
-  Package,
   Shield,
   Store,
   UserPen,
@@ -88,13 +87,8 @@ export default function SettingsScreen() {
           />
           <SettingsRow
             icon={MapPin}
-            label="Shopping Info"
+            label="Shipping Address"
             onPress={() => router.push("/(app)/address")}
-          />
-          <SettingsRow
-            icon={Package}
-            label="My Orders"
-            onPress={() => router.push("/(app)/orders")}
           />
           {!profile?.is_seller && (
             <SettingsRow

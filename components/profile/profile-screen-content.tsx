@@ -1,6 +1,9 @@
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { BackButton } from "@/components/ui/back-button";
-import { ProfileAvatar } from "@/components/ui/profile-avatar";
+import {
+  ProfileHeaderHero,
+  PROFILE_BANNER_ASPECT_RATIO,
+} from "@/components/ui/profile-header-hero";
 import { ProfileStats } from "@/components/ui/profile-stats";
 import { SCREEN_WIDTH } from "@/lib/dimensions";
 import type { ItemWithMedia } from "@/services/items";
@@ -9,8 +12,13 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
+  CircleCheckBig,
+  CircleDollarSign,
   Ellipsis,
+  ListFilter,
+  MapPin,
   Settings2,
+  Truck,
 } from "lucide-react-native";
 import { useMemo, useState, type ReactNode } from "react";
 import {
@@ -22,9 +30,12 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
-const HERO_HEIGHT = SCREEN_WIDTH * 0.9;
+const HERO_HEIGHT = SCREEN_WIDTH / PROFILE_BANNER_ASPECT_RATIO;
 const INSTAGRAM_ICON = require("@/assets/icons/instagram-icon.svg");
 
 const MOCK_ITEM_COLORS: Record<string, { label: string; value: string }> = {
@@ -49,6 +60,19 @@ const MOCK_ITEM_STATUSES: Record<string, "available" | "sold"> = {
 
 type StatusFilter = "all" | "available" | "sold";
 type SortOption = "newest" | "oldest" | "price-high" | "price-low";
+type OrderTab = "all" | "to_pay" | "to_ship" | "to_receive" | "completed";
+
+const ORDER_SHORTCUTS: {
+  key: OrderTab;
+  label: string;
+  icon: typeof ListFilter;
+}[] = [
+  { key: "all", label: "All", icon: ListFilter },
+  { key: "to_pay", label: "To Pay", icon: CircleDollarSign },
+  { key: "to_ship", label: "To Ship", icon: ListFilter },
+  { key: "to_receive", label: "To Receive", icon: Truck },
+  { key: "completed", label: "Completed", icon: CircleCheckBig },
+];
 
 interface ProfileScreenContentProps {
   profile: Tables<"users">;
@@ -119,6 +143,48 @@ function FilterChip({
   );
 }
 
+function OrdersQuickCard({
+  title,
+  onViewHistory,
+  onSelectTab,
+}: {
+  title: string;
+  onViewHistory: () => void;
+  onSelectTab: (tab: OrderTab) => void;
+}) {
+  return (
+    <View className="mb-5">
+      <View className="flex-row items-center justify-between mb-3">
+        <Text className="text-2xl font-neuton-bold text-foreground">{title}</Text>
+        <Pressable onPress={onViewHistory} hitSlop={8}>
+          <Text className="text-xl font-neuton text-muted-foreground">
+            View history &gt;
+          </Text>
+        </Pressable>
+      </View>
+      <View className="rounded-3xl bg-muted border border-border px-3 py-5">
+        <View className="flex-row items-start justify-between">
+          {ORDER_SHORTCUTS.map((shortcut) => {
+            const Icon = shortcut.icon;
+            return (
+              <Pressable
+                key={`${title}-${shortcut.key}`}
+                onPress={() => onSelectTab(shortcut.key)}
+                className="flex-1 items-center px-1"
+              >
+                <Icon size={26} strokeWidth={1.5} color="#1A1A1A" />
+                <Text className="text-base font-neuton text-foreground mt-2 text-center">
+                  {shortcut.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
+    </View>
+  );
+}
+
 export function ProfileScreenContent({
   profile,
   listings,
@@ -140,8 +206,7 @@ export function ProfileScreenContent({
   const [sort, setSort] = useState<SortOption>("newest");
 
   const isSeller = Boolean(profile.is_seller);
-  const instagramLink =
-    profile.instagram_link ?? `https://instagram.com/${profile.username}`;
+  const instagramLink = profile.instagram_link;
 
   const categories = useMemo(
     () => uniqueValues(listings.map((item) => item.category)),
@@ -185,6 +250,7 @@ export function ProfileScreenContent({
   };
 
   const openInstagram = () => {
+    if (!instagramLink) return;
     void Linking.openURL(instagramLink);
   };
 
@@ -227,7 +293,7 @@ export function ProfileScreenContent({
   return (
     <View className="flex-1 bg-background">
       <FlatList
-        data={filteredListings}
+        data={isSeller ? filteredListings : []}
         keyExtractor={(item) => item.id}
         numColumns={2}
         showsVerticalScrollIndicator={false}
@@ -236,135 +302,118 @@ export function ProfileScreenContent({
         ItemSeparatorComponent={() => <View className="h-4" />}
         ListHeaderComponent={
           <View className="mb-6">
-            <View style={{ height: HERO_HEIGHT }} className="relative">
-              {profile.background_url ? (
-                <Image
-                  source={{ uri: profile.background_url }}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                  }}
-                  contentFit="cover"
+            <ProfileHeaderHero
+              heroHeight={HERO_HEIGHT}
+              backgroundUri={profile.background_url}
+              avatarUri={profile.avatar_url}
+              avatarSize={100}
+              avatarBorderWidth={4}
+              backgroundOverlay={
+                <LinearGradient
+                  colors={["transparent", "rgba(0,0,0,0.65)"]}
+                  locations={[0.3, 1]}
+                  className="absolute inset-0"
                 />
-              ) : (
-                <View className="absolute inset-0 bg-muted" />
-              )}
-
-              <LinearGradient
-                colors={["transparent", "rgba(0,0,0,0.65)"]}
-                locations={[0.3, 1]}
-                className="absolute inset-0"
-              />
-
-              {showBackButton && (
-                <SafeAreaView
-                  edges={["top"]}
-                  className="absolute top-0 left-0 right-0"
-                >
-                  <View className="px-4 pt-1">
-                    <BackButton className="bg-black/30" />
-                  </View>
-                </SafeAreaView>
-              )}
-
-              {showSettingsButton && (
-                <Pressable
-                  onPress={() => router.push("/(app)/settings")}
-                  style={{ top: insets.top + 8 }}
-                  className="absolute right-5 w-11 h-11 rounded-full bg-background/90 border border-border items-center justify-center"
-                >
-                  <Ellipsis size={22} strokeWidth={1.5} color="#5B3B1B" />
-                </Pressable>
-              )}
-
-              <View className="absolute bottom-20 left-0 right-0 items-center px-6">
-                <Text className="text-4xl font-neuton-bold text-white text-center">
-                  {profile.username}
-                </Text>
-                <Text className="text-lg font-neuton text-white/70 mt-1">
-                  @{profile.username}
-                </Text>
-              </View>
-            </View>
-
-            <View className="items-center -mt-14 z-10">
-              <ProfileAvatar
-                uri={profile.avatar_url}
-                size={96}
-                borderWidth={2}
-              />
-            </View>
-
-            <View className="flex-row items-center justify-center gap-3 mt-5 px-8">
-              {isOwnProfile ? (
+              }
+              topOverlay={
                 <>
-                  <AnimatedButton
-                    onPress={() => router.push("/(app)/profile/edit")}
-                    className="flex-1 h-14 bg-accent"
-                  >
-                    <Text className="text-lg font-neuton-bold text-white">
-                      Edit Profile
-                    </Text>
-                  </AnimatedButton>
-                  {isSeller && (
-                    <AnimatedButton
-                      onPress={openInstagram}
-                      className="h-14 px-5 bg-accent flex-row gap-2"
+                  {showBackButton && (
+                    <SafeAreaView
+                      edges={["top"]}
+                      className="absolute top-0 left-0 right-0"
                     >
-                      <Image
-                        source={INSTAGRAM_ICON}
-                        style={{ width: 20, height: 20 }}
-                        contentFit="contain"
-                      />
-                      <Text className="text-lg font-neuton-bold text-white">
-                        Instagram
-                      </Text>
-                    </AnimatedButton>
+                      <View className="px-4 pt-1">
+                        <BackButton />
+                      </View>
+                    </SafeAreaView>
+                  )}
+
+                  {showSettingsButton && (
+                    <Pressable
+                      onPress={() => router.push("/(app)/settings")}
+                      style={{ top: insets.top + 8 }}
+                      className="absolute right-5 w-11 h-11 rounded-full bg-background/90 border border-border items-center justify-center"
+                    >
+                      <Ellipsis size={22} strokeWidth={1.5} color="#5B3B1B" />
+                    </Pressable>
                   )}
                 </>
-              ) : (
-                <>
-                  {isSeller && (
+              }
+            />
+
+            <View className="flex-col items-center">
+              <Text className="text-3xl font-neuton-bold text-foreground mt-3">
+                {profile.username}
+              </Text>
+
+              <View className="flex-row items-center justify-center gap-3 mt-5 px-8">
+                {isOwnProfile ? (
+                  <>
+                    {instagramLink && (
+                      <AnimatedButton
+                        onPress={openInstagram}
+                        className="px-6 h-14 bg-transparent border border-border flex-row gap-2"
+                      >
+                        <Image
+                          source={INSTAGRAM_ICON}
+                          style={{ width: 20, height: 20 }}
+                          contentFit="contain"
+                        />
+                        <Text className="text-lg font-neuton-bold text-foreground">
+                          Instagram
+                        </Text>
+                      </AnimatedButton>
+                    )}
                     <AnimatedButton
-                      onPress={openInstagram}
-                      className="h-14 px-5 bg-accent flex-row gap-2"
+                      onPress={() => router.push("/(app)/profile/edit")}
+                      className="px-6 h-14 "
                     >
-                      <Image
-                        source={INSTAGRAM_ICON}
-                        style={{ width: 20, height: 20 }}
-                        contentFit="contain"
-                      />
                       <Text className="text-lg font-neuton-bold text-white">
-                        Instagram
+                        Edit Profile
                       </Text>
                     </AnimatedButton>
-                  )}
-                  <AnimatedButton
-                    onPress={onFollowPress}
-                    className={`flex-1 h-14 ${
-                      isFollowing ? "bg-muted" : "bg-accent"
-                    }`}
-                  >
-                    <Text
-                      className={`text-lg font-neuton-bold ${
-                        isFollowing ? "text-foreground" : "text-white"
+                  </>
+                ) : (
+                  <>
+                    {instagramLink && (
+                      <AnimatedButton
+                        onPress={openInstagram}
+                        className="px-6 h-14 bg-transparent border border-border flex-row gap-2"
+                      >
+                        <Image
+                          source={INSTAGRAM_ICON}
+                          style={{ width: 20, height: 20 }}
+                          contentFit="contain"
+                        />
+                        <Text className="text-lg font-neuton-bold text-foreground">
+                          Instagram
+                        </Text>
+                      </AnimatedButton>
+                    )}
+                    <AnimatedButton
+                      onPress={onFollowPress}
+                      className={`px-6 h-14 ${
+                        isFollowing ? "bg-muted" : "bg-accent"
                       }`}
                     >
-                      {isFollowing ? "Following" : "Follow"}
-                    </Text>
-                  </AnimatedButton>
-                </>
-              )}
+                      <Text
+                        className={`text-lg font-neuton-bold ${
+                          isFollowing ? "text-foreground" : "text-white"
+                        }`}
+                      >
+                        {isFollowing ? "Following" : "Follow"}
+                      </Text>
+                    </AnimatedButton>
+                  </>
+                )}
+              </View>
             </View>
 
             <View className="px-8 mt-4">
               <ProfileStats
                 following={following}
                 followers={followers}
-                items={listings.length}
+                items={isSeller ? listings.length : undefined}
               />
             </View>
 
@@ -373,6 +422,52 @@ export function ProfileScreenContent({
                 <Text className="text-lg font-neuton text-foreground leading-7">
                   {profile.bio}
                 </Text>
+              </View>
+            )}
+
+            {isOwnProfile && (
+              <View className="mx-6 mt-6">
+                <OrdersQuickCard
+                  title="Buying"
+                  onViewHistory={() =>
+                    router.push({
+                      pathname: "/(app)/orders",
+                      params: { tab: "completed" },
+                    })
+                  }
+                  onSelectTab={(tab) =>
+                    router.push({
+                      pathname: "/(app)/orders",
+                      params: { tab },
+                    })
+                  }
+                />
+                {isSeller && (
+                  <OrdersQuickCard
+                    title="Selling"
+                    onViewHistory={() =>
+                      router.push({
+                        pathname: "/(app)/orders/selling",
+                        params: { tab: "completed" },
+                      })
+                    }
+                    onSelectTab={(tab) =>
+                      router.push({
+                        pathname: "/(app)/orders/selling",
+                        params: { tab },
+                      })
+                    }
+                  />
+                )}
+                <Pressable
+                  onPress={() => router.push("/(app)/address")}
+                  className="rounded-3xl border border-border bg-muted px-5 py-4 flex-row items-center gap-3"
+                >
+                  <MapPin size={22} strokeWidth={1.5} color="#5B3B1B" />
+                  <Text className="text-lg font-neuton-bold text-foreground">
+                    Shipping Address
+                  </Text>
+                </Pressable>
               </View>
             )}
 
@@ -399,13 +494,15 @@ export function ProfileScreenContent({
         }
         renderItem={renderListing}
         ListEmptyComponent={
-          <View className="items-center py-12 px-8">
-            <Text className="text-lg font-neuton text-muted-foreground text-center leading-7">
-              {listings.length > 0
-                ? "No products match these filters."
-                : emptyMessage}
-            </Text>
-          </View>
+          isSeller ? (
+            <View className="items-center py-12 px-8">
+              <Text className="text-lg font-neuton text-muted-foreground text-center leading-7">
+                {listings.length > 0
+                  ? "No products match these filters."
+                  : emptyMessage}
+              </Text>
+            </View>
+          ) : null
         }
       />
 

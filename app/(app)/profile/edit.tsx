@@ -1,11 +1,18 @@
 import { BackButton } from "@/components/ui/back-button";
+import {
+  ProfileHeaderHero,
+  PROFILE_BANNER_ASPECT_RATIO,
+} from "@/components/ui/profile-header-hero";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { extractInstagramUsername } from "@/lib/instagram";
+import { SCREEN_WIDTH } from "@/lib/dimensions";
 import { useAuth } from "@/providers/auth-provider";
 import { updateUser } from "@/services/users";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { Camera, ChevronRight, User } from "lucide-react-native";
+import { Camera, ChevronRight } from "lucide-react-native";
+import { useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -21,6 +28,9 @@ function formatGender(gender?: string | null) {
   if (!gender) return "";
   return gender === "Non-binary" ? "Other" : gender;
 }
+
+const HERO_HEIGHT = SCREEN_WIDTH / PROFILE_BANNER_ASPECT_RATIO;
+const BANNER_PICKER_ASPECT: [number, number] = [3, 2];
 
 function ProfileRow({
   label,
@@ -52,24 +62,61 @@ function ProfileRow({
 export default function EditProfileScreen() {
   const { user, profile, refreshProfile } = useAuth();
   const instagramUsername = extractInstagramUsername(profile?.instagram_link);
+  const [pendingAvatarUri, setPendingAvatarUri] = useState<string | null>(null);
+  const [pendingBackgroundUri, setPendingBackgroundUri] = useState<string | null>(
+    null,
+  );
+  const [isSavingImages, setIsSavingImages] = useState(false);
+  const hasPendingImages = Boolean(pendingAvatarUri || pendingBackgroundUri);
 
   const pickImage = async (field: "avatar_url" | "background_url") => {
-    if (!user) return;
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert(
+        "Permission needed",
+        "Please allow photo library access to select an image.",
+      );
+      return;
+    }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      aspect: field === "avatar_url" ? [1, 1] : [16, 9],
+      aspect: field === "avatar_url" ? [1, 1] : BANNER_PICKER_ASPECT,
       quality: 0.8,
     });
 
     if (result.canceled) return;
+    const selectedUri = result.assets[0]?.uri;
+    if (!selectedUri) return;
+
+    if (field === "avatar_url") {
+      setPendingAvatarUri(selectedUri);
+      return;
+    }
+
+    setPendingBackgroundUri(selectedUri);
+  };
+
+  const handleSaveImages = async () => {
+    if (!user || !hasPendingImages || isSavingImages) return;
 
     try {
-      await updateUser(user.id, { [field]: result.assets[0].uri });
+      setIsSavingImages(true);
+
+      await updateUser(user.id, {
+        ...(pendingAvatarUri ? { avatar_url: pendingAvatarUri } : {}),
+        ...(pendingBackgroundUri
+          ? { background_url: pendingBackgroundUri }
+          : {}),
+      });
       await refreshProfile();
+      setPendingAvatarUri(null);
+      setPendingBackgroundUri(null);
     } catch (err: any) {
       Alert.alert("Error", err?.message ?? "Failed to update image");
+    } finally {
+      setIsSavingImages(false);
     }
   };
 
@@ -81,9 +128,26 @@ export default function EditProfileScreen() {
       >
         <View className="flex-row items-center px-6 py-3 gap-3">
           <BackButton />
-          <Text className="text-2xl font-neuton-bold text-foreground">
-            Edit Profile
-          </Text>
+          <View className="flex-1 flex-row items-center justify-between">
+            <Text className="text-2xl font-neuton-bold text-foreground">
+              Edit Profile
+            </Text>
+            <Pressable
+              onPress={handleSaveImages}
+              disabled={!hasPendingImages || isSavingImages}
+              hitSlop={10}
+            >
+              <Text
+                className={`text-xl font-neuton-bold ${
+                  hasPendingImages && !isSavingImages
+                    ? "text-accent"
+                    : "text-neutral"
+                }`}
+              >
+                Save
+              </Text>
+            </Pressable>
+          </View>
         </View>
 
         <ScrollView
@@ -91,64 +155,65 @@ export default function EditProfileScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="mb-8">
-            <Pressable
-              onPress={() => pickImage("background_url")}
-              className="relative h-[256px] rounded-3xl bg-muted border border-border overflow-hidden"
-            >
-              {profile?.background_url && (
-                <Image
-                  source={{ uri: profile.background_url }}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                  }}
-                  contentFit="cover"
-                />
-              )}
-              <View
-                className={`absolute inset-0 items-center justify-center ${
-                  profile?.background_url ? "bg-black/15" : "bg-muted"
-                }`}
-              >
-                <Camera
-                  size={26}
-                  strokeWidth={1.5}
-                  color={profile?.background_url ? "#FFF7EC" : "#8A6B4D"}
-                />
-              </View>
-            </Pressable>
-
-            <View className="items-center -mt-16">
-              <Pressable
-                onPress={() => pickImage("avatar_url")}
-                className="relative"
-              >
-                {profile?.avatar_url ? (
-                  <Image
-                    source={{ uri: profile.avatar_url }}
-                    style={{
-                      width: 128,
-                      height: 128,
-                      borderRadius: 64,
-                      borderWidth: 2,
-                      borderColor: "#FFF7EC",
-                      backgroundColor: "#F5EBDD",
-                    }}
-                    contentFit="cover"
+            <ProfileHeaderHero
+              heroHeight={HERO_HEIGHT}
+              backgroundUri={pendingBackgroundUri ?? profile?.background_url}
+              avatarSize={128}
+              avatarBorderWidth={4}
+              onBackgroundPress={() => pickImage("background_url")}
+              onAvatarPress={() => pickImage("avatar_url")}
+              backgroundOverlay={
+                <View
+                  className={`absolute inset-0 items-center justify-center ${
+                    pendingBackgroundUri ?? profile?.background_url
+                      ? "bg-black/15"
+                      : "bg-muted"
+                  }`}
+                >
+                  <Camera
+                    size={26}
+                    strokeWidth={1.5}
+                    color={
+                      pendingBackgroundUri ?? profile?.background_url
+                        ? "#FFF7EC"
+                        : "#8A6B4D"
+                    }
                   />
-                ) : (
-                  <View className="w-32 h-32 rounded-full bg-muted border-2 border-background items-center justify-center">
-                    <User size={36} strokeWidth={1.5} color="#8A6B4D" />
-                  </View>
-                )}
-                <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center border-2 border-background">
-                  <Camera size={16} strokeWidth={1.5} color="#FFF7EC" />
                 </View>
-              </Pressable>
-            </View>
+              }
+              renderAvatar={() =>
+                pendingAvatarUri ?? profile?.avatar_url ? (
+                  <View className="relative">
+                    <Image
+                      source={{ uri: pendingAvatarUri ?? profile?.avatar_url ?? "" }}
+                      style={{
+                        width: 128,
+                        height: 128,
+                        borderRadius: 64,
+                        borderWidth: 4,
+                        borderColor: "#F3E8D8",
+                        backgroundColor: "#F5EBDD",
+                      }}
+                      contentFit="cover"
+                    />
+                    <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center border-2 border-background">
+                      <Camera size={16} strokeWidth={1.5} color="#FFF7EC" />
+                    </View>
+                  </View>
+                ) : (
+                  <View className="relative">
+                    <ProfileAvatar
+                      uri={null}
+                      size={128}
+                      borderWidth={4}
+                    />
+                    <View className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-accent items-center justify-center border-2 border-background">
+                      <Camera size={16} strokeWidth={1.5} color="#FFF7EC" />
+                    </View>
+                  </View>
+                )
+              }
+            />
           </View>
 
           <View className="rounded-3xl overflow-hidden border border-border mb-10">

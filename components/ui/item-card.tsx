@@ -55,6 +55,18 @@ export function ItemCard({
             {sellerName}
           </Text>
         </View>
+      </View>
+      <Text
+        className="text-lg font-neuton-bold text-foreground mt-2"
+        numberOfLines={1}
+      >
+        {name}
+      </Text>
+      <View className="flex-row items-center justify-between">
+        {/* Product Price */}
+        <Text className="text-xl font-neuton text-foreground">
+          ฿{price.toLocaleString()}
+        </Text>
 
         {onToggleWishlist && (
           <Pressable
@@ -62,7 +74,7 @@ export function ItemCard({
               e.stopPropagation();
               onToggleWishlist();
             }}
-            className="absolute bottom-3 right-3 w-10 h-10 rounded-full items-center justify-center bg-background/95 border border-border"
+            className="w-10 h-10 rounded-full items-center justify-center border border-border"
           >
             <Heart
               size={18}
@@ -73,16 +85,6 @@ export function ItemCard({
           </Pressable>
         )}
       </View>
-      <Text
-        className="text-lg font-neuton-bold text-foreground mt-2"
-        numberOfLines={1}
-      >
-        {name}
-      </Text>
-      {/* Product Price */}
-      <Text className="text-xl font-neuton text-foreground">
-        ฿{price.toLocaleString()}
-      </Text>
     </Pressable>
   );
 }
