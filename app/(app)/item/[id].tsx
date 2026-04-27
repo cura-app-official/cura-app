@@ -266,7 +266,7 @@ export default function ItemDetailScreen() {
           {!inCart ? (
             <AnimatedButton
               onPress={handleAddToCart}
-              className="flex-1 h-14 bg-muted border border-border"
+              className="flex-1 h-[4.75rem] bg-muted border border-border"
             >
               <Text className="text-lg font-neuton-bold text-foreground">
                 Add to cart
@@ -275,7 +275,7 @@ export default function ItemDetailScreen() {
           ) : (
             <AnimatedButton
               onPress={() => router.push("/(app)/cart")}
-              className="flex-1 h-14 bg-muted border border-border"
+              className="flex-1 h-[4.75rem] bg-muted border border-border"
             >
               <Text className="text-lg font-neuton-bold text-foreground">
                 View cart
@@ -284,7 +284,7 @@ export default function ItemDetailScreen() {
           )}
           <AnimatedButton
             onPress={handleBuyNow}
-            className="flex-1 h-14 bg-accent"
+            className="flex-1 h-[4.75rem] bg-accent"
           >
             <Text className="text-lg font-neuton-bold text-background">
               Buy now
